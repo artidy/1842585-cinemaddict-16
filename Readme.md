@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
-* Студент: [Андрей Печенников](https://up.htmlacademy.ru/ecmascript/16/user/1842585).
-* Наставник: `Неизвестно`.
+* Студент: [Андрей Печенников](https://htmlacademy.ru/profile/devandy).
+* Наставник: [Сергей Андреев](https://htmlacademy.ru/profile/id812127).
 
 ---
 
