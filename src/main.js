@@ -11,11 +11,11 @@ const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const footer = document.querySelector('.footer');
 
-render(header, getRatingTemplate(), RenderPosition.BEFOREEND);
+render(header, getRatingTemplate());
 render(main, getMenuTemplate(), RenderPosition.AFTERBEGIN);
-render(main, getSortTemplate(), RenderPosition.BEFOREEND);
-render(main, getFilmsTemplate(), RenderPosition.BEFOREEND);
-render(main, getFilmsTemplate(), RenderPosition.BEFOREEND);
-render(main, getShowMoreTemplate(), RenderPosition.BEFOREEND);
-render(main, getDetailsTemplate(), RenderPosition.BEFOREEND);
-render(footer, getStatisticsTemplate(), RenderPosition.BEFOREEND);
+render(main, getSortTemplate());
+render(main, getFilmsTemplate());
+render(main, getFilmsTemplate());
+render(main, getShowMoreTemplate());
+render(main, getDetailsTemplate());
+render(footer, getStatisticsTemplate());

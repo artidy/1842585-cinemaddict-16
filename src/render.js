@@ -5,7 +5,7 @@ const RenderPosition = {
   AFTEREND: 'afterend',
 };
 
-const render = (container, template, position) => {
+const render = (container, template, position = RenderPosition.BEFOREEND) => {
   container.insertAdjacentHTML(position, template);
 };
 
