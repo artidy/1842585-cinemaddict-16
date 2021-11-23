@@ -10,4 +10,13 @@ module.exports = {
   devServer: {
     hot: false,
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: ['babel-loader'],
+      },
+    ],
+  },
 }
