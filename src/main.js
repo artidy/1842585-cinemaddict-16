@@ -1,10 +1,10 @@
-import {RenderPosition, render} from './render.js';
-import {getRatingTemplate} from './view/rating.js';
-import {getSortTemplate} from './view/sort.js';
-import {getFilmsTemplate} from './view/films.js';
-import {getMenuTemplate} from './view/menu.js';
-import {getDetailsTemplate} from './view/details.js';
-import {getShowMoreTemplate} from './view/buttons.js';
+import {RenderPosition, render} from './render';
+import {getRatingTemplate} from './view/rating';
+import {getSortTemplate} from './view/sort';
+import {getFilmsTemplate} from './view/films';
+import {getMenuTemplate} from './view/menu';
+import {getDetailsTemplate} from './view/details';
+import {getShowMoreTemplate} from './view/buttons';
 import {getStatisticsTemplate} from './view/statistics';
 
 const header = document.querySelector('.header');
