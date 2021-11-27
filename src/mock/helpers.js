@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import dayjsRandom from 'dayjs-random';
+import _ from 'lodash';
 
 dayjs.extend(dayjsRandom);
 
@@ -21,14 +22,14 @@ import {
   MAX_GAP_MINUTES,
   FILMS_COUNTRIES,
   FILMS_GENRES,
-  MAX_MATURITY_RATING_NUMBER,
+  MAX_MATURITY_RATING_NUMBER, DEFAULT_FILMS_COUNT,
 } from './constants';
 
 const getRandomNumber = (start = DEFAULT_MIN_NUMBER, end = DEFAULT_MAX_NUMBER, decimal = DEFAULT_DECIMAL) => (Math.random() * (Math.max(start, end) - Math.min(start, end))).toFixed(decimal);
 
 const getRandomValueFromArray = (list) => list[getRandomNumber(DEFAULT_MIN_NUMBER, list.length - DEFAULT_MAX_NUMBER)];
 
-const getRandomValuesFromArray = (list) => new Set(Array.from({length: getRandomNumber(DEFAULT_MAX_NUMBER, list.length)}, getRandomValueFromArray));
+const getRandomValuesFromArray = (list) => [...new Set(Array.from({length: getRandomNumber(DEFAULT_MAX_NUMBER, list.length)}, () => getRandomValueFromArray(list)))];
 
 const getRandomTitle = () => getRandomValueFromArray(FILMS_TITLES);
 
@@ -56,6 +57,8 @@ const getRandomDuration = () => `${getRandomNumber(DEFAULT_MAX_NUMBER, MAX_GAP_H
 
 const getRandomMaturityRating = () => `${getRandomNumber(DEFAULT_MIN_NUMBER, MAX_MATURITY_RATING_NUMBER)}+`;
 
+const getRandomComments = () => Array.from({length: getRandomNumber(DEFAULT_MIN_NUMBER, DEFAULT_FILMS_COUNT)}, _.uniqueId);
+
 export {
   getRandomTitle,
   getRandomPoster,
@@ -69,4 +72,5 @@ export {
   getRandomFormatDate,
   getRandomDuration,
   getRandomMaturityRating,
+  getRandomComments,
 };

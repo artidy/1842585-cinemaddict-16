@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "dayjs": "1.10.7",
-    "dayjs-random": "1.0.0"
+    "dayjs-random": "1.0.0",
+    "lodash": "4.17.21"
   }
 }

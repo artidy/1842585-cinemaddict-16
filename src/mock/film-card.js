@@ -11,6 +11,7 @@ import {
   getRandomCountry,
   getRandomGenres,
   getRandomMaturityRating,
+  getRandomComments,
 } from './helpers';
 import {DEFAULT_DATE_FORMAT} from './constants';
 
@@ -31,6 +32,7 @@ const generateFilmCard = () => {
     genres: getRandomGenres(),
     description: getRandomDescription(),
     maturityRating: getRandomMaturityRating(),
+    comments: getRandomComments(),
   };
 
 };
