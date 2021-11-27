@@ -24,5 +24,9 @@
   },
   "engines": {
     "node": "16"
+  },
+  "dependencies": {
+    "dayjs": "1.10.7",
+    "dayjs-random": "1.0.0"
   }
 }
