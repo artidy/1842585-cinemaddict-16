@@ -1,5 +1,4 @@
-import {getRandomDate} from "./mock/helpers";
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 const normalizeFilm = ({
   id,
@@ -43,6 +42,11 @@ const normalizeComment = ({id, text, emotion, author, date}) => ({
   date: date,
 });
 
+const normalizeUser = ({avatar, rating}) => ({
+  avatar: avatar,
+  rating: rating,
+});
+
 const normalizeArray = (list, callback) => list.map((value) => callback(value));
 
 const formatDate = (date, format) => dayjs(date).format(format);
@@ -51,5 +55,6 @@ export {
   normalizeArray,
   normalizeFilm,
   normalizeComment,
+  normalizeUser,
   formatDate,
 };
