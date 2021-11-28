@@ -36,7 +36,7 @@ if (filmsCount > 0) {
   render(main, getSortTemplate());
 }
 render(main, getFilmsTemplate(films));
-render(footer, getStatisticsTemplate());
+render(footer, getStatisticsTemplate(filmsCount));
 
 const moreButton = document.querySelector('.films-list__show-more');
 if (moreButton) {

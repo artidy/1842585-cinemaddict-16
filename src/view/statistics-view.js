@@ -1,6 +1,8 @@
-const getStatisticsTemplate = () => `
+import {formatNumber} from '../helpers';
+
+const getStatisticsTemplate = (filmsCount) => `
   <section class="footer__statistics">
-    <p>130 291 movies inside</p>
+    <p>${formatNumber(filmsCount)} movies inside</p>
   </section>
 `;
 
