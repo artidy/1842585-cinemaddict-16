@@ -25,40 +25,23 @@ import {
 } from './constants';
 
 const getRandomValueFromArray = (list) => list[_.random(DEFAULT_MIN_NUMBER, list.length - DEFAULT_MAX_NUMBER)];
-
 const getRandomValuesFromArray = (list) => [...new Set(Array.from({length: _.random(DEFAULT_MAX_NUMBER, list.length)}, () => getRandomValueFromArray(list)))];
-
 const getRandomTitle = () => getRandomValueFromArray(FILMS_TITLES);
-
 const getRandomPoster = () => getRandomValueFromArray(FILMS_POSTERS);
-
 const getRandomDescription = () => getRandomValueFromArray(FILMS_DESCRIPTIONS);
-
 const getRandomRating = () => _.random(MIN_RATING_NUMBER, MAX_RATING_NUMBER, true).toFixed(RATING_DECIMAL);
-
 const getRandomDirectors = () => getRandomValueFromArray(FILMS_DIRECTORS);
-
 const getRandomScreenWriters = () => getRandomValuesFromArray(FILMS_SCREEN_WRITERS);
-
 const getRandomActors = () => getRandomValuesFromArray(FILMS_ACTORS);
-
 const getRandomCountry = () => getRandomValueFromArray(FILMS_COUNTRIES);
-
 const getRandomGenres = () => getRandomValuesFromArray(FILMS_GENRES);
-
 const getRandomDate = () => dayjs.between(dayjs().add(-_.random(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year'),
   dayjs().add(-_.random(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year')).toDate();
-
 const getRandomDuration = () => `${_.random(DEFAULT_MAX_NUMBER, MAX_GAP_HOUR)}h ${_.random(DEFAULT_MAX_NUMBER, MAX_GAP_MINUTES)}m`;
-
 const getRandomMaturityRating = () => `${_.random(DEFAULT_MIN_NUMBER, MAX_MATURITY_RATING_NUMBER)}+`;
-
 const getRandomComments = () => Array.from({length: _.random(DEFAULT_MIN_NUMBER, DEFAULT_FILMS_COUNT)}, _.uniqueId);
-
 const getRandomEmotion = () => getRandomValueFromArray(COMMENTS_EMOTION);
-
 const getRandomAuthor = () => getRandomValueFromArray(COMMENTS_AUTHORS);
-
 const getRandomBoolean = () => Boolean(_.random(DEFAULT_MIN_NUMBER, DEFAULT_MAX_NUMBER));
 
 export {

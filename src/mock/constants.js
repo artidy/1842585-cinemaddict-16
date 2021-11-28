@@ -7,7 +7,6 @@ const FILMS_TITLES = [
   'The Lone Ranger',
   'Men in Black 3',
 ];
-
 const FILMS_POSTERS = [
   'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png',
@@ -17,7 +16,6 @@ const FILMS_POSTERS = [
   'images/posters/the-great-flamarion.jpg',
   'images/posters/the-man-with-the-golden-arm.jpg',
 ];
-
 const FILMS_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
@@ -27,7 +25,6 @@ const FILMS_DESCRIPTIONS = [
   'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
   'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'
 ];
-
 const FILMS_GENRES = [
   'action',
   'adventure',
@@ -37,7 +34,6 @@ const FILMS_GENRES = [
   'horror',
   'thriller',
 ];
-
 const FILMS_DIRECTORS = [
   'Ida Lupino',
   'Bong Joon Ho',
@@ -47,7 +43,6 @@ const FILMS_DIRECTORS = [
   'Woody Allen',
   'Kathryn Bigelow',
 ];
-
 const FILMS_SCREEN_WRITERS = [
   'Ola Balogun',
   'Biyi Bandele',
@@ -60,7 +55,6 @@ const FILMS_SCREEN_WRITERS = [
   'Kemi Adesoye',
   'Chet Anekwe',
 ];
-
 const FILMS_ACTORS = [
   'Casey Affleck',
   'Adam Driver',
@@ -76,7 +70,6 @@ const FILMS_ACTORS = [
   'Rose Byrne',
   'Sheila Florance',
 ];
-
 const FILMS_COUNTRIES = [
   'United States',
   'Brazil',
@@ -86,14 +79,12 @@ const FILMS_COUNTRIES = [
   'Kazakhstan',
   'France',
 ];
-
 const COMMENTS_EMOTION = [
   'angry',
   'puke',
   'sleeping',
   'smile',
 ];
-
 const COMMENTS_AUTHORS = [
   'Tim Macoveev',
   'John Doe',
@@ -103,25 +94,15 @@ const COMMENTS_AUTHORS = [
   'Leif Erikson',
   'Lazar of Serbia',
 ];
-
 const DEFAULT_MIN_NUMBER = 0;
-
 const DEFAULT_MAX_NUMBER = 1;
-
 const MAX_GAP_YEAR = 36;
-
 const MAX_GAP_HOUR = 2;
-
 const MAX_GAP_MINUTES = 59;
-
 const MIN_RATING_NUMBER = 0.0;
-
 const MAX_RATING_NUMBER = 10.0;
-
 const MAX_MATURITY_RATING_NUMBER = 18;
-
 const RATING_DECIMAL = 1;
-
 const DEFAULT_FILMS_COUNT = 20;
 
 export {
