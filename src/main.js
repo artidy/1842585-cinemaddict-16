@@ -11,7 +11,8 @@ import {
   normalizeComment,
   normalizeUser,
   filterWatchingFilms,
-  filterWatchedFilms, filterFavoriteFilms
+  filterWatchedFilms,
+  filterFavoriteFilms,
 } from './helpers';
 import {openDetails} from './view/film-view';
 import {generateComments} from './mock/comments';
@@ -19,6 +20,7 @@ import {user} from './mock/user';
 
 const currentUser = normalizeUser(user);
 const films = normalizeArray(generateFilms(), normalizeFilm);
+const filmsCount = films.length;
 const comments = normalizeArray(generateComments(films), normalizeComment);
 const inWatchListFilms = filterWatchingFilms(films);
 const isWatchedFilms = filterWatchedFilms(films);
@@ -30,7 +32,9 @@ const footer = document.querySelector('.footer');
 
 render(header, getRatingTemplate(currentUser));
 render(main, getMenuTemplate(inWatchListFilms.length, isWatchedFilms.length, isFavoriteFilms.length), RenderPosition.AFTERBEGIN);
-render(main, getSortTemplate());
+if (filmsCount > 0) {
+  render(main, getSortTemplate());
+}
 render(main, getFilmsTemplate(films));
 render(footer, getStatisticsTemplate());
 
