@@ -15,7 +15,10 @@ const normalizeFilm = ({
   genres,
   description,
   maturityRating,
-  comments
+  comments,
+  isInWatchlist,
+  isWatched,
+  isFavorite,
 }) => ({
   id: id,
   poster: poster,
@@ -32,6 +35,9 @@ const normalizeFilm = ({
   description: description,
   maturityRating: maturityRating,
   comments: comments,
+  isInWatchlist: isInWatchlist,
+  isWatched: isWatched,
+  isFavorite: isFavorite,
 });
 
 const normalizeComment = ({id, text, emotion, author, date}) => ({
@@ -51,10 +57,19 @@ const normalizeArray = (list, callback) => list.map((value) => callback(value));
 
 const formatDate = (date, format) => dayjs(date).format(format);
 
+const filterWatchingFilms = (films) => films.filter((film) => film.isInWatchlist);
+
+const filterWatchedFilms = (films) => films.filter((film) => film.isWatched);
+
+const filterFavoriteFilms = (films) => films.filter((film) => film.isFavorite);
+
 export {
   normalizeArray,
   normalizeFilm,
   normalizeComment,
   normalizeUser,
   formatDate,
+  filterWatchingFilms,
+  filterWatchedFilms,
+  filterFavoriteFilms,
 };

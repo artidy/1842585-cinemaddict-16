@@ -14,6 +14,7 @@ import {
   getRandomGenres,
   getRandomMaturityRating,
   getRandomComments,
+  getRandomBoolean,
 } from './helpers';
 
 const generateFilmCard = () => {
@@ -35,6 +36,9 @@ const generateFilmCard = () => {
     description: getRandomDescription(),
     maturityRating: getRandomMaturityRating(),
     comments: getRandomComments(),
+    isInWatchlist: getRandomBoolean(),
+    isWatched: getRandomBoolean(),
+    isFavorite: getRandomBoolean(),
   };
 
 };
