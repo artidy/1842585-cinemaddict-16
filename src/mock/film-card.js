@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
   getRandomTitle,
   getRandomPoster,
@@ -6,19 +8,19 @@ import {
   getRandomDirectors,
   getRandomScreenWriters,
   getRandomActors,
-  getRandomFormatDate,
+  getRandomDate,
   getRandomDuration,
   getRandomCountry,
   getRandomGenres,
   getRandomMaturityRating,
   getRandomComments,
 } from './helpers';
-import {DEFAULT_DATE_FORMAT} from './constants';
 
 const generateFilmCard = () => {
   const title = getRandomTitle();
 
   return {
+    id: _.uniqueId(),
     poster: getRandomPoster(),
     title,
     originalTitle: title,
@@ -26,7 +28,7 @@ const generateFilmCard = () => {
     director: getRandomDirectors(),
     screenWriters: getRandomScreenWriters(),
     actors: getRandomActors(),
-    releaseDate: getRandomFormatDate(DEFAULT_DATE_FORMAT),
+    releaseDate: getRandomDate(),
     duration: getRandomDuration(),
     country: getRandomCountry(),
     genres: getRandomGenres(),

@@ -87,6 +87,23 @@ const FILMS_COUNTRIES = [
   'France',
 ];
 
+const COMMENTS_EMOTION = [
+  'angry',
+  'puke',
+  'sleeping',
+  'smile',
+];
+
+const COMMENTS_AUTHORS = [
+  'Tim Macoveev',
+  'John Doe',
+  'Sargon of Akkad',
+  'Qin Shi Huang ',
+  'Shimon bar Kokhba',
+  'Leif Erikson',
+  'Lazar of Serbia',
+];
+
 const DEFAULT_MIN_NUMBER = 0;
 
 const DEFAULT_MAX_NUMBER = 1;
@@ -120,6 +137,8 @@ export {
   FILMS_SCREEN_WRITERS,
   FILMS_ACTORS,
   FILMS_COUNTRIES,
+  COMMENTS_EMOTION,
+  COMMENTS_AUTHORS,
   DEFAULT_MIN_NUMBER,
   DEFAULT_MAX_NUMBER,
   DEFAULT_DECIMAL,

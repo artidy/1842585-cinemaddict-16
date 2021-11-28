@@ -1,4 +1,24 @@
-const normalizeFilm = ({poster, title, originalTitle, rating, director, screenWriters, actors, releaseDate, duration, country, genres, description, maturityRating, comments}) => ({
+import {getRandomDate} from "./mock/helpers";
+import dayjs from "dayjs";
+
+const normalizeFilm = ({
+  id,
+  poster,
+  title,
+  originalTitle,
+  rating,
+  director,
+  screenWriters,
+  actors,
+  releaseDate,
+  duration,
+  country,
+  genres,
+  description,
+  maturityRating,
+  comments
+}) => ({
+  id: id,
   poster: poster,
   title: title,
   originalTitle: originalTitle,
@@ -15,9 +35,21 @@ const normalizeFilm = ({poster, title, originalTitle, rating, director, screenWr
   comments: comments,
 });
 
+const normalizeComment = ({id, text, emotion, author, date}) => ({
+  id: id,
+  text: text,
+  emotion: emotion,
+  author: author,
+  date: date,
+});
+
 const normalizeArray = (list, callback) => list.map((value) => callback(value));
+
+const formatDate = (date, format) => dayjs(date).format(format);
 
 export {
   normalizeArray,
   normalizeFilm,
+  normalizeComment,
+  formatDate,
 };

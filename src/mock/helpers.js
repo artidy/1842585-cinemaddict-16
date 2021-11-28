@@ -22,7 +22,7 @@ import {
   MAX_GAP_MINUTES,
   FILMS_COUNTRIES,
   FILMS_GENRES,
-  MAX_MATURITY_RATING_NUMBER, DEFAULT_FILMS_COUNT,
+  MAX_MATURITY_RATING_NUMBER, DEFAULT_FILMS_COUNT, COMMENTS_EMOTION, COMMENTS_AUTHORS,
 } from './constants';
 
 const getRandomNumber = (start = DEFAULT_MIN_NUMBER, end = DEFAULT_MAX_NUMBER, decimal = DEFAULT_DECIMAL) => (Math.random() * (Math.max(start, end) - Math.min(start, end))).toFixed(decimal);
@@ -49,15 +49,18 @@ const getRandomCountry = () => getRandomValueFromArray(FILMS_COUNTRIES);
 
 const getRandomGenres = () => getRandomValuesFromArray(FILMS_GENRES);
 
-const getRandomDate = () => dayjs.between(dayjs().add(-getRandomNumber(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year'), dayjs().add(-getRandomNumber(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year'));
-
-const getRandomFormatDate = (format) => getRandomDate().format(format);
+const getRandomDate = () => dayjs.between(dayjs().add(-getRandomNumber(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year'),
+  dayjs().add(-getRandomNumber(DEFAULT_MIN_NUMBER, MAX_GAP_YEAR), 'year')).toDate();
 
 const getRandomDuration = () => `${getRandomNumber(DEFAULT_MAX_NUMBER, MAX_GAP_HOUR)}h ${getRandomNumber(DEFAULT_MAX_NUMBER, MAX_GAP_MINUTES)}m`;
 
 const getRandomMaturityRating = () => `${getRandomNumber(DEFAULT_MIN_NUMBER, MAX_MATURITY_RATING_NUMBER)}+`;
 
 const getRandomComments = () => Array.from({length: getRandomNumber(DEFAULT_MIN_NUMBER, DEFAULT_FILMS_COUNT)}, _.uniqueId);
+
+const getRandomEmotion = () => getRandomValueFromArray(COMMENTS_EMOTION);
+
+const getRandomAuthor = () => getRandomValueFromArray(COMMENTS_AUTHORS);
 
 export {
   getRandomTitle,
@@ -69,8 +72,10 @@ export {
   getRandomActors,
   getRandomCountry,
   getRandomGenres,
-  getRandomFormatDate,
+  getRandomDate,
   getRandomDuration,
   getRandomMaturityRating,
   getRandomComments,
+  getRandomEmotion,
+  getRandomAuthor,
 };
