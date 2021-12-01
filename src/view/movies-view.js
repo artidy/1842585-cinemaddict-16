@@ -1,8 +1,8 @@
 import {createElement} from '../render';
 
-const getShowMoreTemplate = () => '<button class="films-list__show-more">Show more</button>';
+const getMoviesTemplate = () => '<section class="films"></section>';
 
-class ShowMore {
+class MainContainer {
   #element = null;
 
   get element() {
@@ -14,7 +14,7 @@ class ShowMore {
   }
 
   get template() {
-    return getShowMoreTemplate();
+    return getMoviesTemplate();
   }
 
   removeElement() {
@@ -23,4 +23,4 @@ class ShowMore {
   }
 }
 
-export {ShowMore};
+export default MainContainer;

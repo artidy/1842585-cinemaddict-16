@@ -1,9 +1,35 @@
 import {formatNumber} from '../helpers';
+import {createElement} from '../render';
 
-const getStatisticsTemplate = (filmsCount) => `
-  <section class="footer__statistics">
-    <p>${formatNumber(filmsCount)} movies inside</p>
-  </section>
-`;
+const getStatisticsTemplate = (count) =>
+  `<section class="footer__statistics">
+    <p>${count} movies inside</p>
+  </section>`;
 
-export {getStatisticsTemplate};
+class Statistic {
+  #element = null;
+  #count = null;
+
+  constructor(count) {
+    this.#count = formatNumber(count);
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return getStatisticsTemplate(this.#count);
+  }
+
+  removeElement() {
+    this.#element.remove();
+    this.#element = null;
+  }
+}
+
+export default Statistic;

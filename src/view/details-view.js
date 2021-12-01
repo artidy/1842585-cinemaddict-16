@@ -1,9 +1,10 @@
 import {formatDate} from '../helpers';
+import {createElement} from '../render';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
-const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) => `
-  <li class="film-details__comment">
+const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) =>
+  `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
     </span>
@@ -15,8 +16,7 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
         <button class="film-details__comment-delete" data-id="${id}">Delete</button>
       </p>
     </div>
-  </li>
-`).join('');
+  </li>`).join('');
 
 const getDetailsTemplate = ({
   poster,
@@ -32,8 +32,8 @@ const getDetailsTemplate = ({
   genres,
   description,
   maturityRating,
-}, comments) => `
-  <section class="film-details">
+}, comments) =>
+  `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
         <div class="film-details__close">
@@ -143,7 +143,34 @@ const getDetailsTemplate = ({
         </section>
       </div>
     </form>
-  </section>
-`;
+  </section>`;
 
-export {getDetailsTemplate};
+class MovieDetails {
+  #element = null;
+  #movie = null;
+  #comments = null;
+
+  constructor(movie, comments) {
+    this.#movie = movie;
+    this.#comments = comments;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return getDetailsTemplate(this.#movie, this.#comments);
+  }
+
+  removeElement() {
+    this.#element.remove();
+    this.#element = null;
+  }
+}
+
+export default MovieDetails;

@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import Movie from './view/movie-view';
+import {render} from './render';
 
 const normalizeFilm = ({
   id,
@@ -53,9 +55,16 @@ const normalizeUser = ({avatar, rating}) => ({
 const normalizeArray = (list, callback) => list.map((value) => callback(value));
 const formatDate = (date, format) => dayjs(date).format(format);
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
-const filterWatchingFilms = (films) => films.filter((film) => film.isInWatchlist);
-const filterWatchedFilms = (films) => films.filter((film) => film.isWatched);
-const filterFavoriteFilms = (films) => films.filter((film) => film.isFavorite);
+const filterWatchingFilms = (movies) => movies.filter((movie) => movie.isInWatchlist);
+const filterWatchedFilms = (movies) => movies.filter((movie) => movie.isWatched);
+const filterFavoriteFilms = (movies) => movies.filter((movie) => movie.isFavorite);
+const sortTopRatedFilms = (movies) => movies.slice().sort(({rating: firstRating}, {rating: secondRating}) => firstRating < secondRating);
+const sortMostCommentedFilms = (movies) => movies.slice().sort(({comments: firstComments}, {comments: secondComments}) => firstComments.length < secondComments.length);
+const addMovies = (container, movies) => {
+  movies.forEach((movie) => {
+    render(container, new Movie(movie).element);
+  });
+};
 
 export {
   normalizeArray,
@@ -67,4 +76,7 @@ export {
   filterWatchingFilms,
   filterWatchedFilms,
   filterFavoriteFilms,
+  sortTopRatedFilms,
+  sortMostCommentedFilms,
+  addMovies,
 };
