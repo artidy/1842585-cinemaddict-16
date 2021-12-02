@@ -84,20 +84,37 @@ if (moreButton.element) {
   moreButton.element.addEventListener('click', onShowMoreMovies);
 }
 
-const openDetails = (evt) => {
+const onKeydownEsc = (popup) => (evt) => {
+  if (evt.key === 'Esc' || evt.key === 'Escape') {
+    popup.removeElement();
+    document.removeEventListener('keydown', onKeydownEsc);
+    document.body.classList.remove('hide-overflow');
+  }
+};
+
+const onClickCloseBtn = (popup) => () => {
+  popup.removeElement();
+  document.removeEventListener('keydown', onKeydownEsc);
+  document.body.classList.remove('hide-overflow');
+};
+
+const onOpenDetails = (evt) => {
   evt.preventDefault();
 
   const movieCard = evt.target.closest('.film-card__link');
   if (movieCard) {
-    const movieData = movies.find((item) => item.id === movieCard.dataset.id);
-    const {comments: commentsIds} = movieData;
+    const movie = movies.find((item) => item.id === movieCard.dataset.id);
+    const {comments: commentsIds} = movie;
     const movieComments = comments.filter((comment) => commentsIds.includes(comment.id));
-    const movieDetails = new MovieDetails(movieData, movieComments);
+    const movieDetails = new MovieDetails(movie, movieComments);
     const filmDetailsCloseBtn = movieDetails.element.querySelector('.film-details__close-btn');
 
     render(main, movieDetails.element);
-    filmDetailsCloseBtn.addEventListener('click', () => movieDetails.removeElement());
+    document.body.classList.add('hide-overflow');
+
+    document.addEventListener('keydown', onKeydownEsc(movieDetails));
+    filmDetailsCloseBtn.addEventListener('click', onClickCloseBtn(movieDetails));
   }
 };
 
-mainContainer.element.addEventListener('click', openDetails);
+mainContainer.element.addEventListener('click', onOpenDetails);
