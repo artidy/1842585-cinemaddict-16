@@ -1,5 +1,6 @@
-import {formatDate} from '../helpers';
-import AbstractView from './abstract-view';
+import {formatDate} from '../helpers/common';
+import AbstractEventView from './abstract-event-view';
+import {onKeydownEsc} from "../helpers/events";
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
@@ -145,9 +146,23 @@ const getDetailsTemplate = ({
     </form>
   </section>`;
 
-class MovieDetails extends AbstractView {
-  #movie = null;
-  #comments = null;
+class MovieDetails extends AbstractEventView {
+  #comments = [];
+  #movie = {
+    poster: '',
+    title: '',
+    originalTitle: '',
+    rating: '',
+    director: '',
+    screenWriters: [],
+    actors: [],
+    releaseDate: '',
+    duration: '',
+    country: '',
+    genres: [],
+    description: '',
+    maturityRating: '',
+  };
 
   constructor(movie, comments) {
     super();

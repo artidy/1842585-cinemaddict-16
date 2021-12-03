@@ -1,4 +1,4 @@
-import {formatNumber} from '../helpers';
+import {formatNumber} from '../helpers/common';
 import AbstractView from './abstract-view';
 
 const getStatisticsTemplate = (count) =>

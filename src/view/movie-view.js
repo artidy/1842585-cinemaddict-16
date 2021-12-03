@@ -1,4 +1,4 @@
-import {formatDate} from '../helpers';
+import {formatDate} from '../helpers/common';
 import AbstractView from './abstract-view';
 
 const checkDescription = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
