@@ -1,34 +1,21 @@
 import {formatNumber} from '../helpers';
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const getStatisticsTemplate = (count) =>
   `<section class="footer__statistics">
     <p>${count} movies inside</p>
   </section>`;
 
-class Statistic {
-  #element = null;
-  #count = null;
+class Statistic extends AbstractView {
+  #count = 0;
 
   constructor(count) {
+    super();
     this.#count = formatNumber(count);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return getStatisticsTemplate(this.#count);
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

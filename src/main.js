@@ -48,27 +48,27 @@ const moreButton = new ShowMore();
 
 let offset = 5;
 
-render(header, new Rating(currentUser).element);
-render(main, new MainMenu(inWatchListFilms.length, isWatchedFilms.length, isFavoriteFilms.length).element, RenderPosition.AFTERBEGIN);
-render(main, mainContainer.element);
-render(mainContainer.element, mainMoviesList.element);
+render(header, new Rating(currentUser));
+render(main, new MainMenu(inWatchListFilms.length, isWatchedFilms.length, isFavoriteFilms.length), RenderPosition.AFTERBEGIN);
+render(main, mainContainer);
+render(mainContainer, mainMoviesList);
 
 if (moviesCount > 0) {
-  render(mainContainer.element, new Sorting().element, RenderPosition.BEFOREBEGIN);
-  render(mainContainer.element, topMoviesList.element);
-  render(mainContainer.element, recommendMoviesList.element);
-  render(mainMoviesList.element, mainMoviesContainer.element);
-  render(topMoviesList.element, topMoviesContainer.element);
-  render(recommendMoviesList.element, recommendMoviesContainer.element);
-  addMovies(mainMoviesContainer.element, movies.slice(0, MAX_FILMS_GAP));
-  addMovies(topMoviesContainer.element, topRatedMovies.slice(0, MAX_FILMS_EXTRA));
-  addMovies(recommendMoviesContainer.element, recommendMovies.slice(0, MAX_FILMS_EXTRA));
-  render(mainMoviesList.element, moreButton.element);
+  render(mainContainer, new Sorting(), RenderPosition.BEFOREBEGIN);
+  render(mainContainer, topMoviesList);
+  render(mainContainer, recommendMoviesList);
+  render(mainMoviesList, mainMoviesContainer);
+  render(topMoviesList, topMoviesContainer);
+  render(recommendMoviesList, recommendMoviesContainer);
+  addMovies(mainMoviesContainer, movies.slice(0, MAX_FILMS_GAP));
+  addMovies(topMoviesContainer, topRatedMovies.slice(0, MAX_FILMS_EXTRA));
+  addMovies(recommendMoviesContainer, recommendMovies.slice(0, MAX_FILMS_EXTRA));
+  render(mainMoviesList, moreButton);
 } else {
-  render(mainMoviesList.element, new MoviesEmpty().element);
+  render(mainMoviesList, new MoviesEmpty());
 }
 
-render(footer, new Statistic(moviesCount).element);
+render(footer, new Statistic(moviesCount));
 
 if (moreButton.element) {
   const onShowMoreMovies = (evt) => {
@@ -109,7 +109,7 @@ const onOpenDetails = (evt) => {
     const movieDetails = new MovieDetails(movie, movieComments);
     const filmDetailsCloseBtn = movieDetails.element.querySelector('.film-details__close-btn');
 
-    render(main, movieDetails.element);
+    render(main, movieDetails);
     document.body.classList.add('hide-overflow');
 
     document.addEventListener('keydown', onKeydownEsc(movieDetails));

@@ -1,25 +1,10 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const getMoviesEmptyTemplate = () => '<h2 class="films-list__title">There are no movies in our database</h2>';
 
-class MoviesEmpty {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+class MoviesEmpty extends AbstractView {
   get template() {
     return getMoviesEmptyTemplate();
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

@@ -1,5 +1,5 @@
 import {formatDate} from '../helpers';
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
@@ -145,31 +145,18 @@ const getDetailsTemplate = ({
     </form>
   </section>`;
 
-class MovieDetails {
-  #element = null;
+class MovieDetails extends AbstractView {
   #movie = null;
   #comments = null;
 
   constructor(movie, comments) {
+    super();
     this.#movie = movie;
     this.#comments = comments;
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
   get template() {
     return getDetailsTemplate(this.#movie, this.#comments);
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 
