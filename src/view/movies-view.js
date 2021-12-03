@@ -1,25 +1,10 @@
-import {createElement} from '../render';
+import AbstractEventView from './abstract-event-view';
 
 const getMoviesTemplate = () => '<section class="films"></section>';
 
-class MainContainer {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+class MainContainer extends AbstractEventView {
   get template() {
     return getMoviesTemplate();
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

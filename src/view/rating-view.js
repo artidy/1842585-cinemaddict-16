@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const getRatingTemplate = ({avatar, rating}) =>
   `<section class="header__profile profile">
@@ -6,32 +6,19 @@ const getRatingTemplate = ({avatar, rating}) =>
     <img class="profile__avatar" src="${avatar}" alt="Avatar" width="35" height="35">
   </section>`;
 
-class Rating {
-  #element = null;
+class Rating extends AbstractView {
   #user = {
     avatar: '',
     rating: '',
   };
 
   constructor(user) {
+    super();
     this.#user = user;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return getRatingTemplate(this.#user);
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

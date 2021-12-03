@@ -1,5 +1,5 @@
-import {formatDate} from '../helpers';
-import {createElement} from '../render';
+import {formatDate} from '../helpers/common';
+import AbstractView from './abstract-view';
 
 const checkDescription = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
 
@@ -24,29 +24,26 @@ const getFilmTemplate = ({id, title, rating, releaseDate, duration, genres, post
     </div>
   </article>`;
 
-class Movie {
-  #element = null;
-  #movie = null;
+class Movie extends AbstractView {
+  #movie = {
+    id: '',
+    title: '',
+    rating: '',
+    releaseDate: '',
+    duration: '',
+    genres: [],
+    poster: '',
+    description: '',
+    comments: ''
+  };
 
   constructor(movie) {
+    super();
     this.#movie = movie;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return getFilmTemplate(this.#movie);
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

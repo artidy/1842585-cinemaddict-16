@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const getMenuTemplate = (watchListCount, historyCount, favoriteCount) =>
   `<nav class="main-navigation">
@@ -11,33 +11,20 @@ const getMenuTemplate = (watchListCount, historyCount, favoriteCount) =>
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 
-class MainMenu {
-  #element = null;
+class MainMenu extends AbstractView {
   #watchListCount = null;
   #historyCount = null;
   #favoriteCount = null;
 
   constructor(watchListCount, historyCount, favoriteCount) {
+    super();
     this.#watchListCount = watchListCount;
     this.#historyCount = historyCount;
     this.#favoriteCount = favoriteCount;
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
   get template() {
     return getMenuTemplate(this.#watchListCount, this.#historyCount, this.#favoriteCount);
-  }
-
-  removeElement() {
-    this.#element.remove();
-    this.#element = null;
   }
 }
 

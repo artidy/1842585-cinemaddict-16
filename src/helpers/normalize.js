@@ -1,0 +1,56 @@
+const normalizeMovie = ({
+  id,
+  poster,
+  title,
+  originalTitle,
+  rating,
+  director,
+  screenWriters,
+  actors,
+  releaseDate,
+  duration,
+  country,
+  genres,
+  description,
+  maturityRating,
+  comments,
+  isInWatchlist,
+  isWatched,
+  isFavorite,
+}) => ({
+  id,
+  poster,
+  title,
+  originalTitle,
+  rating,
+  director,
+  screenWriters,
+  actors,
+  releaseDate,
+  duration,
+  country,
+  genres,
+  description,
+  maturityRating,
+  comments,
+  isInWatchlist,
+  isWatched,
+  isFavorite,
+});
+const normalizeComment = ({id, text, emotion, author, date}) => ({
+  id,
+  text,
+  emotion,
+  author,
+  date,
+});
+const normalizeUser = ({avatar, rating}) => ({
+  avatar,
+  rating,
+});
+
+export {
+  normalizeMovie,
+  normalizeComment,
+  normalizeUser,
+};

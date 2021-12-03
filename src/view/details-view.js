@@ -1,5 +1,5 @@
-import {formatDate} from '../helpers';
-import {createElement} from '../render';
+import {formatDate} from '../helpers/common';
+import AbstractEventView from './abstract-event-view';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
@@ -145,22 +145,28 @@ const getDetailsTemplate = ({
     </form>
   </section>`;
 
-class MovieDetails {
-  #element = null;
-  #movie = null;
-  #comments = null;
+class MovieDetails extends AbstractEventView {
+  #comments = [];
+  #movie = {
+    poster: '',
+    title: '',
+    originalTitle: '',
+    rating: '',
+    director: '',
+    screenWriters: [],
+    actors: [],
+    releaseDate: '',
+    duration: '',
+    country: '',
+    genres: [],
+    description: '',
+    maturityRating: '',
+  };
 
   constructor(movie, comments) {
+    super();
     this.#movie = movie;
     this.#comments = comments;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
@@ -168,8 +174,8 @@ class MovieDetails {
   }
 
   removeElement() {
-    this.#element.remove();
-    this.#element = null;
+    super.removeElement();
+    document.body.classList.remove('hide-overflow');
   }
 }
 
