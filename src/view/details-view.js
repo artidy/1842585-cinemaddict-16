@@ -1,6 +1,5 @@
 import {formatDate} from '../helpers/common';
 import AbstractEventView from './abstract-event-view';
-import {onKeydownEsc} from "../helpers/events";
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
