@@ -9,11 +9,11 @@ class AbstractEventView extends AbstractView {
     }
   }
 
-  addEvent = (element = this.element, eventName, callback) => {
+  addEvent = (eventName, callback, element = this.element) => {
     element.addEventListener(eventName, callback);
   }
 
-  removeEvent = (element = this.element, eventName, callback) => {
+  removeEvent = (eventName, callback, element = this.element) => {
     element.removeEventListener(eventName, callback);
   }
 }

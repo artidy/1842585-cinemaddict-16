@@ -158,6 +158,11 @@ class MovieDetails extends AbstractView {
   get template() {
     return getDetailsTemplate(this.#movie, this.#comments);
   }
+
+  removeElement() {
+    super.removeElement();
+    document.body.classList.remove('hide-overflow');
+  }
 }
 
 export default MovieDetails;

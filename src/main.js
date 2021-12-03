@@ -70,32 +70,28 @@ if (moviesCount > 0) {
 
 render(footer, new Statistic(moviesCount));
 
-if (moreButton.element) {
-  const onShowMoreMovies = (evt) => {
-    evt.preventDefault();
-    addMovies(mainMoviesContainer.element, movies.slice(offset, offset + MAX_FILMS_GAP));
-    offset += MAX_FILMS_GAP;
+const onShowMoreMovies = (evt) => {
+  evt.preventDefault();
+  addMovies(mainMoviesContainer, movies.slice(offset, offset + MAX_FILMS_GAP));
+  offset += MAX_FILMS_GAP;
 
-    if (offset >= moviesCount) {
-      moreButton.removeElement();
-    }
-  };
+  if (offset >= moviesCount) {
+    moreButton.removeElement();
+  }
+};
 
-  moreButton.element.addEventListener('click', onShowMoreMovies);
-}
+moreButton.addEvent('click', onShowMoreMovies);
 
 const onKeydownEsc = (popup) => (evt) => {
   if (evt.key === 'Esc' || evt.key === 'Escape') {
     popup.removeElement();
     document.removeEventListener('keydown', onKeydownEsc);
-    document.body.classList.remove('hide-overflow');
   }
 };
 
 const onClickCloseBtn = (popup) => () => {
   popup.removeElement();
   document.removeEventListener('keydown', onKeydownEsc);
-  document.body.classList.remove('hide-overflow');
 };
 
 const onOpenDetails = (evt) => {
@@ -117,4 +113,4 @@ const onOpenDetails = (evt) => {
   }
 };
 
-mainContainer.element.addEventListener('click', onOpenDetails);
+mainContainer.addEvent('click', onOpenDetails);

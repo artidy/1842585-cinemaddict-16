@@ -1,8 +1,8 @@
-import AbstractView from './abstract-view';
+import AbstractEventView from './abstract-event-view';
 
 const getMoviesTemplate = () => '<section class="films"></section>';
 
-class MainContainer extends AbstractView {
+class MainContainer extends AbstractEventView {
   get template() {
     return getMoviesTemplate();
   }

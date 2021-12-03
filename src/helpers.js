@@ -62,7 +62,7 @@ const sortTopRatedFilms = (movies) => movies.slice().sort(({rating: firstRating}
 const sortMostCommentedFilms = (movies) => movies.slice().sort(({comments: firstComments}, {comments: secondComments}) => firstComments.length < secondComments.length);
 const addMovies = (container, movies) => {
   movies.forEach((movie) => {
-    render(container, new Movie(movie).element);
+    render(container, new Movie(movie));
   });
 };
 
