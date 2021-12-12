@@ -32,14 +32,17 @@ const getControlsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
     <button
       class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isInWatchlist ? 'film-card__controls-item--active' : ''}"
       type="button"
+      name="watchlist"
     >${isInWatchlist ? 'Already in watchlist' : 'Add to watchlist'}</button>
     <button
-      class="film-card__controls-item film-card__controls-item--mark-as-watched ${isInWatchlist ? 'film-card__controls-item--active' : ''}"
+      class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}"
       type="button"
+      name="watched"
     >${isWatched ? 'Already watched' : 'Add to watched'}</button>
     <button
       class="film-card__controls-item film-card__controls-item--favorite ${isFavorite ? 'film-card__controls-item--active' : ''}"
       type="button"
+      name="favorite"
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </div>`;
 

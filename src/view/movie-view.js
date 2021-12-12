@@ -49,6 +49,7 @@ class Movie extends AbstractView {
   updateControl = () => {
     this.#control.removeElement();
     render(this.element, this.#control.element);
+    this.#control.addEvent('onClickControls', 'click', this.#control.onClickControls(this.updateControl));
   }
 }
 
