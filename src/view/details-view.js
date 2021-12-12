@@ -178,9 +178,39 @@ class MovieDetails extends AbstractEventView {
     return getDetailsTemplate(this.#movie, this.#comments);
   }
 
+  #toggleWatchlist = () => {
+    this.#movie.isInWatchlist = !this.#movie.isInWatchlist;
+    console.log("click");
+  }
+
+  #toggleWatched = () => {
+    this.#movie.isWatched = !this.#movie.isWatched;
+  }
+
+  #toggleFavorite = () => {
+    this.#movie.isFavorite = !this.#movie.isFavorite;
+  }
+
   removeElement = () => {
     super.removeElement();
     document.body.classList.remove('hide-overflow');
+  }
+
+  onClickControls = (evt) => {
+    evt.preventDefault();
+
+    if (evt.target.tagName === 'BUTTON') {
+      switch(evt.target.getAttribute('name')) {
+        case 'watchlist':
+          this.#toggleWatchlist();
+          return;
+        case 'watched':
+          this.#toggleWatched();
+          return;
+        case 'favorite':
+          this.#toggleFavorite();
+      }
+    }
   }
 }
 

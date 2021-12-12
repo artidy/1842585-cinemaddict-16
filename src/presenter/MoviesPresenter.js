@@ -156,6 +156,7 @@ class MoviesPresenter {
     if (this.#movieDetails !== null) {
       this.#movieDetails.addEvent('onKeydownEsc', 'keydown', onKeydownEsc(this.#movieDetails), document);
       this.#movieDetails.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+      this.#movieDetails.addEvent('onClickControls', 'click', this.#movieDetails.onClickControls);
     }
   }
 
