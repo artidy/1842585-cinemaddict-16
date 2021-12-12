@@ -7,12 +7,14 @@ import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {addMovies} from '../helpers/renders';
+import {addMovies, renderMovieDetails} from '../helpers/renders';
 import {MAX_FILMS_EXTRA, MAX_FILMS_GAP} from '../constants';
 import Statistic from '../view/statistics-view';
-import {onOpenMovieDetails, onShowMoreMovies} from '../helpers/events';
+import {onClickCloseBtn, onKeydownEsc, onOpenMovieDetails, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
 import {sortMostCommentedMovies, sortTopRatedMovies} from '../helpers/sorting';
+import MovieDetails from '../view/details-view';
+import Movie from '../view/movie-view';
 
 class MoviesPresenter {
   #header = null;
@@ -35,6 +37,7 @@ class MoviesPresenter {
   #topMoviesContainer = new MovieContainer();
   #recommendMoviesContainer = new MovieContainer();
   #moreButton = new ShowMore();
+  #movieDetails = null;
 
   constructor(header, main, footer) {
     this.#header = header;
@@ -56,8 +59,11 @@ class MoviesPresenter {
     if (this.#movies.length > 0) {
       this.#renderSorting();
       this.#renderMainMovies();
+      this.#renderMovies(this.#mainMoviesContainer, this.#movies.slice(0, MAX_FILMS_GAP));
       this.#renderTopMovies();
+      this.#renderMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
       this.#renderRecommendedMovies();
+      this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
       this.#renderMoreButton();
     } else {
       this.#renderEmpty();
@@ -65,11 +71,11 @@ class MoviesPresenter {
     this.#renderStatistic();
   }
 
-  #renderRating() {
+  #renderRating = () => {
     render(this.#header,  new Rating(this.#currentUser));
   }
 
-  #renderMainMenu() {
+  #renderMainMenu = () => {
     render(this.#main,
       new MainMenu(
         this.#watchMovies.length,
@@ -79,50 +85,81 @@ class MoviesPresenter {
     );
   }
 
-  #renderMainContainer() {
+  #renderMainContainer = () => {
     render(this.#main, this.#mainContainer);
   }
 
-  #renderMainMoviesList() {
+  #renderMainMoviesList = () => {
     render(this.#mainContainer, this.#mainMoviesList);
   }
 
-  #renderSorting() {
+  #renderSorting = () => {
     render(this.#mainContainer, new Sorting(), RenderPosition.BEFOREBEGIN);
   }
 
-  #renderMainMovies() {
+  #renderMainMovies = () => {
     render(this.#mainMoviesList, this.#mainMoviesContainer);
-    addMovies(this.#mainMoviesContainer, this.#movies.slice(0, MAX_FILMS_GAP));
     this.#addClickMainContainer();
   }
 
-  #renderTopMovies() {
+  #renderTopMovies = () => {
     render(this.#mainContainer, this.#topMoviesList);
     render(this.#topMoviesList, this.#topMoviesContainer);
-    addMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
   }
 
-  #renderRecommendedMovies() {
+  #renderRecommendedMovies = () => {
     render(this.#mainContainer, this.#recommendMoviesList);
     render(this.#recommendMoviesList, this.#recommendMoviesContainer);
-    addMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
   }
 
-  #renderMoreButton() {
+  #renderMoreButton = () => {
     render(this.#mainMoviesList, this.#moreButton);
     this.#addClickMoreButton();
   }
 
-  #renderStatistic() {
+  #renderStatistic = () => {
     render(this.#footer, new Statistic(this.#movies.length));
   }
 
-  #renderEmpty() {
+  #renderEmpty = () => {
     render(this.#mainMoviesList, new MoviesEmpty());
   }
 
-  #addClickMoreButton() {
+  #renderMovies = (container, movies) => {
+    container.innerHTML = '';
+
+    movies.forEach((movie) => {
+      render(container, new Movie(movie));
+    });
+  }
+
+  #renderMovieDetails = (filmCard) => {
+    const movieCard = filmCard.closest('.film-card__link');
+
+    if (movieCard) {
+      const movie = this.#movies.find((item) => item.id === movieCard.dataset.id);
+      const {comments: commentsIds} = movie;
+      const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
+      this.#movieDetails = new MovieDetails(movie, movieComments);
+
+      render(this.#main, this.#movieDetails);
+
+      document.body.classList.add('hide-overflow');
+    }
+  }
+
+  #onOpenMovieDetails = (evt) => {
+    evt.preventDefault();
+
+    this.#renderMovieDetails(evt.target);
+
+    if (this.#movieDetails !== null) {
+      this.#movieDetails.addEvent('onKeydownEsc', 'keydown', onKeydownEsc(this.#movieDetails), document);
+      this.#movieDetails.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+    }
+  }
+
+  #addClickMoreButton = () => {
     this.#moreButton.addEvent(
       'onShowMoreMovies',
       'click',
@@ -133,24 +170,17 @@ class MoviesPresenter {
     );
   }
 
-  #addClickMainContainer() {
-    this.#mainContainer.addEvent(
-      'onOpenMovieDetails',
-      'click',
-      onOpenMovieDetails(
-        this.#main,
-        this.#movies,
-        this.#comments)
-    );
+  #addClickMainContainer = () => {
+    this.#mainContainer.addEvent('onOpenMovieDetails', 'click', this.#onOpenMovieDetails);
   }
 
-  #updateFilters() {
+  #updateFilters = () => {
     this.#watchMovies = filterWatchingMovies(this.#movies);
     this.#watchedMovies = filterWatchedMovies(this.#movies);
     this.#favoriteMovies = filterFavoriteMovies(this.#movies);
   }
 
-  #updateSorting() {
+  #updateSorting = () => {
     this.#topRatedMovies = sortTopRatedMovies(this.#movies);
     this.#recommendMovies = sortMostCommentedMovies(this.#movies);
   }

@@ -1,4 +1,4 @@
-import {addMovies, renderMovieDetails} from './renders';
+import {addMovies} from './renders';
 import {MAX_FILMS_GAP} from '../constants';
 
 const onShowMoreMovies = (movies, container, button) => {
@@ -31,20 +31,26 @@ const onClickCloseBtn = (popup) => (evt) => {
   }
 };
 
-const onOpenMovieDetails = (container, movies, comments) => (evt) => {
-  evt.preventDefault();
+const onClickWatchlist = (movie, updateView) => {
+  movie.isInWatchlist = !movie.isInWatchlist;
+  updateView();
+};
 
-  const movieDetails = renderMovieDetails(container, movies, comments, evt.target);
+const onClickWatched = (movie, updateView) => {
+  movie.isWatched = !movie.isWatched;
+  updateView();
+};
 
-  if (movieDetails) {
-    movieDetails.addEvent('onKeydownEsc', 'keydown', onKeydownEsc(movieDetails), document);
-    movieDetails.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(movieDetails));
-  }
+const onClickFavorite = (movie, updateView) => {
+  movie.isFavorite = !movie.isFavorite;
+  updateView();
 };
 
 export {
   onShowMoreMovies,
   onKeydownEsc,
   onClickCloseBtn,
-  onOpenMovieDetails,
+  onClickWatchlist,
+  onClickWatched,
+  onClickFavorite,
 };
