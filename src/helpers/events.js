@@ -1,7 +1,6 @@
-import {addMovies} from './renders';
 import {MAX_FILMS_GAP} from '../constants';
 
-const onShowMoreMovies = (movies, container, button) => {
+const onShowMoreMovies = (movies, container, button, addMovies) => {
   let offset = MAX_FILMS_GAP;
 
   return (evt) => {

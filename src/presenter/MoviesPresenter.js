@@ -1,25 +1,23 @@
 import MainContainer from '../view/movies-view';
 import MoviesList from '../view/movies-list-view';
 import MovieContainer from '../view/movies-container-view';
-import {CloseDetails, Controls, ShowMore} from '../view/buttons-view';
+import {CloseDetails, ShowMore} from '../view/buttons-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {addMovies, renderMovieDetails} from '../helpers/renders';
 import {MAX_FILMS_EXTRA, MAX_FILMS_GAP} from '../constants';
 import Statistic from '../view/statistics-view';
-import {onClickCloseBtn, onKeydownEsc, onOpenMovieDetails, onShowMoreMovies} from '../helpers/events';
+import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
 import {sortMostCommentedMovies, sortTopRatedMovies} from '../helpers/sorting';
 import MovieDetails from '../view/details-view';
 import Movie from '../view/movie-view';
 import MovieDetailsFormView from '../view/movie-details-form-view';
-import MovieDetailsContainerView from "../view/movie-details-container-view";
-import MovieDetailsWrapView from "../view/movie-details-wrap-view";
-import MovieDetailsWrap from "../view/movie-details-wrap-view";
-import MovieDetailsCommentsView from "../view/movie-details-comments-view";
+import MovieDetailsContainerView from '../view/movie-details-container-view';
+import MovieDetailsWrap from '../view/movie-details-wrap-view';
+import MovieDetailsCommentsView from '../view/movie-details-comments-view';
 
 class MoviesPresenter {
   #header = null;
@@ -132,8 +130,6 @@ class MoviesPresenter {
   }
 
   #renderMovies = (container, movies) => {
-    container.innerHTML = '';
-
     movies.forEach((movie) => {
       const movieCard = new Movie(movie);
 
@@ -148,6 +144,10 @@ class MoviesPresenter {
     const movieCard = filmCard.closest('.film-card__link');
 
     if (movieCard) {
+      if (this.#movieDetails !== null) {
+        this.#movieDetails.removeElement();
+      }
+
       const id = movieCard.dataset.id;
       const movie = this.#movies.find((item) => item.id === id);
       const {comments: commentsIds} = movie;
@@ -187,7 +187,8 @@ class MoviesPresenter {
       onShowMoreMovies(
         this.#movies,
         this.#mainMoviesContainer,
-        this.#moreButton)
+        this.#moreButton,
+        this.#renderMovies)
     );
   }
 
