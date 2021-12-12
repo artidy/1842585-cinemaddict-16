@@ -16,9 +16,12 @@ const onShowMoreMovies = (movies, container, button) => {
 };
 
 const onKeydownEsc = (popup) => (evt) => {
+  evt.preventDefault();
+
   if (evt.key === 'Esc' || evt.key === 'Escape') {
-    popup.removeElement();
     popup.removeEvent('onKeydownEsc', 'keydown', document);
+    document.body.classList.remove('hide-overflow');
+    popup.removeElement();
   }
 };
 
@@ -26,31 +29,14 @@ const onClickCloseBtn = (popup) => (evt) => {
   evt.preventDefault();
 
   if (evt.target.classList.contains('film-details__close-btn')) {
-    popup.removeElement();
     popup.removeEvent('onKeydownEsc', 'keydown', document);
+    document.body.classList.remove('hide-overflow');
+    popup.removeElement();
   }
-};
-
-const onClickWatchlist = (movie, updateView) => {
-  movie.isInWatchlist = !movie.isInWatchlist;
-  updateView();
-};
-
-const onClickWatched = (movie, updateView) => {
-  movie.isWatched = !movie.isWatched;
-  updateView();
-};
-
-const onClickFavorite = (movie, updateView) => {
-  movie.isFavorite = !movie.isFavorite;
-  updateView();
 };
 
 export {
   onShowMoreMovies,
   onKeydownEsc,
   onClickCloseBtn,
-  onClickWatchlist,
-  onClickWatched,
-  onClickFavorite,
 };

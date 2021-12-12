@@ -1,7 +1,7 @@
 import MainContainer from '../view/movies-view';
 import MoviesList from '../view/movies-list-view';
 import MovieContainer from '../view/movies-container-view';
-import {ShowMore} from '../view/buttons-view';
+import {CloseDetails, Controls, ShowMore} from '../view/buttons-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
@@ -15,12 +15,18 @@ import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '.
 import {sortMostCommentedMovies, sortTopRatedMovies} from '../helpers/sorting';
 import MovieDetails from '../view/details-view';
 import Movie from '../view/movie-view';
+import MovieDetailsFormView from '../view/movie-details-form-view';
+import MovieDetailsContainerView from "../view/movie-details-container-view";
+import MovieDetailsWrapView from "../view/movie-details-wrap-view";
+import MovieDetailsWrap from "../view/movie-details-wrap-view";
+import MovieDetailsCommentsView from "../view/movie-details-comments-view";
 
 class MoviesPresenter {
   #header = null;
   #main = null;
   #footer = null;
   #currentUser = null;
+  #movieDetails = null;
   #movies = [];
   #comments = [];
   #watchMovies = [];
@@ -28,6 +34,7 @@ class MoviesPresenter {
   #favoriteMovies = [];
   #topRatedMovies = [];
   #recommendMovies = [];
+  #moviesCards = new Map();
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
@@ -37,7 +44,6 @@ class MoviesPresenter {
   #topMoviesContainer = new MovieContainer();
   #recommendMoviesContainer = new MovieContainer();
   #moreButton = new ShowMore();
-  #movieDetails = null;
 
   constructor(header, main, footer) {
     this.#header = header;
@@ -129,7 +135,12 @@ class MoviesPresenter {
     container.innerHTML = '';
 
     movies.forEach((movie) => {
-      render(container, new Movie(movie));
+      const movieCard = new Movie(movie);
+
+      this.#moviesCards.set(movie.id, movieCard);
+
+      render(container, movieCard);
+      movieCard.updateControl();
     });
   }
 
@@ -137,12 +148,27 @@ class MoviesPresenter {
     const movieCard = filmCard.closest('.film-card__link');
 
     if (movieCard) {
-      const movie = this.#movies.find((item) => item.id === movieCard.dataset.id);
+      const id = movieCard.dataset.id;
+      const movie = this.#movies.find((item) => item.id === id);
       const {comments: commentsIds} = movie;
       const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
-      this.#movieDetails = new MovieDetails(movie, movieComments);
+      this.#movieDetails = new MovieDetails();
+      const movieForm = new MovieDetailsFormView();
+      const movieContainer = new MovieDetailsContainerView();
+      const movieWrap = new MovieDetailsWrap(movie, this.#moviesCards.get(id));
+      const movieClose = new CloseDetails();
+      const movieCommentsView = new MovieDetailsCommentsView(movieComments);
 
       render(this.#main, this.#movieDetails);
+      render(this.#movieDetails, movieForm);
+      render(movieForm, movieContainer);
+      render(movieForm, movieCommentsView);
+      render(movieContainer, movieClose);
+      render(movieContainer, movieWrap);
+      movieWrap.updateControl();
+
+      document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
+      movieClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
 
       document.body.classList.add('hide-overflow');
     }
@@ -152,12 +178,6 @@ class MoviesPresenter {
     evt.preventDefault();
 
     this.#renderMovieDetails(evt.target);
-
-    if (this.#movieDetails !== null) {
-      this.#movieDetails.addEvent('onKeydownEsc', 'keydown', onKeydownEsc(this.#movieDetails), document);
-      this.#movieDetails.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
-      this.#movieDetails.addEvent('onClickControls', 'click', this.#movieDetails.onClickControls);
-    }
   }
 
   #addClickMoreButton = () => {

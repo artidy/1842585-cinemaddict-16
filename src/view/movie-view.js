@@ -1,5 +1,7 @@
 import {formatDate} from '../helpers/common';
 import AbstractView from './abstract-view';
+import {Controls} from './buttons-view';
+import {render} from '../render';
 
 const checkDescription = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
 
@@ -17,14 +19,10 @@ const getFilmTemplate = ({id, title, rating, releaseDate, duration, genres, post
       <p class="film-card__description">${checkDescription(description)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
-    <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
-    </div>
   </article>`;
 
 class Movie extends AbstractView {
+  #control = null;
   #movie = {
     id: '',
     title: '',
@@ -39,11 +37,18 @@ class Movie extends AbstractView {
 
   constructor(movie) {
     super();
+
     this.#movie = movie;
+    this.#control = new Controls(movie);
   }
 
   get template() {
     return getFilmTemplate(this.#movie);
+  }
+
+  updateControl = () => {
+    this.#control.removeElement();
+    render(this.element, this.#control.element);
   }
 }
 
