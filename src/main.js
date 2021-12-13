@@ -3,7 +3,7 @@ import {normalizeArray} from './helpers/common';
 import {normalizeMovie, normalizeComment, normalizeUser} from './helpers/normalize';
 import {generateComments} from './mock/comments';
 import {user} from './mock/user';
-import MoviesPresenter from './presenter/MoviesPresenter';
+import MoviesPresenter from './presenter/movies-presenter';
 
 const currentUser = normalizeUser(user);
 const movies = normalizeArray(generateFilms(), normalizeMovie);
