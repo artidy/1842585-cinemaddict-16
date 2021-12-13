@@ -16,7 +16,7 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
     </div>
   </li>`).join('');
 
-const getTemplate = (comments) =>
+const getMovieCommentsTemplate = (comments) =>
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -67,7 +67,7 @@ class MovieDetailsCommentsView extends AbstractView {
   }
 
   get template() {
-    return getTemplate(this.#comments);
+    return getMovieCommentsTemplate(this.#comments);
   }
 }
 

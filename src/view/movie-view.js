@@ -5,7 +5,7 @@ import {render} from '../render';
 
 const checkDescription = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
 
-const getFilmTemplate = ({id, title, rating, releaseDate, duration, genres, poster, description, comments}) =>
+const getMovieTemplate = ({id, title, rating, releaseDate, duration, genres, poster, description, comments}) =>
   `<article class="film-card">
     <a class="film-card__link" data-id="${id}">
       <h3 class="film-card__title">${title}</h3>
@@ -43,7 +43,7 @@ class Movie extends AbstractView {
   }
 
   get template() {
-    return getFilmTemplate(this.#movie);
+    return getMovieTemplate(this.#movie);
   }
 
   updateControl = () => {

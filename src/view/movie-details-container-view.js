@@ -1,10 +1,10 @@
 import AbstractView from './abstract-view';
 
-const getTemplate = () => '<div class="film-details__top-container"></div>';
+const getMovieDetailsContainerTemplate = () => '<div class="film-details__top-container"></div>';
 
 class MovieDetailsContainerView extends AbstractView {
   get template() {
-    return getTemplate();
+    return getMovieDetailsContainerTemplate();
   }
 }
 

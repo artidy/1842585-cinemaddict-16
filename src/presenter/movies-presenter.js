@@ -1,6 +1,6 @@
 import MainContainer from '../view/movies-view';
 import MoviesList from '../view/movies-list-view';
-import MovieContainer from '../view/movies-container-view';
+import MoviesContainer from '../view/movies-container-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
@@ -39,9 +39,9 @@ class MoviesPresenter {
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
   #topMoviesList = new MoviesList('Top rated', true);
   #recommendMoviesList = new MoviesList('Most commented', true);
-  #mainMoviesContainer = new MovieContainer();
-  #topMoviesContainer = new MovieContainer();
-  #recommendMoviesContainer = new MovieContainer();
+  #mainMoviesContainer = new MoviesContainer();
+  #topMoviesContainer = new MoviesContainer();
+  #recommendMoviesContainer = new MoviesContainer();
   #moreButton = new ShowMoreBtnView();
 
   constructor(header, main, footer) {

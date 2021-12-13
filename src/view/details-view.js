@@ -1,10 +1,10 @@
 import AbstractEventView from './abstract-event-view';
 
-const getTemplate = () => '<section class="film-details"></section>';
+const getMovieDetailsTemplate = () => '<section class="film-details"></section>';
 
 class MovieDetails extends AbstractEventView {
   get template() {
-    return getTemplate();
+    return getMovieDetailsTemplate();
   }
 }
 

@@ -6,7 +6,7 @@ import {render, RenderPosition} from '../render';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
-const getTemplate = ({poster, title, maturityRating, originalTitle, rating, director,
+const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, rating, director,
   screenWriters, actors, releaseDate, duration, country, genres, description}) =>
   `<div class="film-details__info-wrap">
     <div class="film-details__poster">
@@ -79,7 +79,7 @@ class MovieDetailsWrap extends AbstractView {
   }
 
   get template() {
-    return getTemplate(this.#movie);
+    return getMoviesWrapTemplate(this.#movie);
   }
 
   updateControl = () => {
