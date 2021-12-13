@@ -1,11 +1,11 @@
 import {MAX_FILMS_GAP} from '../constants';
 
-const onShowMoreMovies = (movies, container, button, addMovies) => {
+const onShowMoreMovies = (movies, container, button, renderMovies) => {
   let offset = MAX_FILMS_GAP;
 
   return (evt) => {
     evt.preventDefault();
-    addMovies(container, movies.slice(offset, offset + MAX_FILMS_GAP));
+    renderMovies(container, movies.slice(offset, offset + MAX_FILMS_GAP));
     offset += MAX_FILMS_GAP;
 
     if (offset >= movies.length) {
