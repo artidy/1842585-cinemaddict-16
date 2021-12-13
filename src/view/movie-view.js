@@ -1,6 +1,6 @@
-import {formatDate} from '../helpers/common';
 import AbstractView from './abstract-view';
-import {Controls} from './buttons-view';
+import ControlsView from './controls-view';
+import {formatDate} from '../helpers/common';
 import {render} from '../render';
 
 const checkDescription = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
@@ -39,7 +39,7 @@ class Movie extends AbstractView {
     super();
 
     this.#movie = movie;
-    this.#control = new Controls(movie);
+    this.#control = new ControlsView(movie);
   }
 
   get template() {

@@ -1,7 +1,6 @@
 import MainContainer from '../view/movies-view';
 import MoviesList from '../view/movies-list-view';
 import MovieContainer from '../view/movies-container-view';
-import {CloseDetails, ShowMore} from '../view/buttons-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
@@ -18,6 +17,8 @@ import MovieDetailsFormView from '../view/movie-details-form-view';
 import MovieDetailsContainerView from '../view/movie-details-container-view';
 import MovieDetailsWrap from '../view/movie-details-wrap-view';
 import MovieDetailsCommentsView from '../view/movie-details-comments-view';
+import ShowMoreBtnView from '../view/show-more-btn-view';
+import CloseDetailsBtnView from '../view/close-details-btn-view';
 
 class MoviesPresenter {
   #header = null;
@@ -41,7 +42,7 @@ class MoviesPresenter {
   #mainMoviesContainer = new MovieContainer();
   #topMoviesContainer = new MovieContainer();
   #recommendMoviesContainer = new MovieContainer();
-  #moreButton = new ShowMore();
+  #moreButton = new ShowMoreBtnView();
 
   constructor(header, main, footer) {
     this.#header = header;
@@ -135,7 +136,7 @@ class MoviesPresenter {
     const movieForm = new MovieDetailsFormView();
     const movieContainer = new MovieDetailsContainerView();
     const movieWrap = new MovieDetailsWrap(movie, this.#moviesCards.get(id));
-    const movieClose = new CloseDetails();
+    const movieClose = new CloseDetailsBtnView();
     const movieCommentsView = new MovieDetailsCommentsView(movieComments);
 
     render(this.#main, this.#movieDetails);

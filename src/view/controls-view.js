@@ -1,10 +1,6 @@
 import AbstractEventView from './abstract-event-view';
 import {EMPTY_MOVIE} from '../constants';
 
-const getShowMoreTemplate = () => '<button class="films-list__show-more">Show more</button>';
-
-const getCloseDetailsTemplate = () => '<div class="film-details__close"><button class="film-details__close-btn" type="button">close</button></div>';
-
 const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
   `<section class="film-details__controls">
     <button
@@ -46,19 +42,7 @@ const getControlsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </div>`;
 
-class ShowMore extends AbstractEventView {
-  get template() {
-    return getShowMoreTemplate();
-  }
-}
-
-class CloseDetails extends AbstractEventView {
-  get template() {
-    return getCloseDetailsTemplate();
-  }
-}
-
-class Controls extends AbstractEventView {
+class ControlsView extends AbstractEventView {
   #movie = EMPTY_MOVIE;
   #isDetails = false;
 
@@ -106,4 +90,4 @@ class Controls extends AbstractEventView {
   }
 }
 
-export {ShowMore, CloseDetails, Controls};
+export default ControlsView;

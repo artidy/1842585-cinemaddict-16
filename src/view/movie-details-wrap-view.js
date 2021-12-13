@@ -1,7 +1,7 @@
 import AbstractView from './abstract-view';
+import ControlsView from './controls-view';
 import {formatDate} from '../helpers/common';
 import {EMPTY_MOVIE} from '../constants';
-import {Controls} from './buttons-view';
 import {render, RenderPosition} from '../render';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
@@ -74,7 +74,7 @@ class MovieDetailsWrap extends AbstractView {
     super();
 
     this.#movie = movie;
-    this.#control = new Controls(movie, true);
+    this.#control = new ControlsView(movie, true);
     this.#parent = parent;
   }
 
