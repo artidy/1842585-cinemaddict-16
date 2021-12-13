@@ -10,7 +10,7 @@ import {MAX_FILMS_EXTRA, MAX_FILMS_GAP} from '../constants';
 import Statistic from '../view/statistics-view';
 import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
-import {sortMostCommentedMovies, sortTopRatedMovies} from '../helpers/sorting';
+import {sortMoviesByComments, sortMoviesByDate, sortMoviesByRating,} from '../helpers/sorting';
 import MovieDetails from '../view/details-view';
 import Movie from '../view/movie-view';
 import MovieDetailsFormView from '../view/movie-details-form-view';
@@ -26,7 +26,9 @@ class MoviesPresenter {
   #footer = null;
   #currentUser = null;
   #movieDetails = null;
+  #currentSort = 'default';
   #movies = [];
+  #sortingMovies = [];
   #comments = [];
   #watchMovies = [];
   #watchedMovies = [];
@@ -42,7 +44,9 @@ class MoviesPresenter {
   #mainMoviesContainer = new MoviesContainer();
   #topMoviesContainer = new MoviesContainer();
   #recommendMoviesContainer = new MoviesContainer();
+  #sortingMenu = new Sorting();
   #moreButton = new ShowMoreBtnView();
+  #mainMenu = new MainMenu(0, 0, 0);
 
   constructor(header, main, footer) {
     this.#header = header;
@@ -55,35 +59,15 @@ class MoviesPresenter {
     this.#comments = [...comments];
     this.#currentUser = {...currentUser};
 
-    this.#updateFilters();
-    this.#updateSorting();
     render(this.#header,  new Rating(this.#currentUser));
-    this.#renderMainMenu();
-    render(this.#main, this.#mainContainer);
-    render(this.#mainContainer, this.#mainMoviesList);
-    if (this.#movies.length > 0) {
-      render(this.#mainContainer, new Sorting(), RenderPosition.BEFOREBEGIN);
-      this.#renderMainMovies();
-      this.#renderMovies(this.#mainMoviesContainer, this.#movies.slice(0, MAX_FILMS_GAP));
-      this.#renderTopMovies();
-      this.#renderMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
-      this.#renderRecommendedMovies();
-      this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
-      this.#renderMoreButton();
-    } else {
-      render(this.#mainMoviesList, new MoviesEmpty());
-    }
+    this.#updateMovies();
     render(this.#footer, new Statistic(this.#movies.length));
   }
 
   #renderMainMenu = () => {
-    render(this.#main,
-      new MainMenu(
-        this.#watchMovies.length,
-        this.#watchedMovies.length,
-        this.#favoriteMovies.length),
-      RenderPosition.AFTERBEGIN
-    );
+    this.#mainMenu = new MainMenu(this.#watchMovies.length, this.#watchedMovies.length, this.#favoriteMovies.length);
+
+    render(this.#main, this.#mainMenu, RenderPosition.AFTERBEGIN);
   }
 
   #renderMainMovies = () => {
@@ -153,6 +137,11 @@ class MoviesPresenter {
     document.body.classList.add('hide-overflow');
   }
 
+  #renderSortMenu = () => {
+    render(this.#mainContainer, this.#sortingMenu, RenderPosition.BEFOREBEGIN);
+    this.#sortingMenu.addEvent('onClickSortBtn', 'click', this.#sortingMenu.onClickSortBtn(this.#updateMovies));
+  }
+
   #onOpenMovieDetails = (evt) => {
     evt.preventDefault();
 
@@ -164,7 +153,7 @@ class MoviesPresenter {
       'onShowMoreMovies',
       'click',
       onShowMoreMovies(
-        this.#movies,
+        this.#sortingMovies,
         this.#mainMoviesContainer,
         this.#moreButton,
         this.#renderMovies)
@@ -181,9 +170,51 @@ class MoviesPresenter {
     this.#favoriteMovies = filterFavoriteMovies(this.#movies);
   }
 
+  #updateMovies = () => {
+    this.#mainContainer.removeElement();
+    this.#mainMoviesContainer.removeElement();
+    this.#topMoviesContainer.removeElement();
+    this.#recommendMoviesContainer.removeElement();
+    this.#moreButton.removeElement();
+    this.#sortingMenu.removeElement();
+    this.#mainMenu.removeElement();
+
+    this.#updateFilters();
+    this.#updateSorting();
+
+    this.#renderMainMenu();
+    render(this.#main, this.#mainContainer);
+    render(this.#mainContainer, this.#mainMoviesList);
+
+    if (this.#sortingMovies.length === 0) {
+      render(this.#mainMoviesList, new MoviesEmpty());
+      return;
+    }
+
+    this.#renderSortMenu(this.#currentSort);
+    this.#renderMainMovies();
+    this.#renderMovies(this.#mainMoviesContainer, this.#sortingMovies.slice(0, MAX_FILMS_GAP));
+    this.#renderTopMovies();
+    this.#renderMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
+    this.#renderRecommendedMovies();
+    this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
+    this.#renderMoreButton();
+  }
+
   #updateSorting = () => {
-    this.#topRatedMovies = sortTopRatedMovies(this.#movies);
-    this.#recommendMovies = sortMostCommentedMovies(this.#movies);
+    switch(this.#sortingMenu.currentSort) {
+      case 'date':
+        this.#sortingMovies = sortMoviesByDate(this.#movies);
+        break;
+      case 'rating':
+        this.#sortingMovies = sortMoviesByRating(this.#movies);
+        break;
+      default:
+        this.#sortingMovies = this.#movies;
+    }
+
+    this.#topRatedMovies = sortMoviesByRating(this.#sortingMovies);
+    this.#recommendMovies = sortMoviesByComments(this.#sortingMovies);
   }
 }
 
