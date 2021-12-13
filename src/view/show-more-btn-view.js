@@ -2,10 +2,10 @@ import AbstractEventView from './abstract-event-view';
 
 const getShowMoreTemplate = () => '<button class="films-list__show-more">Show more</button>';
 
-class ShowMore extends AbstractEventView {
+class ShowMoreBtnView extends AbstractEventView {
   get template() {
     return getShowMoreTemplate();
   }
 }
 
-export {ShowMore};
+export default ShowMoreBtnView;
