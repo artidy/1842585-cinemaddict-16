@@ -56,12 +56,12 @@ class MoviesPresenter {
 
     this.#updateFilters();
     this.#updateSorting();
-    this.#renderRating();
+    render(this.#header,  new Rating(this.#currentUser));
     this.#renderMainMenu();
-    this.#renderMainContainer();
-    this.#renderMainMoviesList();
+    render(this.#main, this.#mainContainer);
+    render(this.#mainContainer, this.#mainMoviesList);
     if (this.#movies.length > 0) {
-      this.#renderSorting();
+      render(this.#mainContainer, new Sorting(), RenderPosition.BEFOREBEGIN);
       this.#renderMainMovies();
       this.#renderMovies(this.#mainMoviesContainer, this.#movies.slice(0, MAX_FILMS_GAP));
       this.#renderTopMovies();
@@ -70,13 +70,9 @@ class MoviesPresenter {
       this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
       this.#renderMoreButton();
     } else {
-      this.#renderEmpty();
+      render(this.#mainMoviesList, new MoviesEmpty());
     }
-    this.#renderStatistic();
-  }
-
-  #renderRating = () => {
-    render(this.#header,  new Rating(this.#currentUser));
+    render(this.#footer, new Statistic(this.#movies.length));
   }
 
   #renderMainMenu = () => {
@@ -87,18 +83,6 @@ class MoviesPresenter {
         this.#favoriteMovies.length),
       RenderPosition.AFTERBEGIN
     );
-  }
-
-  #renderMainContainer = () => {
-    render(this.#main, this.#mainContainer);
-  }
-
-  #renderMainMoviesList = () => {
-    render(this.#mainContainer, this.#mainMoviesList);
-  }
-
-  #renderSorting = () => {
-    render(this.#mainContainer, new Sorting(), RenderPosition.BEFOREBEGIN);
   }
 
   #renderMainMovies = () => {
@@ -119,14 +103,6 @@ class MoviesPresenter {
   #renderMoreButton = () => {
     render(this.#mainMoviesList, this.#moreButton);
     this.#addClickMoreButton();
-  }
-
-  #renderStatistic = () => {
-    render(this.#footer, new Statistic(this.#movies.length));
-  }
-
-  #renderEmpty = () => {
-    render(this.#mainMoviesList, new MoviesEmpty());
   }
 
   #renderMovies = (container, movies) => {
