@@ -119,35 +119,37 @@ class MoviesPresenter {
   #renderMovieDetails = (filmCard) => {
     const movieCard = filmCard.closest('.film-card__link');
 
-    if (movieCard) {
-      if (this.#movieDetails !== null) {
-        this.#movieDetails.removeElement();
-      }
-
-      const id = movieCard.dataset.id;
-      const movie = this.#movies.find((item) => item.id === id);
-      const {comments: commentsIds} = movie;
-      const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
-      this.#movieDetails = new MovieDetails();
-      const movieForm = new MovieDetailsFormView();
-      const movieContainer = new MovieDetailsContainerView();
-      const movieWrap = new MovieDetailsWrap(movie, this.#moviesCards.get(id));
-      const movieClose = new CloseDetails();
-      const movieCommentsView = new MovieDetailsCommentsView(movieComments);
-
-      render(this.#main, this.#movieDetails);
-      render(this.#movieDetails, movieForm);
-      render(movieForm, movieContainer);
-      render(movieForm, movieCommentsView);
-      render(movieContainer, movieClose);
-      render(movieContainer, movieWrap);
-      movieWrap.updateControl();
-
-      document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
-      movieClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
-
-      document.body.classList.add('hide-overflow');
+    if (!movieCard) {
+      return;
     }
+
+    if (this.#movieDetails !== null) {
+      this.#movieDetails.removeElement();
+    }
+
+    const id = movieCard.dataset.id;
+    const movie = this.#movies.find((item) => item.id === id);
+    const {comments: commentsIds} = movie;
+    const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
+    this.#movieDetails = new MovieDetails();
+    const movieForm = new MovieDetailsFormView();
+    const movieContainer = new MovieDetailsContainerView();
+    const movieWrap = new MovieDetailsWrap(movie, this.#moviesCards.get(id));
+    const movieClose = new CloseDetails();
+    const movieCommentsView = new MovieDetailsCommentsView(movieComments);
+
+    render(this.#main, this.#movieDetails);
+    render(this.#movieDetails, movieForm);
+    render(movieForm, movieContainer);
+    render(movieForm, movieCommentsView);
+    render(movieContainer, movieClose);
+    render(movieContainer, movieWrap);
+    movieWrap.updateControl();
+
+    document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
+    movieClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+
+    document.body.classList.add('hide-overflow');
   }
 
   #onOpenMovieDetails = (evt) => {
