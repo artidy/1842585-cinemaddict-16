@@ -1,14 +1,15 @@
 import AbstractEventView from './abstract-event-view';
+import {SortType} from '../constants';
 
 const getSortTemplate = (currentSort) =>
   `<ul class="sort">
-    <li><a class="sort__button ${currentSort === 'default' ? 'sort__button--active' : ''}" data-sort="default">Sort by default</a></li>
-    <li><a class="sort__button ${currentSort === 'date' ? 'sort__button--active' : ''}" data-sort="date">Sort by date</a></li>
-    <li><a class="sort__button ${currentSort === 'rating' ? 'sort__button--active' : ''}" data-sort="rating">Sort by rating</a></li>
+    <li><a class="sort__button ${currentSort === SortType.DEFAULT ? 'sort__button--active' : ''}" data-sort="${SortType.DEFAULT}">Sort by default</a></li>
+    <li><a class="sort__button ${currentSort === SortType.DATE ? 'sort__button--active' : ''}" data-sort="${SortType.DATE}">Sort by date</a></li>
+    <li><a class="sort__button ${currentSort === SortType.RATING ? 'sort__button--active' : ''}" data-sort="${SortType.RATING}">Sort by rating</a></li>
   </ul>`;
 
 class Sorting extends AbstractEventView {
-  #currentSort = 'default';
+  #currentSort = SortType.DEFAULT;
 
   get template() {
     return getSortTemplate(this.#currentSort);

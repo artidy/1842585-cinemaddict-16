@@ -6,7 +6,7 @@ import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {MAX_FILMS_EXTRA, MAX_FILMS_GAP} from '../constants';
+import {MAX_FILMS_EXTRA, MAX_FILMS_GAP, SortType} from '../constants';
 import Statistic from '../view/statistics-view';
 import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
@@ -92,9 +92,14 @@ class MoviesPresenter {
 
   #renderMovies = (container, movies) => {
     movies.forEach((movie) => {
-      const movieCard = new Movie(movie);
+      const mainCard = this.#moviesCards.get(movie.id);
+      const movieCard = new Movie(movie, mainCard);
 
-      this.#moviesCards.set(movie.id, movieCard);
+      if (this.#moviesCards.has(movie.id)) {
+        mainCard.addExtra(movieCard);
+      } else {
+        this.#moviesCards.set(movie.id, movieCard);
+      }
 
       render(container, movieCard);
       movieCard.updateControl();
@@ -173,8 +178,6 @@ class MoviesPresenter {
   #updateMovies = () => {
     this.#mainContainer.removeElement();
     this.#mainMoviesContainer.removeElement();
-    this.#topMoviesContainer.removeElement();
-    this.#recommendMoviesContainer.removeElement();
     this.#moreButton.removeElement();
     this.#sortingMenu.removeElement();
     this.#mainMenu.removeElement();
@@ -194,19 +197,26 @@ class MoviesPresenter {
     this.#renderSortMenu(this.#currentSort);
     this.#renderMainMovies();
     this.#renderMovies(this.#mainMoviesContainer, this.#sortingMovies.slice(0, MAX_FILMS_GAP));
+    this.#updateExtraMovies();
+    this.#renderMoreButton();
+  }
+
+  #updateExtraMovies = () => {
+    this.#topMoviesContainer.removeElement();
+    this.#recommendMoviesContainer.removeElement();
+
     this.#renderTopMovies();
     this.#renderMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
     this.#renderRecommendedMovies();
     this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
-    this.#renderMoreButton();
   }
 
   #updateSorting = () => {
     switch(this.#sortingMenu.currentSort) {
-      case 'date':
+      case SortType.DATE:
         this.#sortingMovies = sortMoviesByDate(this.#movies);
         break;
-      case 'rating':
+      case SortType.RATING:
         this.#sortingMovies = sortMoviesByRating(this.#movies);
         break;
       default:
