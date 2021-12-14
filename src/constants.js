@@ -19,5 +19,10 @@ const EMPTY_MOVIE = {
   isWatched: false,
   isFavorite: false,
 };
+const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
 
-export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, EMPTY_MOVIE};
+export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, EMPTY_MOVIE, SortType};

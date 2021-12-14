@@ -23,6 +23,8 @@ const getMovieTemplate = ({id, title, rating, releaseDate, duration, genres, pos
 
 class Movie extends AbstractView {
   #control = null;
+  #extraMovies = new Set();
+  #mainCard = null;
   #movie = {
     id: '',
     title: '',
@@ -35,10 +37,11 @@ class Movie extends AbstractView {
     comments: ''
   };
 
-  constructor(movie) {
+  constructor(movie, mainCard = null) {
     super();
 
     this.#movie = movie;
+    this.#mainCard = mainCard;
     this.#control = new ControlsView(movie);
   }
 
@@ -46,10 +49,24 @@ class Movie extends AbstractView {
     return getMovieTemplate(this.#movie);
   }
 
-  updateControl = () => {
+  addExtra = (movieCard) => {
+    this.#extraMovies.add(movieCard);
+  }
+
+  updateControl = (updateMainCard = true, extraElement = null) => {
     this.#control.removeElement();
     render(this.element, this.#control.element);
     this.#control.addEvent('onClickControls', 'click', this.#control.onClickControls(this.updateControl));
+
+    if (this.#mainCard && updateMainCard) {
+      this.#mainCard.updateControl(this);
+    }
+
+    this.#extraMovies.forEach((movie) => {
+      if (extraElement !== movie) {
+        movie.updateControl(false);
+      }
+    });
   }
 }
 
