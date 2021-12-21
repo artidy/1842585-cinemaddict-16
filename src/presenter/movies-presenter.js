@@ -134,6 +134,7 @@ class MoviesPresenter {
     render(this.#movieDetails, movieForm);
     render(movieForm, movieContainer);
     render(movieForm, movieCommentsView);
+    movieCommentsView.restoreHandlers();
     render(movieContainer, movieClose);
     render(movieContainer, movieWrap);
     this.#addNewControl(movieWrap, movie, true, RenderPosition.AFTEREND);

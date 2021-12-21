@@ -1,5 +1,7 @@
 import {formatDate} from '../helpers/common';
-import AbstractView from './abstract-view';
+import AbstractSmartView from './abstract-smart-view';
+
+const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">` : '';
 
 const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) =>
   `<li class="film-details__comment">
@@ -16,7 +18,7 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
     </div>
   </li>`).join('');
 
-const getMovieCommentsTemplate = (comments) =>
+const getMovieCommentsTemplate = (comments, currentEmoji) =>
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -26,29 +28,29 @@ const getMovieCommentsTemplate = (comments) =>
       </ul>
 
       <div class="film-details__new-comment">
-        <div class="film-details__add-emoji-label"></div>
+        <div class="film-details__add-emoji-label">${getEmojiTemplate(currentEmoji)}</div>
 
         <label class="film-details__comment-label">
           <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
         </label>
 
         <div class="film-details__emoji-list">
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${currentEmoji === 'smile' ? 'checked' : ''}>
           <label class="film-details__emoji-label" for="emoji-smile">
             <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${currentEmoji === 'sleeping' ? 'checked' : ''}>
           <label class="film-details__emoji-label" for="emoji-sleeping">
             <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${currentEmoji === 'puke' ? 'checked' : ''}>
           <label class="film-details__emoji-label" for="emoji-puke">
             <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${currentEmoji === 'angry' ? 'checked' : ''}>
           <label class="film-details__emoji-label" for="emoji-angry">
             <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
           </label>
@@ -57,8 +59,9 @@ const getMovieCommentsTemplate = (comments) =>
     </section>
   </div>`;
 
-class MovieDetailsCommentsView extends AbstractView {
+class MovieDetailsCommentsView extends AbstractSmartView {
   #comments = null;
+  #currentEmoji = null;
 
   constructor(comments) {
     super();
@@ -67,7 +70,22 @@ class MovieDetailsCommentsView extends AbstractView {
   }
 
   get template() {
-    return getMovieCommentsTemplate(this.#comments);
+    return getMovieCommentsTemplate(this.#comments, this.#currentEmoji);
+  }
+
+  #onClickEmoji = (evt) => {
+    evt.preventDefault();
+
+    const emojiLabel = evt.target.closest('.film-details__emoji-label');
+
+    if (emojiLabel) {
+      this.#currentEmoji = this.element.querySelector(`#${emojiLabel.getAttribute('for')}`).value;
+      this.updateData(this.#currentEmoji);
+    }
+  }
+
+  restoreHandlers = () => {
+    this.addEvent('onClickEmoji', 'click', this.#onClickEmoji);
   }
 }
 
