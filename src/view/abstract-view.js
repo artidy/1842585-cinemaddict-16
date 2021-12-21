@@ -21,6 +21,19 @@ class AbstractView {
     return 'You should override template method.';
   }
 
+  replaceElement = () => {
+    if (this.#element && this.#element.parentElement) {
+      const prevElement = this.#element;
+      const parent = prevElement.parentElement;
+
+      this.#element = null;
+
+      const newElement = this.element;
+
+      parent.replaceChild(newElement, prevElement);
+    }
+  }
+
   removeElement = () => {
     if (this.#element) {
       this.#element.remove();

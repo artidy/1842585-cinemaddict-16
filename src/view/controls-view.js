@@ -1,4 +1,4 @@
-import AbstractEventView from './abstract-event-view';
+import AbstractSmartView from './abstract-smart-view';
 import {EMPTY_MOVIE} from '../constants';
 
 const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
@@ -42,7 +42,8 @@ const getControlsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </div>`;
 
-class ControlsView extends AbstractEventView {
+class ControlsView extends AbstractSmartView {
+  static #controls = new Map();
   #movie = EMPTY_MOVIE;
   #isDetails = false;
 
@@ -70,7 +71,35 @@ class ControlsView extends AbstractEventView {
       : getControlsTemplate(this.#movie);
   }
 
-  onClickControls = (updateElement) => (evt) => {
+  updateControl = () => {
+    const currentMovieControls = ControlsView.#controls.get(this.#movie.id);
+
+    if (currentMovieControls) {
+      currentMovieControls.forEach((control) => {
+        control.updateData(this.#movie, false);
+      });
+    }
+  }
+
+  static addControl = (movie, control) => {
+    const mainControls  = ControlsView.#controls.get(movie.id);
+
+    if (mainControls) {
+      mainControls.push(control);
+    } else {
+      ControlsView.#controls.set(movie.id, [control]);
+    }
+  }
+
+  static clearControl = () => {
+    ControlsView.#controls = new Map();
+  }
+
+  restoreHandlers = () => {
+    this.addEvent('onClickControls', 'click', this.#onClickControls(this.updateControl));
+  }
+
+  #onClickControls = (updateElement) => (evt) => {
     evt.preventDefault();
 
     if (evt.target.tagName === 'BUTTON') {
