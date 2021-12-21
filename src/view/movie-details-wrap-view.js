@@ -1,8 +1,6 @@
 import AbstractView from './abstract-view';
-import ControlsView from './controls-view';
 import {formatDate} from '../helpers/common';
 import {EMPTY_MOVIE} from '../constants';
-import {render, RenderPosition} from '../render';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
@@ -67,26 +65,15 @@ const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, ra
 
 class MovieDetailsWrap extends AbstractView {
   #movie = EMPTY_MOVIE;
-  #parent = null;
-  #control = null;
 
-  constructor(movie, parent) {
+  constructor(movie) {
     super();
 
     this.#movie = movie;
-    this.#control = new ControlsView(movie, true);
-    this.#parent = parent;
   }
 
   get template() {
     return getMoviesWrapTemplate(this.#movie);
-  }
-
-  updateControl = () => {
-    this.#control.removeElement();
-    render(this.element, this.#control.element, RenderPosition.AFTEREND);
-    this.#parent.updateControl();
-    this.#control.addEvent('onClickControls', 'click', this.#control.onClickControls(this.updateControl));
   }
 }
 

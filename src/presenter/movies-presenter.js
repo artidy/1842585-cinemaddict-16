@@ -19,6 +19,7 @@ import MovieDetailsWrap from '../view/movie-details-wrap-view';
 import MovieDetailsCommentsView from '../view/movie-details-comments-view';
 import ShowMoreBtnView from '../view/show-more-btn-view';
 import CloseDetailsBtnView from '../view/close-details-btn-view';
+import ControlsView from '../view/controls-view';
 
 class MoviesPresenter {
   #header = null;
@@ -35,7 +36,6 @@ class MoviesPresenter {
   #favoriteMovies = [];
   #topRatedMovies = [];
   #recommendMovies = [];
-  #moviesCards = new Map();
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
@@ -92,18 +92,20 @@ class MoviesPresenter {
 
   #renderMovies = (container, movies) => {
     movies.forEach((movie) => {
-      const mainCard = this.#moviesCards.get(movie.id);
-      const movieCard = new Movie(movie, mainCard);
-
-      if (this.#moviesCards.has(movie.id)) {
-        mainCard.addExtra(movieCard);
-      } else {
-        this.#moviesCards.set(movie.id, movieCard);
-      }
+      const movieCard = new Movie(movie);
 
       render(container, movieCard);
-      movieCard.updateControl();
+      this.#addNewControl(movieCard, movie);
     });
+  }
+
+  #addNewControl = (parent, movie, isDetails = false, renderPosition = RenderPosition.BEFOREEND) => {
+    const movieCardControls = new ControlsView(movie, isDetails);
+    ControlsView.addControl(movie, movieCardControls);
+
+    render(parent, movieCardControls, renderPosition);
+
+    movieCardControls.restoreHandlers();
   }
 
   #renderMovieDetails = (filmCard) => {
@@ -124,7 +126,7 @@ class MoviesPresenter {
     this.#movieDetails = new MovieDetails();
     const movieForm = new MovieDetailsFormView();
     const movieContainer = new MovieDetailsContainerView();
-    const movieWrap = new MovieDetailsWrap(movie, this.#moviesCards.get(id));
+    const movieWrap = new MovieDetailsWrap(movie);
     const movieClose = new CloseDetailsBtnView();
     const movieCommentsView = new MovieDetailsCommentsView(movieComments);
 
@@ -132,9 +134,10 @@ class MoviesPresenter {
     render(this.#movieDetails, movieForm);
     render(movieForm, movieContainer);
     render(movieForm, movieCommentsView);
+    movieCommentsView.restoreHandlers();
     render(movieContainer, movieClose);
     render(movieContainer, movieWrap);
-    movieWrap.updateControl();
+    this.#addNewControl(movieWrap, movie, true, RenderPosition.AFTEREND);
 
     document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
     movieClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
@@ -176,6 +179,7 @@ class MoviesPresenter {
   }
 
   #updateMovies = () => {
+    ControlsView.clearControl();
     this.#mainContainer.removeElement();
     this.#mainMoviesContainer.removeElement();
     this.#moreButton.removeElement();
