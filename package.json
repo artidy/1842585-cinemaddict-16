@@ -2,12 +2,15 @@
   "name": "cinemaddict",
   "version": "16.0.0",
   "private": true,
+  "homepage": "https://artidy.github.io/1842585-cinemaddict-16/",
   "description": "Проект «Киноман» от HTML Academy",
   "scripts": {
     "eslint": "eslint src/",
     "test": "npm run eslint",
     "build": "webpack --mode development",
-    "start": "webpack serve --open --mode development"
+    "start": "webpack serve --open --mode development",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
@@ -29,6 +32,7 @@
   "dependencies": {
     "dayjs": "1.10.7",
     "dayjs-random": "1.0.0",
+    "gh-pages": "^3.2.3",
     "lodash": "4.17.21"
   }
 }
