@@ -6,7 +6,7 @@ import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {MAX_FILMS_EXTRA, MAX_FILMS_GAP, SortType} from '../constants';
+import {MAX_FILMS_EXTRA, MAX_FILMS_GAP, MIN_FILMS, SortType} from '../constants';
 import Statistic from '../view/statistics-view';
 import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
@@ -29,14 +29,10 @@ class MoviesPresenter {
   #currentUser = null;
   #movieDetails = null;
   #currentSort = 'default';
-  #movies = [];
-  #sortingMovies = [];
   #comments = [];
   #watchMovies = [];
   #watchedMovies = [];
   #favoriteMovies = [];
-  #topRatedMovies = [];
-  #recommendMovies = [];
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
@@ -57,17 +53,31 @@ class MoviesPresenter {
   }
 
   get movies() {
-    return this.#moviesModel.movies;
+    switch(this.#sortingMenu.currentSort) {
+      case SortType.DATE:
+        return sortMoviesByDate(this.#moviesModel.movies);
+      case SortType.RATING:
+        return sortMoviesByRating(this.#moviesModel.movies);
+      default:
+        return [...this.#moviesModel.movies];
+    }
+  }
+
+  get topRatedMovies() {
+    return sortMoviesByRating(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
+  }
+
+  get mostCommentedMovies() {
+    return sortMoviesByComments(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
   }
 
   load = (comments, currentUser) => {
-    this.#movies = [...this.movies];
     this.#comments = [...comments];
     this.#currentUser = {...currentUser};
 
     render(this.#header,  new Rating(this.#currentUser));
     this.#updateMovies();
-    render(this.#footer, new Statistic(this.#movies.length));
+    render(this.#footer, new Statistic(this.movies.length));
   }
 
   #renderMainMenu = () => {
@@ -126,7 +136,7 @@ class MoviesPresenter {
     }
 
     const id = movieCard.dataset.id;
-    const movie = this.#movies.find((item) => item.id === id);
+    const movie = this.movies.find((item) => item.id === id);
     const {comments: commentsIds} = movie;
     const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
     this.#movieDetails = new MovieDetails();
@@ -167,7 +177,7 @@ class MoviesPresenter {
       'onShowMoreMovies',
       'click',
       onShowMoreMovies(
-        this.#sortingMovies,
+        this.movies,
         this.#mainMoviesContainer,
         this.#moreButton,
         this.#renderMovies)
@@ -179,9 +189,9 @@ class MoviesPresenter {
   }
 
   #updateFilters = () => {
-    this.#watchMovies = filterWatchingMovies(this.#movies);
-    this.#watchedMovies = filterWatchedMovies(this.#movies);
-    this.#favoriteMovies = filterFavoriteMovies(this.#movies);
+    this.#watchMovies = filterWatchingMovies(this.movies);
+    this.#watchedMovies = filterWatchedMovies(this.movies);
+    this.#favoriteMovies = filterFavoriteMovies(this.movies);
   }
 
   #updateMovies = () => {
@@ -193,20 +203,19 @@ class MoviesPresenter {
     this.#mainMenu.removeElement();
 
     this.#updateFilters();
-    this.#updateSorting();
 
     this.#renderMainMenu();
     render(this.#main, this.#mainContainer);
     render(this.#mainContainer, this.#mainMoviesList);
 
-    if (this.#sortingMovies.length === 0) {
+    if (this.movies.length === 0) {
       render(this.#mainMoviesList, new MoviesEmpty());
       return;
     }
 
     this.#renderSortMenu(this.#currentSort);
     this.#renderMainMovies();
-    this.#renderMovies(this.#mainMoviesContainer, this.#sortingMovies.slice(0, MAX_FILMS_GAP));
+    this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, MAX_FILMS_GAP));
     this.#updateExtraMovies();
     this.#renderMoreButton();
   }
@@ -216,25 +225,9 @@ class MoviesPresenter {
     this.#recommendMoviesContainer.removeElement();
 
     this.#renderTopMovies();
-    this.#renderMovies(this.#topMoviesContainer, this.#topRatedMovies.slice(0, MAX_FILMS_EXTRA));
+    this.#renderMovies(this.#topMoviesContainer, this.topRatedMovies);
     this.#renderRecommendedMovies();
-    this.#renderMovies(this.#recommendMoviesContainer, this.#recommendMovies.slice(0, MAX_FILMS_EXTRA));
-  }
-
-  #updateSorting = () => {
-    switch(this.#sortingMenu.currentSort) {
-      case SortType.DATE:
-        this.#sortingMovies = sortMoviesByDate(this.#movies);
-        break;
-      case SortType.RATING:
-        this.#sortingMovies = sortMoviesByRating(this.#movies);
-        break;
-      default:
-        this.#sortingMovies = this.#movies;
-    }
-
-    this.#topRatedMovies = sortMoviesByRating(this.#sortingMovies);
-    this.#recommendMovies = sortMoviesByComments(this.#sortingMovies);
+    this.#renderMovies(this.#recommendMoviesContainer, this.mostCommentedMovies);
   }
 }
 

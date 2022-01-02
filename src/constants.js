@@ -1,5 +1,6 @@
 const MAX_FILMS_GAP = 5;
 const MAX_FILMS_EXTRA = 2;
+const MIN_FILMS = 0;
 const EMPTY_MOVIE = {
   id: '',
   poster: '',
@@ -25,4 +26,4 @@ const SortType = {
   RATING: 'rating',
 };
 
-export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, EMPTY_MOVIE, SortType};
+export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, EMPTY_MOVIE, SortType, MIN_FILMS};
