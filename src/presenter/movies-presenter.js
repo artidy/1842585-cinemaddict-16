@@ -25,6 +25,7 @@ class MoviesPresenter {
   #header = null;
   #main = null;
   #footer = null;
+  #moviesModel = null;
   #currentUser = null;
   #movieDetails = null;
   #currentSort = 'default';
@@ -48,14 +49,19 @@ class MoviesPresenter {
   #moreButton = new ShowMoreBtnView();
   #mainMenu = new MainMenu(0, 0, 0);
 
-  constructor(header, main, footer) {
+  constructor(header, main, footer, moviesModel) {
     this.#header = header;
     this.#main = main;
     this.#footer = footer;
+    this.#moviesModel = moviesModel;
   }
 
-  load(movies, comments, currentUser) {
-    this.#movies = [...movies];
+  get movies() {
+    return this.#moviesModel.movies;
+  }
+
+  load = (comments, currentUser) => {
+    this.#movies = [...this.movies];
     this.#comments = [...comments];
     this.#currentUser = {...currentUser};
 
