@@ -69,6 +69,14 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     this.#comments = comments;
   }
 
+  get comments() {
+    return this.#comments;
+  }
+
+  set comments(comments) {
+    this.#comments = comments;
+  }
+
   get template() {
     return getMovieCommentsTemplate(this.#comments, this.#currentEmoji);
   }

@@ -66,14 +66,20 @@ const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, ra
 class MovieDetailsWrap extends AbstractView {
   #movie = EMPTY_MOVIE;
 
-  constructor(movie) {
+  constructor() {
     super();
-
-    this.#movie = movie;
   }
 
   get template() {
     return getMoviesWrapTemplate(this.#movie);
+  }
+
+  get movie() {
+    return this.#movie;
+  }
+
+  set movie(movie) {
+    this.#movie = movie;
   }
 }
 

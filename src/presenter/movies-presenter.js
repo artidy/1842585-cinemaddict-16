@@ -6,7 +6,7 @@ import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {ActionType, FilterType, MAX_FILMS_EXTRA, MIN_FILMS, SortType, UpdateType} from '../constants';
+import {ActionType, FilterType, MAX_FILMS_EXTRA, MAX_FILMS_GAP, MIN_FILMS, SortType, UpdateType} from '../constants';
 import Statistic from '../view/statistics-view';
 import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
@@ -46,6 +46,10 @@ class MoviesPresenter {
   #sortingMenu = null;
   #moreButton = new ShowMoreBtnView();
   #mainMenu = new MainMenu();
+  #movieWrap = new MovieDetailsWrap();
+  #movieCommentsView = null;
+  #movieDetailsContainer = new MovieDetailsContainerView();
+  #movieDetailsClose = new CloseDetailsBtnView();
 
   constructor(header, main, footer, moviesModel, filterModel, sortModel) {
     this.#header = header;
@@ -144,8 +148,12 @@ class MoviesPresenter {
   }
 
   #renderMoreButton = () => {
+    if (this.#currentMoviesGap >= this.movies.length) {
+      return;
+    }
+
     render(this.#mainMoviesList, this.#moreButton);
-    this.#addClickMoreButton();
+    this.#moreButton.addEvent('onShowMoreMovies', 'click', this.#onShowMoreMovies);
   }
 
   #renderMovies = (container, movies) => {
@@ -163,42 +171,35 @@ class MoviesPresenter {
 
     render(parent, movieCardControls, renderPosition);
 
-    movieCardControls.restoreHandlers();
+    movieCardControls.restoreHandlers(this.#handleViewAction);
   }
 
-  #renderMovieDetails = (filmCard) => {
-    const movieCard = filmCard.closest('.film-card__link');
-
-    if (!movieCard) {
-      return;
-    }
-
+  #renderMovieDetails = (movie) => {
     if (this.#movieDetails !== null) {
+      this.#movieWrap.removeElement();
+      this.#movieDetailsClose.removeElement();
+      this.#movieDetailsContainer.removeElement();
       this.#movieDetails.removeElement();
     }
 
-    const id = movieCard.dataset.id;
-    const movie = this.movies.find((item) => item.id === id);
     const {comments: commentsIds} = movie;
     const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
     this.#movieDetails = new MovieDetails();
     const movieForm = new MovieDetailsFormView();
-    const movieContainer = new MovieDetailsContainerView();
-    const movieWrap = new MovieDetailsWrap(movie);
-    const movieClose = new CloseDetailsBtnView();
-    const movieCommentsView = new MovieDetailsCommentsView(movieComments);
+    this.#movieWrap.movie = movie;
+    this.#movieCommentsView = new MovieDetailsCommentsView(movieComments);
 
     render(this.#main, this.#movieDetails);
     render(this.#movieDetails, movieForm);
-    render(movieForm, movieContainer);
-    render(movieForm, movieCommentsView);
-    movieCommentsView.restoreHandlers();
-    render(movieContainer, movieClose);
-    render(movieContainer, movieWrap);
-    this.#addNewControl(movieWrap, movie, true, RenderPosition.AFTEREND);
+    render(movieForm, this.#movieDetailsContainer);
+    render(movieForm, this.#movieCommentsView);
+    this.#movieCommentsView.restoreHandlers();
+    render(this.#movieDetailsContainer, this.#movieDetailsClose);
+    render(this.#movieDetailsContainer, this.#movieWrap);
+    this.#addNewControl(this.#movieWrap, movie, true, RenderPosition.AFTEREND);
 
     document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
-    movieClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
 
     document.body.classList.add('hide-overflow');
   }
@@ -211,20 +212,28 @@ class MoviesPresenter {
   #onOpenMovieDetails = (evt) => {
     evt.preventDefault();
 
-    this.#renderMovieDetails(evt.target);
+    const movieCard = evt.target.closest('.film-card__link');
+
+    if (!movieCard) {
+      return;
+    }
+
+    const id = movieCard.dataset.id;
+    const movie = this.movies.find((item) => item.id === id);
+
+    this.#renderMovieDetails(movie);
   }
 
-  #addClickMoreButton = () => {
-    this.#moreButton.addEvent(
-      'onShowMoreMovies',
-      'click',
-      onShowMoreMovies(
-        this.movies,
-        this.#mainMoviesContainer,
-        this.#moreButton,
-        this.#renderMovies)
-    );
-  }
+  #onShowMoreMovies = (evt) => {
+    evt.preventDefault();
+
+    this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(this.#currentMoviesGap, this.#currentMoviesGap + MAX_FILMS_GAP));
+    this.#currentMoviesGap += MAX_FILMS_GAP;
+
+    if (this.#currentMoviesGap >= this.movies.length) {
+      this.#moreButton.removeElement();
+    }
+  };
 
   #addClickMainContainer = () => {
     this.#mainContainer.addEvent('onOpenMovieDetails', 'click', this.#onOpenMovieDetails);
@@ -247,24 +256,50 @@ class MoviesPresenter {
     this.#recommendMoviesContainer.replaceElement();
     this.#renderMovies(this.#topMoviesContainer, this.topRatedMovies);
     this.#renderMovies(this.#recommendMoviesContainer, this.mostCommentedMovies);
+
+    if (this.#movieDetails !== null) {
+      this.#updateMovieDetails();
+    }
+
     this.#moreButton.removeElement();
     this.#renderMoreButton();
   }
 
-  #handleViewAction = (actionType, updateType, data) => {
+  #updateMovieDetails = () => {
 
-    if (actionType === ActionType.CHANGE_SORT) {
-      this.#sortModel.updateSort(updateType, data);
-    } else {
-      this.#moviesModel.updateMovie(updateType, data);
+    if (this.#movieDetails === null) {
+      return;
     }
 
+    this.#movieCommentsView.updateElement();
+    this.#movieDetailsContainer.replaceElement();
+    this.#movieWrap.replaceElement();
+    render(this.#movieDetailsContainer, this.#movieDetailsClose);
+    render(this.#movieDetailsContainer, this.#movieWrap);
+    this.#addNewControl(this.#movieWrap, this.#movieWrap.movie, true, RenderPosition.AFTEREND);
+    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
   }
 
-  #handleModelEvent = (updateType, data) => {
-    if (updateType === UpdateType.MINOR) {
-      this.#updateMovies();
+  #handleViewAction = (actionType, updateType, data) => {
+    switch (actionType) {
+      case ActionType.CHANGE_SORT:
+        this.#currentMoviesGap = MAX_FILMS_GAP;
+        this.#sortModel.updateSort(updateType, data);
+        break;
+      case ActionType.UPDATE_MOVIE:
+        if (this.#movieDetails !== null && this.#movieWrap.movie.id === data.id) {
+          this.#movieWrap.movie = data;
+          const {comments: commentsIds} = data;
+          this.#movieCommentsView.comments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
+        }
+
+        this.#moviesModel.updateMovie(updateType, data);
+        break;
     }
+  }
+
+  #handleModelEvent = () => {
+    this.#updateMovies();
   }
 
   #onClickMenu = (evt) => {
