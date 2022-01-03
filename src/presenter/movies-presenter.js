@@ -6,9 +6,9 @@ import {render, RenderPosition} from '../render';
 import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {ActionType, FilterType, MAX_FILMS_EXTRA, MAX_FILMS_GAP, MIN_FILMS, SortType, UpdateType} from '../constants';
+import {ActionType, FilterType, MAX_FILMS_EXTRA, MAX_FILMS_GAP, MIN_FILMS, SortType} from '../constants';
 import Statistic from '../view/statistics-view';
-import {onClickCloseBtn, onKeydownEsc, onShowMoreMovies} from '../helpers/events';
+import {onClickCloseBtn, onKeydownEsc} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
 import {sortMoviesByComments, sortMoviesByDate, sortMoviesByRating,} from '../helpers/sorting';
 import MovieDetails from '../view/details-view';
@@ -34,7 +34,7 @@ class MoviesPresenter {
   #watchMovies = [];
   #watchedMovies = [];
   #favoriteMovies = [];
-  #currentMoviesGap = 5;
+  #currentMoviesGap = MAX_FILMS_GAP;
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
@@ -67,9 +67,6 @@ class MoviesPresenter {
 
   get movies() {
     let movies = [...this.#moviesModel.movies];
-    this.#watchMovies = filterWatchingMovies(movies);
-    this.#watchedMovies = filterWatchedMovies(movies);
-    this.#favoriteMovies = filterFavoriteMovies(movies);
 
     switch (this.#filterModel.currentFilter) {
       case FilterType.WATCHLIST:
@@ -120,16 +117,23 @@ class MoviesPresenter {
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
     this.#updateExtraMovies();
     this.#renderMoreButton();
-    render(this.#footer, new Statistic(this.movies.length));
+    render(this.#footer, new Statistic(this.#moviesModel.movies.length));
   }
 
   #renderMainMenu = () => {
+    this.#updateFilters();
     this.#mainMenu.watchListCount = this.#watchMovies.length;
     this.#mainMenu.historyCount = this.#watchedMovies.length;
     this.#mainMenu.favoriteCount = this.#favoriteMovies.length;
 
     render(this.#main, this.#mainMenu, RenderPosition.AFTERBEGIN);
-    this.#mainMenu.restoreHandlers(this.#onClickMenu);
+    this.#mainMenu.restoreHandlers(this.#handleViewAction);
+  }
+
+  #updateFilters = () => {
+    this.#watchMovies = filterWatchingMovies(this.#moviesModel.movies);
+    this.#watchedMovies = filterWatchedMovies(this.#moviesModel.movies);
+    this.#favoriteMovies = filterFavoriteMovies(this.#moviesModel.movies);
   }
 
   #renderMainMovies = () => {
@@ -240,22 +244,30 @@ class MoviesPresenter {
   }
 
   #updateMovies = () => {
-    this.#mainMenu.replaceElement();
+    this.#mainMenu.updateElement(
+      this.#handleViewAction,
+      this.#watchMovies.length,
+      this.#watchedMovies.length,
+      this.#favoriteMovies.length,
+    );
     this.#mainMoviesList.replaceElement();
+    this.#topMoviesContainer.removeElement();
+    this.#recommendMoviesContainer.removeElement();
+
+    if (this.#filterModel.currentFilter === FilterType.STATS) {
+      return;
+    }
 
     if (this.movies.length === 0) {
       render(this.#mainMoviesList, new MoviesEmpty());
       return;
     }
 
-    this.#sortingMenu.updateElement(this.#handleViewAction);
+    this.#sortingMenu.updateElement(this.#handleViewAction, this.#sortModel.currentSort);
     this.#mainMoviesContainer.replaceElement();
     render(this.#mainMoviesList, this.#mainMoviesContainer);
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
-    this.#topMoviesContainer.replaceElement();
-    this.#recommendMoviesContainer.replaceElement();
-    this.#renderMovies(this.#topMoviesContainer, this.topRatedMovies);
-    this.#renderMovies(this.#recommendMoviesContainer, this.mostCommentedMovies);
+    this.#updateExtraMovies();
 
     if (this.#movieDetails !== null) {
       this.#updateMovieDetails();
@@ -266,7 +278,6 @@ class MoviesPresenter {
   }
 
   #updateMovieDetails = () => {
-
     if (this.#movieDetails === null) {
       return;
     }
@@ -292,28 +303,19 @@ class MoviesPresenter {
           const {comments: commentsIds} = data;
           this.#movieCommentsView.comments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
         }
-
         this.#moviesModel.updateMovie(updateType, data);
+        break;
+      case ActionType.CHANGE_FILTER:
+        this.#currentMoviesGap = MAX_FILMS_GAP;
+        this.#sortModel.currentSort = SortType.DEFAULT;
+        this.#filterModel.updateFilter(updateType, data);
         break;
     }
   }
 
   #handleModelEvent = () => {
+    this.#updateFilters();
     this.#updateMovies();
-  }
-
-  #onClickMenu = (evt) => {
-    evt.preventDefault();
-
-    if (evt.target.tagName === 'A') {
-      const currentFilter = evt.target.getAttribute('href').replace('#', '');
-
-      if (currentFilter === this.#filterModel.currentFilter) {
-        return;
-      }
-
-      this.#filterModel.updateFilter(UpdateType.MINOR, currentFilter);
-    }
   }
 
   #updateExtraMovies = () => {

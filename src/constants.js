@@ -33,6 +33,7 @@ const UpdateType = {
 const ActionType = {
   CHANGE_SORT: 'CHANGE_SORT',
   UPDATE_MOVIE: 'UPDATE_MOVIE',
+  CHANGE_FILTER: 'CHANGE_FILTER',
 };
 const FilterType = {
   All: 'all',

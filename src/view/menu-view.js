@@ -1,5 +1,5 @@
 import AbstractSmartView from './abstract-smart-view';
-import {FilterType} from '../constants';
+import {ActionType, FilterType, UpdateType} from '../constants';
 
 const getMenuTemplate = (watchListCount, historyCount, favoriteCount, activeButton) =>
   `<nav class="main-navigation">
@@ -46,8 +46,34 @@ class MainMenu extends AbstractSmartView {
     this.#favoriteCount = favoriteCount;
   }
 
-  restoreHandlers = (onClickMenu) => {
-    this.addEvent('onClickMenu', 'click', onClickMenu);
+  updateElement = (updateFilter, watchListCount, historyCount, favoriteCount) => {
+    this.#watchListCount = watchListCount;
+    this.#historyCount = historyCount;
+    this.#favoriteCount = favoriteCount;
+
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(updateFilter);
+  }
+
+  restoreHandlers = (updateFilter) => {
+    this.addEvent('onClickMenu', 'click', this.#onClickFilterBtn(updateFilter));
+  }
+
+  #onClickFilterBtn = (updateFilter) => (evt) => {
+    evt.preventDefault();
+
+    if (evt.target.tagName === 'A') {
+      const currentFilter = evt.target.getAttribute('href').replace('#', '');
+
+      if (currentFilter === this.#activeButton) {
+        return;
+      }
+
+      this.#activeButton = currentFilter;
+
+      updateFilter(ActionType.CHANGE_FILTER, UpdateType.MINOR, this.#activeButton);
+    }
   }
 }
 

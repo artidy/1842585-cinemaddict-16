@@ -1,19 +1,3 @@
-import {MAX_FILMS_GAP} from '../constants';
-
-const onShowMoreMovies = (movies, container, button, renderMovies) => {
-  let offset = MAX_FILMS_GAP;
-
-  return (evt) => {
-    evt.preventDefault();
-    renderMovies(container, movies.slice(offset, offset + MAX_FILMS_GAP));
-    offset += MAX_FILMS_GAP;
-
-    if (offset >= movies.length) {
-      button.removeElement();
-    }
-  };
-};
-
 const onKeydownEsc = (popup) => (evt) => {
   evt.preventDefault();
 
@@ -35,7 +19,6 @@ const onClickCloseBtn = (popup) => (evt) => {
 };
 
 export {
-  onShowMoreMovies,
   onKeydownEsc,
   onClickCloseBtn,
 };
