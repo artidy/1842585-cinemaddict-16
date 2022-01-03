@@ -25,5 +25,21 @@ const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+const ActionType = {
+  CHANGE_SORT: 'CHANGE_SORT',
+  UPDATE_MOVIE: 'UPDATE_MOVIE',
+};
+const FilterType = {
+  All: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+  STATS: 'stats',
+};
 
-export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, EMPTY_MOVIE, SortType, MIN_FILMS};
+export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, MIN_FILMS, EMPTY_MOVIE, SortType, UpdateType, FilterType, ActionType};

@@ -1,5 +1,5 @@
 import AbstractSmartView from './abstract-smart-view';
-import {EMPTY_MOVIE} from '../constants';
+import {EMPTY_MOVIE, UpdateType} from '../constants';
 
 const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
   `<section class="film-details__controls">
@@ -95,8 +95,14 @@ class ControlsView extends AbstractSmartView {
     ControlsView.#controls = new Map();
   }
 
-  restoreHandlers = () => {
-    this.addEvent('onClickControls', 'click', this.#onClickControls(this.updateControl));
+  updateElement = (updateElement) => {
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(updateElement);
+  }
+
+  restoreHandlers = (updateElement) => {
+    this.addEvent('onClickControls', 'click', this.#onClickControls(updateElement));
   }
 
   #onClickControls = (updateElement) => (evt) => {
@@ -114,7 +120,7 @@ class ControlsView extends AbstractSmartView {
           this.#toggleFavorite();
           break;
       }
-      updateElement();
+      updateElement(UpdateType.MINOR, this.#movie);
     }
   }
 }
