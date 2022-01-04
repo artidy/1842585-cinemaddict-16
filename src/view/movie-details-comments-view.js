@@ -1,5 +1,6 @@
 import {formatDate} from '../helpers/common';
 import AbstractSmartView from './abstract-smart-view';
+import {ActionType, UpdateType} from '../constants';
 
 const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">` : '';
 
@@ -81,6 +82,17 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     return getMovieCommentsTemplate(this.#comments, this.#currentEmoji);
   }
 
+  updateElement = (deleteComment) => {
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(deleteComment);
+  }
+
+  restoreHandlers = (deleteComment) => {
+    this.addEvent('onClickEmoji', 'click', this.#onClickEmoji);
+    this.addEvent('onDeleteComment', 'click', this.#onDeleteComment(deleteComment));
+  }
+
   #onClickEmoji = (evt) => {
     evt.preventDefault();
 
@@ -92,8 +104,12 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     }
   }
 
-  restoreHandlers = () => {
-    this.addEvent('onClickEmoji', 'click', this.#onClickEmoji);
+  #onDeleteComment = (deleteComment) => (evt) => {
+    evt.preventDefault();
+
+    if (evt.target.tagName === 'BUTTON') {
+      deleteComment(ActionType.DELETE_COMMENT, UpdateType.MINOR, evt.target.dataset.id);
+    }
   }
 }
 

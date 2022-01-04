@@ -34,6 +34,7 @@ const ActionType = {
   CHANGE_SORT: 'CHANGE_SORT',
   UPDATE_MOVIE: 'UPDATE_MOVIE',
   CHANGE_FILTER: 'CHANGE_FILTER',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 const FilterType = {
   All: 'all',

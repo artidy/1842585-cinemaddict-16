@@ -28,6 +28,7 @@ class MoviesPresenter {
   #moviesModel = null;
   #filterModel = null;
   #sortModel = null;
+  #commentsModel = null;
   #currentUser = null;
   #movieDetails = null;
   #comments = [];
@@ -51,18 +52,20 @@ class MoviesPresenter {
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
 
-  constructor(header, main, footer, moviesModel, filterModel, sortModel) {
+  constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel) {
     this.#header = header;
     this.#main = main;
     this.#footer = footer;
     this.#moviesModel = moviesModel;
     this.#filterModel = filterModel;
     this.#sortModel = sortModel;
+    this.#commentsModel = commentsModel;
     this.#sortingMenu = new Sorting(this.#sortModel.currentSort);
 
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
     this.#sortModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get movies() {
@@ -98,8 +101,7 @@ class MoviesPresenter {
     return sortMoviesByComments(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
   }
 
-  load = (comments, currentUser) => {
-    this.#comments = [...comments];
+  load = (currentUser) => {
     this.#currentUser = {...currentUser};
 
     render(this.#header,  new Rating(this.#currentUser));
@@ -187,7 +189,7 @@ class MoviesPresenter {
     }
 
     const {comments: commentsIds} = movie;
-    const movieComments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
+    const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
     this.#movieDetails = new MovieDetails();
     const movieForm = new MovieDetailsFormView();
     this.#movieWrap.movie = movie;
@@ -197,7 +199,7 @@ class MoviesPresenter {
     render(this.#movieDetails, movieForm);
     render(movieForm, this.#movieDetailsContainer);
     render(movieForm, this.#movieCommentsView);
-    this.#movieCommentsView.restoreHandlers();
+    this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
     this.#addNewControl(this.#movieWrap, movie, true, RenderPosition.AFTEREND);
@@ -282,7 +284,9 @@ class MoviesPresenter {
       return;
     }
 
-    this.#movieCommentsView.updateElement();
+    const {comments: commentsIds} = this.#movieWrap.movie;
+    this.#movieCommentsView.comments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
+    this.#movieCommentsView.updateElement(this.#handleViewAction);
     this.#movieDetailsContainer.replaceElement();
     this.#movieWrap.replaceElement();
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
@@ -300,8 +304,6 @@ class MoviesPresenter {
       case ActionType.UPDATE_MOVIE:
         if (this.#movieDetails !== null && this.#movieWrap.movie.id === data.id) {
           this.#movieWrap.movie = data;
-          const {comments: commentsIds} = data;
-          this.#movieCommentsView.comments = this.#comments.filter((comment) => commentsIds.includes(comment.id));
         }
         this.#moviesModel.updateMovie(updateType, data);
         break;
@@ -309,6 +311,10 @@ class MoviesPresenter {
         this.#currentMoviesGap = MAX_FILMS_GAP;
         this.#sortModel.currentSort = SortType.DEFAULT;
         this.#filterModel.updateFilter(updateType, data);
+        break;
+      case ActionType.DELETE_COMMENT:
+        this.#moviesModel.deleteComment(data);
+        this.#commentsModel.deleteComment(data);
         break;
     }
   }

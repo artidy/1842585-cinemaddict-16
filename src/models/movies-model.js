@@ -11,6 +11,16 @@ class MoviesModel extends AbstractObservable {
     return this.#movies;
   }
 
+  deleteComment = (commentId) => {
+    const currentMovie = this.#movies.find((movie) => movie.comments.includes(commentId));
+    const commentIndex = currentMovie.comments.findIndex((comment) => comment === commentId);
+
+    currentMovie.comments = [
+      ...currentMovie.comments.slice(0, commentIndex),
+      ...currentMovie.comments.slice(commentIndex + 1),
+    ];
+  }
+
   updateMovie = (updateType, updatedMovie) => {
     const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
 
