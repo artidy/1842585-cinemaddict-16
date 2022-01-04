@@ -89,18 +89,19 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   }
 
   restoreHandlers = (deleteComment) => {
-    this.addEvent('onClickEmoji', 'click', this.#onClickEmoji);
+    this.addEvent('onClickEmoji', 'click', this.#onClickEmoji(deleteComment));
     this.addEvent('onDeleteComment', 'click', this.#onDeleteComment(deleteComment));
   }
 
-  #onClickEmoji = (evt) => {
+  #onClickEmoji = (deleteComment) => (evt) => {
     evt.preventDefault();
 
     const emojiLabel = evt.target.closest('.film-details__emoji-label');
 
     if (emojiLabel) {
       this.#currentEmoji = this.element.querySelector(`#${emojiLabel.getAttribute('for')}`).value;
-      this.updateData(this.#currentEmoji);
+      this.updateData(this.#currentEmoji, true);
+      this.updateElement(deleteComment);
     }
   }
 
