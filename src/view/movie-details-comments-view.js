@@ -1,19 +1,20 @@
 import {formatDate} from '../helpers/common';
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
+import he from 'he';
 
-const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">` : '';
+const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${he.encode(emoji)}.png" width="55" height="55" alt="emoji">` : '';
 
 const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) =>
   `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
+      <img src="./images/emoji/${he.encode(emotion)}.png" width="55" height="55" alt="emoji-${he.encode(emotion)}">
     </span>
     <div>
-      <p class="film-details__comment-text">${text}</p>
+      <p class="film-details__comment-text">${he.encode(text)}</p>
       <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${formatDate(date, 'YYYY/MM/DD HH:mm')}</span>
+        <span class="film-details__comment-author">${he.encode(author)}</span>
+        <span class="film-details__comment-day">${he.encode(formatDate(date, 'YYYY/MM/DD HH:mm'))}</span>
         <button class="film-details__comment-delete" data-id="${id}">Delete</button>
       </p>
     </div>
@@ -33,7 +34,10 @@ const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) 
 
 
         <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" data-movie-id="${movieId}">${currentText}</textarea>
+            <textarea
+                class="film-details__comment-input"
+                placeholder="Select reaction below and write comment here"
+                name="comment" data-movie-id="${movieId}">${he.encode(currentText)}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
