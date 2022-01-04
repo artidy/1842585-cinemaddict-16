@@ -31,7 +31,6 @@ class MoviesPresenter {
   #commentsModel = null;
   #currentUser = null;
   #movieDetails = null;
-  #comments = [];
   #watchMovies = [];
   #watchedMovies = [];
   #favoriteMovies = [];
@@ -51,6 +50,7 @@ class MoviesPresenter {
   #movieCommentsView = null;
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
+  #movieForm = new MovieDetailsFormView();
 
   constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel) {
     this.#header = header;
@@ -186,20 +186,22 @@ class MoviesPresenter {
       this.#movieDetailsClose.removeElement();
       this.#movieDetailsContainer.removeElement();
       this.#movieDetails.removeElement();
+      this.#movieCommentsView.removeElement();
+      this.#movieForm.removeElement();
     }
 
     const {comments: commentsIds} = movie;
     const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
     this.#movieDetails = new MovieDetails();
-    const movieForm = new MovieDetailsFormView();
     this.#movieWrap.movie = movie;
-    this.#movieCommentsView = new MovieDetailsCommentsView(movieComments);
+    this.#movieCommentsView = new MovieDetailsCommentsView(movie.id, movieComments);
 
     render(this.#main, this.#movieDetails);
-    render(this.#movieDetails, movieForm);
-    render(movieForm, this.#movieDetailsContainer);
-    render(movieForm, this.#movieCommentsView);
+    render(this.#movieDetails, this.#movieForm);
+    render(this.#movieForm, this.#movieDetailsContainer);
+    render(this.#movieForm, this.#movieCommentsView);
     this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
+    this.#movieForm.restoreHandlers(this.#handleViewAction);
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
     this.#addNewControl(this.#movieWrap, movie, true, RenderPosition.AFTEREND);
@@ -315,6 +317,11 @@ class MoviesPresenter {
       case ActionType.DELETE_COMMENT:
         this.#moviesModel.deleteComment(data);
         this.#commentsModel.deleteComment(data);
+        break;
+      case ActionType.ADD_COMMENT:
+        this.#movieCommentsView.resetData();
+        this.#moviesModel.addComment(data.movieId, data.id);
+        this.#commentsModel.addComment(data);
         break;
     }
   }

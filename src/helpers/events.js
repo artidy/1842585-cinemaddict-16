@@ -1,7 +1,7 @@
 const onKeydownEsc = (popup) => (evt) => {
-  evt.preventDefault();
-
   if (evt.key === 'Esc' || evt.key === 'Escape') {
+    evt.preventDefault();
+
     popup.removeEvent('onKeydownEsc', 'keydown', document);
     document.body.classList.remove('hide-overflow');
     popup.removeElement();

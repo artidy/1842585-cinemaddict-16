@@ -19,7 +19,7 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
     </div>
   </li>`).join('');
 
-const getMovieCommentsTemplate = (comments, currentEmoji) =>
+const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) =>
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
@@ -31,8 +31,9 @@ const getMovieCommentsTemplate = (comments, currentEmoji) =>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label">${getEmojiTemplate(currentEmoji)}</div>
 
+
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" data-movie-id="${movieId}">${currentText}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
@@ -61,13 +62,16 @@ const getMovieCommentsTemplate = (comments, currentEmoji) =>
   </div>`;
 
 class MovieDetailsCommentsView extends AbstractSmartView {
+  #movieId = null;
   #comments = null;
   #currentEmoji = null;
+  #currentText = '';
 
-  constructor(comments) {
+  constructor(movieId, comments) {
     super();
 
     this.#comments = comments;
+    this.#movieId = movieId;
   }
 
   get comments() {
@@ -79,17 +83,29 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   }
 
   get template() {
-    return getMovieCommentsTemplate(this.#comments, this.#currentEmoji);
+    return getMovieCommentsTemplate(this.#movieId, this.#comments, this.#currentEmoji, this.#currentText);
+  }
+
+  resetData = () => {
+    this.#currentEmoji = null;
+    this.#currentText = '';
   }
 
   updateElement = (deleteComment) => {
     this.replaceElement();
     this.clearEvents();
     this.restoreHandlers(deleteComment);
+
+    if (this.#currentText) {
+      const inputArea = this.element.querySelector('.film-details__comment-input');
+      inputArea.focus();
+      inputArea.selectionStart = inputArea.selectionEnd = inputArea.value.length;
+    }
   }
 
   restoreHandlers = (deleteComment) => {
     this.addEvent('onClickEmoji', 'click', this.#onClickEmoji(deleteComment));
+    this.addEvent('onInputText', 'input', this.#onInputText(deleteComment));
     this.addEvent('onDeleteComment', 'click', this.#onDeleteComment(deleteComment));
   }
 
@@ -101,6 +117,18 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     if (emojiLabel) {
       this.#currentEmoji = this.element.querySelector(`#${emojiLabel.getAttribute('for')}`).value;
       this.updateData(this.#currentEmoji, true);
+      this.updateElement(deleteComment);
+    }
+  }
+
+  #onInputText = (deleteComment) => (evt) => {
+    evt.preventDefault();
+
+    const currentInput = this.element.querySelector('.film-details__comment-input');
+
+    if (currentInput) {
+      this.#currentText = currentInput.value;
+      this.updateData(this.#currentText, true);
       this.updateElement(deleteComment);
     }
   }

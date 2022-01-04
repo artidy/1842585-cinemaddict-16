@@ -12,7 +12,13 @@ class CommentsModel extends AbstractObservable {
   }
 
   addComment = (comment) => {
-    this.#comments.push(comment);
+    this.#comments.push({
+      id: comment.id,
+      text: comment.text,
+      emotion: comment.emotion,
+      author: comment.author,
+      date: comment.date,
+    });
 
     this._notify();
   }

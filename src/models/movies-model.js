@@ -11,6 +11,16 @@ class MoviesModel extends AbstractObservable {
     return this.#movies;
   }
 
+  addComment = (movieId, commentId) => {
+    const currentMovie = this.#movies.find((movie) => movie.id === movieId);
+
+    if (!currentMovie) {
+      throw new Error('Movie doesn\'t exist.');
+    }
+
+    currentMovie.comments.push(commentId);
+  }
+
   deleteComment = (commentId) => {
     const currentMovie = this.#movies.find((movie) => movie.comments.includes(commentId));
     const commentIndex = currentMovie.comments.findIndex((comment) => comment === commentId);
