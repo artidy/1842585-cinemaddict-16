@@ -29,20 +29,22 @@ class MovieDetailsFormView extends AbstractSmartView {
       const text = commentInput?.value;
       const emotion = this.element.querySelector('.film-details__emoji-item:checked')?.value;
 
-      if (text && emotion) {
-        addComment(
-          ActionType.ADD_COMMENT,
-          UpdateType.MINOR,
-          {
-            movieId: commentInput.dataset.movieId,
-            id: _.uniqueId(),
-            text,
-            emotion,
-            author: getRandomAuthor(),
-            date: dayjs().toDate(),
-          },
-        );
+      if (!text || !emotion) {
+        return;
       }
+
+      addComment(
+        ActionType.ADD_COMMENT,
+        UpdateType.MINOR,
+        {
+          movieId: commentInput.dataset.movieId,
+          id: _.uniqueId(),
+          text,
+          emotion,
+          author: getRandomAuthor(),
+          date: dayjs().toDate(),
+        },
+      );
     }
   }
 }
