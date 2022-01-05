@@ -254,9 +254,14 @@ class MoviesPresenter {
       this.#watchedMovies.length,
       this.#favoriteMovies.length,
     );
-    this.#mainMoviesList.replaceElement();
+    this.#mainMoviesList.removeElement();
+    this.#topMoviesList.removeElement();
+    this.#recommendMoviesList.removeElement();
+    this.#sortingMenu.removeElement();
+    this.#mainMoviesContainer.removeElement();
     this.#topMoviesContainer.removeElement();
     this.#recommendMoviesContainer.removeElement();
+    this.#moreButton.removeElement();
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
       return;
@@ -267,8 +272,10 @@ class MoviesPresenter {
       return;
     }
 
-    this.#sortingMenu.updateElement(this.#handleViewAction, this.#sortModel.currentSort);
-    this.#mainMoviesContainer.replaceElement();
+    this.#sortingMenu.updateElement(this.#sortModel.currentSort);
+    this.#renderSortMenu();
+    render(this.#mainContainer, this.#mainMoviesList);
+    this.#renderMainMovies();
     render(this.#mainMoviesList, this.#mainMoviesContainer);
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
     this.#updateExtraMovies();
@@ -277,7 +284,6 @@ class MoviesPresenter {
       this.#updateMovieDetails();
     }
 
-    this.#moreButton.removeElement();
     this.#renderMoreButton();
   }
 
