@@ -1,5 +1,5 @@
 import AbstractSmartView from './abstract-smart-view';
-import {EMPTY_MOVIE} from '../constants';
+import {ActionType, EMPTY_MOVIE, FilterType, UpdateType} from '../constants';
 
 const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
   `<section class="film-details__controls">
@@ -7,19 +7,19 @@ const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
       type="button"
       class="film-details__control-button film-details__control-button--watchlist ${isInWatchlist ? 'film-details__control-button--active' : ''}"
       id="watchlist"
-      name="watchlist"
+      name="${FilterType.WATCHLIST}"
     >${isInWatchlist ? 'Already in watchlist' : 'Add to watchlist'}</button>
     <button
       type="button"
       class="film-details__control-button film-details__control-button--watched ${isWatched ? 'film-details__control-button--active' : ''}"
       id="watched"
-      name="watched"
+      name="${FilterType.HISTORY}"
     >${isWatched ? 'Already watched' : 'Add to watched'}</button>
     <button
       type="button"
       class="film-details__control-button film-details__control-button--favorite ${isFavorite ? 'film-details__control-button--active' : ''}"
       id="favorite"
-      name="favorite"
+      name="${FilterType.FAVORITES}"
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </section>`;
 
@@ -28,17 +28,17 @@ const getControlsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
     <button
       class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isInWatchlist ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="watchlist"
+      name="${FilterType.WATCHLIST}"
     >${isInWatchlist ? 'Already in watchlist' : 'Add to watchlist'}</button>
     <button
       class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="watched"
+      name="${FilterType.HISTORY}"
     >${isWatched ? 'Already watched' : 'Add to watched'}</button>
     <button
       class="film-card__controls-item film-card__controls-item--favorite ${isFavorite ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="favorite"
+      name="${FilterType.FAVORITES}"
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </div>`;
 
@@ -95,8 +95,14 @@ class ControlsView extends AbstractSmartView {
     ControlsView.#controls = new Map();
   }
 
-  restoreHandlers = () => {
-    this.addEvent('onClickControls', 'click', this.#onClickControls(this.updateControl));
+  updateElement = (updateElement) => {
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(updateElement);
+  }
+
+  restoreHandlers = (updateElement) => {
+    this.addEvent('onClickControls', 'click', this.#onClickControls(updateElement));
   }
 
   #onClickControls = (updateElement) => (evt) => {
@@ -104,17 +110,18 @@ class ControlsView extends AbstractSmartView {
 
     if (evt.target.tagName === 'BUTTON') {
       switch(evt.target.getAttribute('name')) {
-        case 'watchlist':
+        case FilterType.WATCHLIST:
           this.#toggleWatchlist();
           break;
-        case 'watched':
+        case FilterType.HISTORY:
           this.#toggleWatched();
           break;
-        case 'favorite':
+        case FilterType.FAVORITES:
           this.#toggleFavorite();
           break;
       }
-      updateElement();
+
+      updateElement(ActionType.UPDATE_MOVIE, UpdateType.MINOR, this.#movie);
     }
   }
 }

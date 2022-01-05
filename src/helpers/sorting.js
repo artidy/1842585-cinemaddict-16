@@ -1,6 +1,6 @@
-const sortMoviesByRating = (movies) => movies.slice().sort(({rating: firstRating}, {rating: secondRating}) => firstRating < secondRating);
-const sortMoviesByComments = (movies) => movies.slice().sort(({comments: firstComments}, {comments: secondComments}) => firstComments.length < secondComments.length);
-const sortMoviesByDate = (movies) => movies.slice().sort(({releaseDate: firstDate}, {releaseDate: secondDate}) => firstDate < secondDate);
+const sortMoviesByRating = (movies) => movies.sort(({rating: firstRating}, {rating: secondRating}) => secondRating - firstRating);
+const sortMoviesByComments = (movies) => movies.sort(({comments: firstComments}, {comments: secondComments}) => secondComments.length - firstComments.length);
+const sortMoviesByDate = (movies) => movies.sort(({releaseDate: firstDate}, {releaseDate: secondDate}) => secondDate - firstDate);
 
 export {
   sortMoviesByRating,

@@ -1,5 +1,5 @@
-import AbstractEventView from './abstract-event-view';
-import {SortType} from '../constants';
+import {ActionType, SortType, UpdateType} from '../constants';
+import AbstractSmartView from './abstract-smart-view';
 
 const getSortTemplate = (currentSort) =>
   `<ul class="sort">
@@ -8,18 +8,30 @@ const getSortTemplate = (currentSort) =>
     <li><a class="sort__button ${currentSort === SortType.RATING ? 'sort__button--active' : ''}" data-sort="${SortType.RATING}">Sort by rating</a></li>
   </ul>`;
 
-class Sorting extends AbstractEventView {
-  #currentSort = SortType.DEFAULT;
+class Sorting extends AbstractSmartView {
+  #currentSort = null;
+
+  constructor(currentSort) {
+    super();
+    this.#currentSort = currentSort;
+  }
 
   get template() {
     return getSortTemplate(this.#currentSort);
   }
 
-  get currentSort() {
-    return this.#currentSort;
+  updateElement = (updateElement, currentSort) => {
+    this.#currentSort = currentSort;
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(updateElement);
   }
 
-  onClickSortBtn = (updateSort) => (evt) => {
+  restoreHandlers = (updateElement) => {
+    this.addEvent('onClickSortBtn', 'click', this.#onClickSortBtn(updateElement));
+  }
+
+  #onClickSortBtn = (updateSort) => (evt) => {
     evt.preventDefault();
 
     if (evt.target.tagName !== 'A' || this.#currentSort === evt.target.dataset.sort) {
@@ -28,7 +40,7 @@ class Sorting extends AbstractEventView {
 
     this.#currentSort = evt.target.dataset.sort;
 
-    updateSort();
+    updateSort(ActionType.CHANGE_SORT, UpdateType.MINOR, this.#currentSort);
   }
 }
 
