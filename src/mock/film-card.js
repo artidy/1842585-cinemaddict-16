@@ -22,23 +22,30 @@ const generateFilmCard = () => {
 
   return {
     id: _.uniqueId(),
-    poster: getRandomPoster(),
-    title,
-    originalTitle: title,
-    rating: getRandomRating(),
-    director: getRandomDirectors(),
-    screenWriters: getRandomScreenWriters(),
-    actors: getRandomActors(),
-    releaseDate: getRandomDate(),
-    duration: getRandomDuration(),
-    country: getRandomCountry(),
-    genres: getRandomGenres(),
-    description: getRandomDescription(),
-    maturityRating: getRandomMaturityRating(),
     comments: getRandomComments(),
-    isInWatchlist: getRandomBoolean(),
-    isWatched: getRandomBoolean(),
-    isFavorite: getRandomBoolean(),
+    'film_info': {
+      title,
+      'alternative_title': title,
+      'total_rating': getRandomRating(),
+      poster: getRandomPoster(),
+      'age_rating': getRandomMaturityRating(),
+      director: getRandomDirectors(),
+      writers: getRandomScreenWriters(),
+      actors: getRandomActors(),
+      release: {
+        date: getRandomDate(),
+        'release_country': getRandomCountry(),
+      },
+      runtime: getRandomDuration(),
+      genre: getRandomGenres(),
+      description: getRandomDescription(),
+    },
+    'user_details': {
+      'watchlist': getRandomBoolean(),
+      'already_watched': getRandomBoolean(),
+      'watching_date': getRandomDate(),
+      'favorite': getRandomBoolean(),
+    },
   };
 
 };

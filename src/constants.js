@@ -1,6 +1,7 @@
 const MAX_FILMS_GAP = 5;
 const MAX_FILMS_EXTRA = 2;
 const MIN_FILMS = 0;
+const BAR_HEIGHT = 50;
 const EMPTY_MOVIE = {
   id: '',
   poster: '',
@@ -45,4 +46,4 @@ const FilterType = {
   STATS: 'stats',
 };
 
-export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, MIN_FILMS, EMPTY_MOVIE, SortType, UpdateType, FilterType, ActionType};
+export {MAX_FILMS_GAP, MAX_FILMS_EXTRA, MIN_FILMS, EMPTY_MOVIE, BAR_HEIGHT, SortType, UpdateType, FilterType, ActionType};
