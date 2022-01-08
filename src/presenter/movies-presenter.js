@@ -20,6 +20,7 @@ import MovieDetailsCommentsView from '../view/movie-details-comments-view';
 import ShowMoreBtnView from '../view/show-more-btn-view';
 import CloseDetailsBtnView from '../view/close-details-btn-view';
 import ControlsView from '../view/controls-view';
+import StatsView from '../view/stats-view';
 
 class MoviesPresenter {
   #header = null;
@@ -51,6 +52,7 @@ class MoviesPresenter {
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
   #movieForm = new MovieDetailsFormView();
+  #statsView = null;
 
   constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel) {
     this.#header = header;
@@ -254,21 +256,36 @@ class MoviesPresenter {
       this.#watchedMovies.length,
       this.#favoriteMovies.length,
     );
-    this.#mainMoviesList.replaceElement();
+    this.#mainMoviesList.removeElement();
+    this.#topMoviesList.removeElement();
+    this.#recommendMoviesList.removeElement();
+    this.#sortingMenu.removeElement();
+    this.#mainMoviesContainer.removeElement();
     this.#topMoviesContainer.removeElement();
     this.#recommendMoviesContainer.removeElement();
+    this.#moreButton.removeElement();
+
+    if (this.#statsView) {
+      this.#statsView.removeElement();
+    }
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
+      this.#statsView = new StatsView(this.#watchedMovies);
+      render(this.#mainContainer, this.#statsView);
+      this.#statsView.updateElement();
       return;
     }
+
+    render(this.#mainContainer, this.#mainMoviesList);
 
     if (this.movies.length === 0) {
       render(this.#mainMoviesList, new MoviesEmpty());
       return;
     }
 
-    this.#sortingMenu.updateElement(this.#handleViewAction, this.#sortModel.currentSort);
-    this.#mainMoviesContainer.replaceElement();
+    this.#sortingMenu.updateElement(this.#sortModel.currentSort);
+    this.#renderSortMenu();
+    this.#renderMainMovies();
     render(this.#mainMoviesList, this.#mainMoviesContainer);
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
     this.#updateExtraMovies();
@@ -277,7 +294,6 @@ class MoviesPresenter {
       this.#updateMovieDetails();
     }
 
-    this.#moreButton.removeElement();
     this.#renderMoreButton();
   }
 

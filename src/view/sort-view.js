@@ -20,11 +20,8 @@ class Sorting extends AbstractSmartView {
     return getSortTemplate(this.#currentSort);
   }
 
-  updateElement = (updateElement, currentSort) => {
+  updateElement = (currentSort) => {
     this.#currentSort = currentSort;
-    this.replaceElement();
-    this.clearEvents();
-    this.restoreHandlers(updateElement);
   }
 
   restoreHandlers = (updateElement) => {

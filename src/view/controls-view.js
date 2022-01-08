@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, EMPTY_MOVIE, FilterType, UpdateType} from '../constants';
 
@@ -60,6 +61,7 @@ class ControlsView extends AbstractSmartView {
 
   #toggleWatched = () => {
     this.#movie.isWatched = !this.#movie.isWatched;
+    this.#movie.watchingDate = this.#movie.isWatched ? dayjs().toDate() : null;
   }
 
   #toggleFavorite = () => {
