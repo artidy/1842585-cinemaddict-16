@@ -1571,6 +1571,8 @@ class MoviesPresenter {
           return;
         }
 
+        (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainContainer), _classPrivateFieldGet(this, _mainMoviesList));
+
         if (this.movies.length === 0) {
           (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainMoviesList), new _view_movies_empty__WEBPACK_IMPORTED_MODULE_3__["default"]());
           return;
@@ -1579,8 +1581,6 @@ class MoviesPresenter {
         _classPrivateFieldGet(this, _sortingMenu).updateElement(_classPrivateFieldGet(this, _sortModel).currentSort);
 
         _classPrivateFieldGet(this, _renderSortMenu).call(this);
-
-        (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainContainer), _classPrivateFieldGet(this, _mainMoviesList));
 
         _classPrivateFieldGet(this, _renderMainMovies).call(this);
 
@@ -2078,6 +2078,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-smart-view */ "./src/view/abstract-smart-view.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
@@ -2101,6 +2103,7 @@ function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 
 function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
 
 
 
@@ -2189,6 +2192,10 @@ class ControlsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["de
       writable: true,
       value: () => {
         _classPrivateFieldGet(this, _movie).isWatched = !_classPrivateFieldGet(this, _movie).isWatched;
+
+        if (_classPrivateFieldGet(this, _movie).isWatched) {
+          _classPrivateFieldGet(this, _movie).watchingDate = dayjs__WEBPACK_IMPORTED_MODULE_2___default()().toDate();
+        }
       }
     });
 
