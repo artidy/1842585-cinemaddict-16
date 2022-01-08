@@ -2076,10 +2076,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-smart-view */ "./src/view/abstract-smart-view.js");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _abstract_smart_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-smart-view */ "./src/view/abstract-smart-view.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
@@ -2117,19 +2117,19 @@ const getControlsDetailsTemplate = ({
       type="button"
       class="film-details__control-button film-details__control-button--watchlist ${isInWatchlist ? 'film-details__control-button--active' : ''}"
       id="watchlist"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.WATCHLIST}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.WATCHLIST}"
     >${isInWatchlist ? 'Already in watchlist' : 'Add to watchlist'}</button>
     <button
       type="button"
       class="film-details__control-button film-details__control-button--watched ${isWatched ? 'film-details__control-button--active' : ''}"
       id="watched"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.HISTORY}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.HISTORY}"
     >${isWatched ? 'Already watched' : 'Add to watched'}</button>
     <button
       type="button"
       class="film-details__control-button film-details__control-button--favorite ${isFavorite ? 'film-details__control-button--active' : ''}"
       id="favorite"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.FAVORITES}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.FAVORITES}"
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </section>`;
 
@@ -2141,17 +2141,17 @@ const getControlsTemplate = ({
     <button
       class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isInWatchlist ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.WATCHLIST}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.WATCHLIST}"
     >${isInWatchlist ? 'Already in watchlist' : 'Add to watchlist'}</button>
     <button
       class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.HISTORY}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.HISTORY}"
     >${isWatched ? 'Already watched' : 'Add to watched'}</button>
     <button
       class="film-card__controls-item film-card__controls-item--favorite ${isFavorite ? 'film-card__controls-item--active' : ''}"
       type="button"
-      name="${_constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.FAVORITES}"
+      name="${_constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.FAVORITES}"
     >${isFavorite ? 'Already favorite' : 'Add to favorites'}</button>
   </div>`;
 
@@ -2167,13 +2167,13 @@ var _toggleFavorite = /*#__PURE__*/new WeakMap();
 
 var _onClickControls = /*#__PURE__*/new WeakMap();
 
-class ControlsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class ControlsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_1__["default"] {
   constructor(movie, isDetails = false) {
     super();
 
     _classPrivateFieldInitSpec(this, _movie, {
       writable: true,
-      value: _constants__WEBPACK_IMPORTED_MODULE_1__.EMPTY_MOVIE
+      value: _constants__WEBPACK_IMPORTED_MODULE_2__.EMPTY_MOVIE
     });
 
     _classPrivateFieldInitSpec(this, _isDetails, {
@@ -2192,10 +2192,7 @@ class ControlsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["de
       writable: true,
       value: () => {
         _classPrivateFieldGet(this, _movie).isWatched = !_classPrivateFieldGet(this, _movie).isWatched;
-
-        if (_classPrivateFieldGet(this, _movie).isWatched) {
-          _classPrivateFieldGet(this, _movie).watchingDate = dayjs__WEBPACK_IMPORTED_MODULE_2___default()().toDate();
-        }
+        _classPrivateFieldGet(this, _movie).watchingDate = _classPrivateFieldGet(this, _movie).isWatched ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()().toDate() : null;
       }
     });
 
@@ -2233,23 +2230,23 @@ class ControlsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["de
 
         if (evt.target.tagName === 'BUTTON') {
           switch (evt.target.getAttribute('name')) {
-            case _constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.WATCHLIST:
+            case _constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.WATCHLIST:
               _classPrivateFieldGet(this, _toggleWatchlist).call(this);
 
               break;
 
-            case _constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.HISTORY:
+            case _constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.HISTORY:
               _classPrivateFieldGet(this, _toggleWatched).call(this);
 
               break;
 
-            case _constants__WEBPACK_IMPORTED_MODULE_1__.FilterType.FAVORITES:
+            case _constants__WEBPACK_IMPORTED_MODULE_2__.FilterType.FAVORITES:
               _classPrivateFieldGet(this, _toggleFavorite).call(this);
 
               break;
           }
 
-          updateElement(_constants__WEBPACK_IMPORTED_MODULE_1__.ActionType.UPDATE_MOVIE, _constants__WEBPACK_IMPORTED_MODULE_1__.UpdateType.MINOR, _classPrivateFieldGet(this, _movie));
+          updateElement(_constants__WEBPACK_IMPORTED_MODULE_2__.ActionType.UPDATE_MOVIE, _constants__WEBPACK_IMPORTED_MODULE_2__.UpdateType.MINOR, _classPrivateFieldGet(this, _movie));
         }
       }
     });
