@@ -1,5 +1,6 @@
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, EMPTY_MOVIE, FilterType, UpdateType} from '../constants';
+import dayjs from "dayjs";
 
 const getControlsDetailsTemplate = ({isInWatchlist, isWatched, isFavorite}) =>
   `<section class="film-details__controls">
@@ -60,6 +61,9 @@ class ControlsView extends AbstractSmartView {
 
   #toggleWatched = () => {
     this.#movie.isWatched = !this.#movie.isWatched;
+    if (this.#movie.isWatched) {
+      this.#movie.watchingDate = dayjs().toDate();
+    }
   }
 
   #toggleFavorite = () => {

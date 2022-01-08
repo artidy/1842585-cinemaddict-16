@@ -276,6 +276,8 @@ class MoviesPresenter {
       return;
     }
 
+    render(this.#mainContainer, this.#mainMoviesList);
+
     if (this.movies.length === 0) {
       render(this.#mainMoviesList, new MoviesEmpty());
       return;
@@ -283,7 +285,6 @@ class MoviesPresenter {
 
     this.#sortingMenu.updateElement(this.#sortModel.currentSort);
     this.#renderSortMenu();
-    render(this.#mainContainer, this.#mainMoviesList);
     this.#renderMainMovies();
     render(this.#mainMoviesList, this.#mainMoviesContainer);
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
