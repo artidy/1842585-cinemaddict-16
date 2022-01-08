@@ -1,11 +1,11 @@
 import AbstractView from './abstract-view';
-import {formatDate} from '../helpers/common';
+import {formatDate, formatRuntime} from '../helpers/common';
 import {EMPTY_MOVIE} from '../constants';
 
 const getGenresContent = (genres) => genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
 const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, rating, director,
-  screenWriters, actors, releaseDate, duration, country, genres, description}) =>
+  screenWriters, actors, releaseDate, runtime, country, genres, description}) =>
   `<div class="film-details__info-wrap">
     <div class="film-details__poster">
       <img class="film-details__poster-img" src="${poster}" alt="${title}">
@@ -44,7 +44,7 @@ const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, ra
         </tr>
         <tr class="film-details__row">
           <td class="film-details__term">Runtime</td>
-          <td class="film-details__cell">${duration}</td>
+          <td class="film-details__cell">${formatRuntime(runtime)}</td>
         </tr>
         <tr class="film-details__row">
           <td class="film-details__term">Country</td>

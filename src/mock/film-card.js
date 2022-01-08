@@ -14,7 +14,7 @@ import {
   getRandomGenres,
   getRandomMaturityRating,
   getRandomComments,
-  getRandomBoolean,
+  getRandomBoolean, getWatchingDate,
 } from './helpers';
 
 const generateFilmCard = () => {
@@ -43,7 +43,7 @@ const generateFilmCard = () => {
     'user_details': {
       'watchlist': getRandomBoolean(),
       'already_watched': getRandomBoolean(),
-      'watching_date': getRandomDate(),
+      'watching_date': getWatchingDate(),
       'favorite': getRandomBoolean(),
     },
   };

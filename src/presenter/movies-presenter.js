@@ -20,7 +20,7 @@ import MovieDetailsCommentsView from '../view/movie-details-comments-view';
 import ShowMoreBtnView from '../view/show-more-btn-view';
 import CloseDetailsBtnView from '../view/close-details-btn-view';
 import ControlsView from '../view/controls-view';
-import StatsView from "../view/stats-view";
+import StatsView from '../view/stats-view';
 
 class MoviesPresenter {
   #header = null;
@@ -52,7 +52,7 @@ class MoviesPresenter {
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
   #movieForm = new MovieDetailsFormView();
-  #statsView = new StatsView();
+  #statsView = null;
 
   constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel) {
     this.#header = header;
@@ -264,11 +264,15 @@ class MoviesPresenter {
     this.#topMoviesContainer.removeElement();
     this.#recommendMoviesContainer.removeElement();
     this.#moreButton.removeElement();
-    this.#statsView.removeElement();
+
+    if (this.#statsView) {
+      this.#statsView.removeElement();
+    }
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
+      this.#statsView = new StatsView(this.#watchedMovies);
       render(this.#mainContainer, this.#statsView);
-      this.#statsView.updateChart();
+      this.#statsView.updateElement();
       return;
     }
 
