@@ -1,14 +1,27 @@
 import AbstractObservable from './abstract-observable';
+import {normalizeArray} from '../helpers/common';
+import {normalizeMovie} from '../helpers/normalize';
+import {UpdateType} from '../constants';
 
 class MoviesModel extends AbstractObservable {
+  #apiService = null;
   #movies = [];
 
-  set movies(movies) {
-    this.#movies = [...movies];
+  constructor (apiService) {
+    super();
+
+    this.#apiService = apiService;
   }
 
   get movies() {
     return this.#movies;
+  }
+
+  init = async () => {
+    const response = await this.#apiService.movies;
+    this.#movies = normalizeArray(response, normalizeMovie);
+
+    this._notify(UpdateType.INIT);
   }
 
   addComment = (movieId, commentId) => {

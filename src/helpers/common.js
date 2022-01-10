@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import {MINUTES_IN_HOUR} from '../constants';
+import {KEY, MINUTES_IN_HOUR} from '../constants';
 
-const normalizeArray = (list, callback) => list.map((value) => callback(value));
+const normalizeArray = (list, callback) => list.map(callback);
 const formatDate = (date, format) => dayjs(date).format(format);
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
 const getDurationHours = (duration) => Math.floor(duration / MINUTES_IN_HOUR);
@@ -24,6 +24,7 @@ const getStatsInfo = (movies) => {
   return stats;
 };
 const getDuration = (movies) => movies.reduce(((prevValue, {runtime}) => prevValue + runtime), 0);
+const getAuthorization = () => `Basic ${KEY}`;
 
 export {
   normalizeArray,
@@ -34,4 +35,5 @@ export {
   getDuration,
   getDurationHours,
   getDurationMinutes,
+  getAuthorization,
 };
