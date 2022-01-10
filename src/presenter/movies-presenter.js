@@ -30,7 +30,7 @@ import ShowMoreBtnView from '../view/show-more-btn-view';
 import CloseDetailsBtnView from '../view/close-details-btn-view';
 import ControlsView from '../view/controls-view';
 import StatsView from '../view/stats-view';
-import UserRating from '../models/user-rating';
+import LoadingView from '../view/loading-view';
 
 class MoviesPresenter {
   #header = null;
@@ -63,6 +63,7 @@ class MoviesPresenter {
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
   #movieForm = new MovieDetailsFormView();
+  #loadingView = new LoadingView();
   #statsView = null;
   #loading = true;
 
@@ -118,7 +119,10 @@ class MoviesPresenter {
 
   load = () => {
     this.#updateMovies();
-    render(this.#footer, new Statistic(this.#moviesModel.movies.length));
+
+    if (!this.#loading) {
+      render(this.#footer, new Statistic(this.#moviesModel.movies.length));
+    }
   }
 
   #renderMainMenu = () => {
@@ -247,6 +251,7 @@ class MoviesPresenter {
 
   #updateMovies = () => {
     this.#mainContainer.removeElement();
+    this.#loadingView.removeElement();
     this.#mainMenu.removeElement();
     this.#mainMoviesList.removeElement();
     this.#topMoviesList.removeElement();
@@ -276,11 +281,20 @@ class MoviesPresenter {
       return;
     }
 
+    if (this.#loading) {
+      render(this.#mainContainer, this.#loadingView);
+      return;
+    }
+
     render(this.#mainContainer, this.#mainMoviesList);
 
     if (this.movies.length === 0) {
       render(this.#mainMoviesList, new MoviesEmpty());
       return;
+    }
+
+    if (this.#movieDetails !== null) {
+      this.#updateMovieDetails();
     }
 
     this.#sortingMenu.updateElement(this.#sortModel.currentSort);
@@ -289,10 +303,6 @@ class MoviesPresenter {
     render(this.#mainMoviesList, this.#mainMoviesContainer);
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
     this.#updateExtraMovies();
-
-    if (this.#movieDetails !== null) {
-      this.#updateMovieDetails();
-    }
 
     this.#renderMoreButton();
   }

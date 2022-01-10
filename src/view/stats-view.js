@@ -6,13 +6,17 @@ import {getDuration, getDurationHours, getDurationMinutes, getStatsInfo} from '.
 import {sortChartGenres, sortChartValues} from '../helpers/sorting';
 import {filterStats} from '../helpers/filters';
 
-const getStatisticsTemplate = (currentFilter, watched, duration, topGenre, avatar, rating) =>
-  `<section class="statistic">
-    <p class="statistic__rank">
+const getRatingTemplate = (avatar, rating) => rating ?
+  `<p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="${avatar}" alt="Avatar" width="35" height="35">
       <span class="statistic__rank-label">${rating}</span>
-    </p>
+    </p>` : '';
+
+const getStatisticsTemplate = (currentFilter, watched, duration, topGenre, avatar, rating) =>
+  `<section class="statistic">
+
+    ${getRatingTemplate(avatar, rating)}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>

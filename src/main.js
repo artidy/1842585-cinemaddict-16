@@ -21,3 +21,4 @@ const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const footer = document.querySelector('.footer');
 const moviesPresenter = new MoviesPresenter(header, main, footer, moviesModel, filterModel, sortModel, commentsModel, userModel);
+moviesPresenter.load();
