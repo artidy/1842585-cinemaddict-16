@@ -1,4 +1,5 @@
 import {Methods, Urls} from './constants';
+import {normalizeComment, normalizeCommentServer, normalizeMovieServer} from './helpers/normalize';
 
 class ApiService {
   #endPoint = null;
@@ -14,6 +15,18 @@ class ApiService {
   }
 
   getMoviesComments = (movieId) => this.#load({url: `${Urls.COMMENTS}/${movieId}`})
+
+  updateMovie = (movie) => this.#load({
+    url: `${Urls.MOVIES}/${movie.id}`,
+    method: Methods.PUT,
+    body: JSON.stringify(normalizeMovieServer(movie)),
+  });
+
+  addComment = (movieId, comment) => this.#load({
+    url: `${Urls.COMMENTS}/${movieId}`,
+    method: Methods.POST,
+    body: JSON.stringify(normalizeCommentServer(comment)),
+  });
 
   #load = async ({
     url,

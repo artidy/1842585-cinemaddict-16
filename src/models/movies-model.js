@@ -44,7 +44,9 @@ class MoviesModel extends AbstractObservable {
     ];
   }
 
-  updateMovie = (updateType, updatedMovie) => {
+  updateMovie = async (updateType, updatedMovie) => {
+    await this.#apiService.updateMovie(updatedMovie);
+
     const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
 
     if (index === -1) {
