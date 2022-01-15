@@ -2,6 +2,7 @@ import AbstractObservable from './abstract-observable';
 import {normalizeArray} from '../helpers/common';
 import {normalizeComment} from '../helpers/normalize';
 import {UpdateType} from '../constants';
+import ApiService from '../api-service';
 
 class CommentsModel extends AbstractObservable {
   #apiService = null;
@@ -19,12 +20,14 @@ class CommentsModel extends AbstractObservable {
 
   loadComments = async (movieId) => {
     const response = await this.#apiService.getMoviesComments(movieId);
-    this.#comments = normalizeArray(response, normalizeComment);
+    this.#comments = normalizeArray(await ApiService.parseResponse(response), normalizeComment);
 
     this._notify(UpdateType.LOAD_COMMENTS);
   }
 
-  addComment = (comment) => {
+  addComment = async (movieId, comment) => {
+    await this.#apiService.addComment(movieId, comment);
+
     this.#comments.push({
       id: comment.id,
       text: comment.text,
@@ -36,7 +39,9 @@ class CommentsModel extends AbstractObservable {
     this._notify();
   }
 
-  deleteComment = (commentId) => {
+  deleteComment = async (commentId) => {
+    await this.#apiService.deleteComment(commentId);
+
     const index = this.#comments.findIndex((comment) => comment.id === commentId);
 
     if (index === -1) {

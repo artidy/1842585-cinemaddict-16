@@ -342,8 +342,8 @@ class MoviesPresenter {
         break;
       case ActionType.ADD_COMMENT:
         this.#movieCommentsView.resetData();
+        this.#commentsModel.addComment(data.movieId, data);
         this.#moviesModel.addComment(data.movieId, data.id);
-        this.#commentsModel.addComment(data);
         break;
     }
   }

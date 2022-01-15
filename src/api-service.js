@@ -1,5 +1,5 @@
 import {Methods, Urls} from './constants';
-import {normalizeComment, normalizeCommentServer, normalizeMovieServer} from './helpers/normalize';
+import {normalizeCommentServer, normalizeMovieServer} from './helpers/normalize';
 
 class ApiService {
   #endPoint = null;
@@ -28,6 +28,11 @@ class ApiService {
     body: JSON.stringify(normalizeCommentServer(comment)),
   });
 
+  deleteComment = (commentId) => this.#load({
+    url: `${Urls.COMMENTS}/${commentId}`,
+    method: Methods.DELETE,
+  });
+
   #load = async ({
     url,
     method = Methods.GET,
@@ -40,7 +45,7 @@ class ApiService {
 
     try {
       ApiService.checkStatus(response);
-      return ApiService.parseResponse(response);
+      return response;
     } catch (err) {
       ApiService.catchError(err);
     }

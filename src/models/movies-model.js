@@ -2,6 +2,7 @@ import AbstractObservable from './abstract-observable';
 import {normalizeArray} from '../helpers/common';
 import {normalizeMovie} from '../helpers/normalize';
 import {UpdateType} from '../constants';
+import ApiService from '../api-service';
 
 class MoviesModel extends AbstractObservable {
   #apiService = null;
@@ -19,7 +20,7 @@ class MoviesModel extends AbstractObservable {
 
   init = async () => {
     const response = await this.#apiService.movies;
-    this.#movies = normalizeArray(response, normalizeMovie);
+    this.#movies = normalizeArray(await ApiService.parseResponse(response), normalizeMovie);
 
     this._notify(UpdateType.INIT);
   }
