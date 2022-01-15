@@ -20,12 +20,14 @@ class ApiService {
     url: `${Urls.MOVIES}/${movie.id}`,
     method: Methods.PUT,
     body: JSON.stringify(normalizeMovieServer(movie)),
+    headers: new Headers({'Content-Type': 'application/json'}),
   });
 
   addComment = (movieId, comment) => this.#load({
     url: `${Urls.COMMENTS}/${movieId}`,
     method: Methods.POST,
     body: JSON.stringify(normalizeCommentServer(comment)),
+    headers: new Headers({'Content-Type': 'application/json'}),
   });
 
   deleteComment = (commentId) => this.#load({
