@@ -43,9 +43,9 @@ class ApiService {
   }) => {
     headers.append('Authorization', this.#authorization);
 
-    const response = await fetch(`${this.#endPoint}/${url}`, {method, body, headers});
-
     try {
+      const response = await fetch(`${this.#endPoint}/${url}`, {method, body, headers});
+
       ApiService.checkStatus(response);
       return response;
     } catch (err) {
