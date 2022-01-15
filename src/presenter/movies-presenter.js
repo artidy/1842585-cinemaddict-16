@@ -41,7 +41,7 @@ class MoviesPresenter {
   #sortModel = null;
   #commentsModel = null;
   #currentUser = null;
-  #movieDetails = null;
+  #currentMovie = null;
   #watchMovies = [];
   #watchedMovies = [];
   #favoriteMovies = [];
@@ -55,6 +55,7 @@ class MoviesPresenter {
   #mainMoviesContainer = new MoviesContainer();
   #topMoviesContainer = new MoviesContainer();
   #recommendMoviesContainer = new MoviesContainer();
+  #movieDetails = null;
   #sortingMenu = null;
   #moreButton = new ShowMoreBtnView();
   #mainMenu = new MainMenu();
@@ -118,8 +119,8 @@ class MoviesPresenter {
   }
 
   load = () => {
+    render(this.#main, this.#mainContainer);
     this.#updateMovies();
-
     if (!this.#loading) {
       render(this.#footer, new Statistic(this.#moviesModel.movies.length));
     }
@@ -182,23 +183,19 @@ class MoviesPresenter {
     movieCardControls.restoreHandlers(this.#handleViewAction);
   }
 
-  #renderMovieDetails = (movie) => {
-    if (this.#movieDetails !== null) {
-      this.#movieWrap.removeElement();
-      this.#movieDetailsClose.removeElement();
-      this.#movieDetailsContainer.removeElement();
-      this.#movieDetails.removeElement();
-      this.#movieCommentsView.removeElement();
-      this.#movieForm.removeElement();
+  #renderMovieDetails = () => {
+    if (this.#movieDetails) {
+      this.#clearDetails();
+    } else {
+      this.#movieDetails = new MovieDetails();
+      render(this.#main, this.#movieDetails);
     }
 
-    const {comments: commentsIds} = movie;
+    this.#movieWrap.movie = this.#currentMovie;
+    const {id, comments: commentsIds} = this.#currentMovie;
     const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieDetails = new MovieDetails();
-    this.#movieWrap.movie = movie;
-    this.#movieCommentsView = new MovieDetailsCommentsView(movie.id, movieComments);
+    this.#movieCommentsView = new MovieDetailsCommentsView(id, movieComments);
 
-    render(this.#main, this.#movieDetails);
     render(this.#movieDetails, this.#movieForm);
     render(this.#movieForm, this.#movieDetailsContainer);
     render(this.#movieForm, this.#movieCommentsView);
@@ -206,12 +203,27 @@ class MoviesPresenter {
     this.#movieForm.restoreHandlers(this.#handleViewAction);
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
-    this.#addNewControl(this.#movieWrap, movie, true, RenderPosition.AFTEREND);
+    this.#addNewControl(this.#movieWrap, this.#currentMovie, true, RenderPosition.AFTEREND);
 
-    document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+    document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
+    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
 
     document.body.classList.add('hide-overflow');
+  }
+
+  #clearDetails = () => {
+    this.#movieWrap.removeElement();
+    this.#movieDetailsClose.removeElement();
+    this.#movieCommentsView.removeElement();
+    this.#movieDetailsContainer.removeElement();
+    this.#movieForm.removeElement();
+  }
+
+  #onClickCloseDetails = () => {
+    this.#clearDetails();
+    this.#movieDetails.removeElement();
+    this.#currentMovie = null;
+    this.#movieDetails = null;
   }
 
   #renderSortMenu = () => {
@@ -229,9 +241,9 @@ class MoviesPresenter {
     }
 
     const id = movieCard.dataset.id;
-    const movie = this.movies.find((item) => item.id === id);
+    this.#currentMovie = this.movies.find((item) => item.id === id);
 
-    this.#renderMovieDetails(movie);
+    this.#commentsModel.loadComments(id);
   }
 
   #onShowMoreMovies = (evt) => {
@@ -250,7 +262,7 @@ class MoviesPresenter {
   }
 
   #updateMovies = () => {
-    this.#mainContainer.removeElement();
+    this.#mainContainer.replaceElement();
     this.#loadingView.removeElement();
     this.#mainMenu.removeElement();
     this.#mainMoviesList.removeElement();
@@ -272,7 +284,6 @@ class MoviesPresenter {
     }
 
     this.#renderMainMenu();
-    render(this.#main, this.#mainContainer);
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
       this.#statsView = new StatsView(this.#watchedMovies, this.#userRating.rating);
@@ -293,8 +304,8 @@ class MoviesPresenter {
       return;
     }
 
-    if (this.#movieDetails !== null) {
-      this.#updateMovieDetails();
+    if (this.#currentMovie !== null) {
+      this.#renderMovieDetails();
     }
 
     this.#sortingMenu.updateElement(this.#sortModel.currentSort);
@@ -305,22 +316,6 @@ class MoviesPresenter {
     this.#updateExtraMovies();
 
     this.#renderMoreButton();
-  }
-
-  #updateMovieDetails = () => {
-    if (this.#movieDetails === null) {
-      return;
-    }
-
-    const {comments: commentsIds} = this.#movieWrap.movie;
-    this.#movieCommentsView.comments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieCommentsView.updateElement(this.#handleViewAction);
-    this.#movieDetailsContainer.replaceElement();
-    this.#movieWrap.replaceElement();
-    render(this.#movieDetailsContainer, this.#movieDetailsClose);
-    render(this.#movieDetailsContainer, this.#movieWrap);
-    this.#addNewControl(this.#movieWrap, this.#movieWrap.movie, true, RenderPosition.AFTEREND);
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
   }
 
   #handleViewAction = (actionType, updateType, data) => {
@@ -354,6 +349,11 @@ class MoviesPresenter {
   }
 
   #handleModelEvent = (updateType) => {
+    if (updateType === UpdateType.LOAD_COMMENTS) {
+      this.#renderMovieDetails();
+      return;
+    }
+
     this.#updateFilters();
     this.#currentUser.changeRating(this.#watchedMovies.length);
     this.#userRating.rating = this.#currentUser.rating;

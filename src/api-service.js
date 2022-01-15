@@ -13,6 +13,8 @@ class ApiService {
     return this.#load({url: Urls.MOVIES});
   }
 
+  getMoviesComments = (movieId) => this.#load({url: `${Urls.COMMENTS}/${movieId}`})
+
   #load = async ({
     url,
     method = Methods.GET,

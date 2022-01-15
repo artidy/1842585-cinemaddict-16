@@ -1,14 +1,27 @@
 import AbstractObservable from './abstract-observable';
+import {normalizeArray} from '../helpers/common';
+import {normalizeComment} from '../helpers/normalize';
+import {UpdateType} from '../constants';
 
 class CommentsModel extends AbstractObservable {
+  #apiService = null;
   #comments = [];
 
-  set comments(comments) {
-    this.#comments = [...comments];
+  constructor (apiService) {
+    super();
+
+    this.#apiService = apiService;
   }
 
   get comments() {
     return this.#comments;
+  }
+
+  loadComments = async (movieId) => {
+    const response = await this.#apiService.getMoviesComments(movieId);
+    this.#comments = normalizeArray(response, normalizeComment);
+
+    this._notify(UpdateType.LOAD_COMMENTS);
   }
 
   addComment = (comment) => {

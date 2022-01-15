@@ -44,6 +44,7 @@ const SortType = {
 };
 const UpdateType = {
   INIT: 'INIT',
+  LOAD_COMMENTS: 'LOAD_COMMENTS',
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
@@ -83,6 +84,7 @@ const Methods = {
 };
 const Urls = {
   MOVIES: 'movies',
+  COMMENTS: 'comments',
 };
 
 export {

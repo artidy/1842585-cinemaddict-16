@@ -45,9 +45,9 @@ const normalizeMovie = (
   isFavorite,
   watchingDate,
 });
-const normalizeComment = ({id, text, emotion, author, date}) => ({
+const normalizeComment = ({id, comment, emotion, author, date}) => ({
   id,
-  text,
+  text: comment,
   emotion,
   author,
   date,

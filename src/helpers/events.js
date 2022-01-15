@@ -1,20 +1,18 @@
-const onKeydownEsc = (popup) => (evt) => {
+const onKeydownEsc = (callback) => (evt) => {
   if (evt.key === 'Esc' || evt.key === 'Escape') {
     evt.preventDefault();
 
-    popup.removeEvent('onKeydownEsc', 'keydown', document);
     document.body.classList.remove('hide-overflow');
-    popup.removeElement();
+    callback();
   }
 };
 
-const onClickCloseBtn = (popup) => (evt) => {
-  evt.preventDefault();
-
+const onClickCloseBtn = (callback) => (evt) => {
   if (evt.target.classList.contains('film-details__close-btn')) {
-    popup.removeEvent('onKeydownEsc', 'keydown', document);
+    evt.preventDefault();
+
     document.body.classList.remove('hide-overflow');
-    popup.removeElement();
+    callback();
   }
 };
 

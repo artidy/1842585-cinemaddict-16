@@ -13,7 +13,7 @@ const moviesModel = new MoviesModel(apiService);
 const filterModel = new FilterModel();
 const sortModel = new SortModel();
 const userModel = new UserRating();
-const commentsModel = new CommentsModel();
+const commentsModel = new CommentsModel(apiService);
 
 moviesModel.init();
 
