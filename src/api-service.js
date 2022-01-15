@@ -47,6 +47,7 @@ class ApiService {
       const response = await fetch(`${this.#endPoint}/${url}`, {method, body, headers});
 
       ApiService.checkStatus(response);
+
       return response;
     } catch (err) {
       ApiService.catchError(err);
