@@ -9,9 +9,10 @@ const getStatisticsTemplate = (count) =>
 class Statistic extends AbstractView {
   #count = 0;
 
-  constructor(count) {
-    super();
+  updateElement = (count) => {
     this.#count = formatNumber(count);
+
+    this.replaceElement();
   }
 
   get template() {

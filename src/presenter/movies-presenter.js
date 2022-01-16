@@ -14,9 +14,7 @@ import {
   MIN_FILMS,
   SortType,
   UpdateType,
-  UserRatings
 } from '../constants';
-import Statistic from '../view/statistics-view';
 import {onClickCloseBtn, onKeydownEsc} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
 import {sortMoviesByComments, sortMoviesByDate, sortMoviesByRating,} from '../helpers/sorting';
@@ -33,9 +31,7 @@ import StatsView from '../view/stats-view';
 import LoadingView from '../view/loading-view';
 
 class MoviesPresenter {
-  #header = null;
   #main = null;
-  #footer = null;
   #moviesModel = null;
   #filterModel = null;
   #sortModel = null;
@@ -68,10 +64,8 @@ class MoviesPresenter {
   #statsView = null;
   #loading = true;
 
-  constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
-    this.#header = header;
+  constructor(main, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
     this.#main = main;
-    this.#footer = footer;
     this.#moviesModel = moviesModel;
     this.#filterModel = filterModel;
     this.#sortModel = sortModel;
@@ -121,9 +115,6 @@ class MoviesPresenter {
   load = () => {
     render(this.#main, this.#mainContainer);
     this.#updateMovies();
-    if (!this.#loading) {
-      render(this.#footer, new Statistic(this.#moviesModel.movies.length));
-    }
   }
 
   #renderMainMenu = () => {
@@ -273,20 +264,15 @@ class MoviesPresenter {
     this.#topMoviesContainer.removeElement();
     this.#recommendMoviesContainer.removeElement();
     this.#moreButton.removeElement();
-    this.#userRating.removeElement();
 
     if (this.#statsView) {
       this.#statsView.removeElement();
     }
 
-    if (this.#userRating.rating !== UserRatings.NONE) {
-      render(this.#header, this.#userRating);
-    }
-
     this.#renderMainMenu();
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
-      this.#statsView = new StatsView(this.#watchedMovies, this.#userRating.rating);
+      this.#statsView = new StatsView(this.#watchedMovies, this.#currentUser.rating);
       render(this.#mainContainer, this.#statsView);
       this.#statsView.updateElement();
       return;
@@ -354,16 +340,13 @@ class MoviesPresenter {
       return;
     }
 
-    this.#updateFilters();
-    this.#currentUser.changeRating(this.#watchedMovies.length);
-    this.#userRating.rating = this.#currentUser.rating;
-
     if (updateType === UpdateType.INIT) {
       this.#loading = false;
-      this.load();
-    } else {
-      this.#updateMovies();
     }
+
+    this.#updateFilters();
+    this.#currentUser.changeRating(this.#watchedMovies.length);
+    this.#updateMovies();
   }
 
   #updateExtraMovies = () => {
