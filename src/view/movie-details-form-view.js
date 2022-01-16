@@ -1,8 +1,5 @@
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
-import _ from 'lodash';
-import dayjs from 'dayjs';
-import {getRandomAuthor} from '../mock/helpers';
 
 const getFormTemplate = () => '<form class="film-details__inner" action="" method="get"></form>';
 
@@ -38,11 +35,8 @@ class MovieDetailsFormView extends AbstractSmartView {
         UpdateType.MINOR,
         {
           movieId: commentInput.dataset.movieId,
-          id: _.uniqueId(),
           text,
           emotion,
-          author: getRandomAuthor(),
-          date: dayjs().toDate(),
         },
       );
     }
