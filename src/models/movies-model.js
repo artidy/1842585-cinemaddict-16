@@ -19,20 +19,24 @@ class MoviesModel extends AbstractObservable {
   }
 
   init = async () => {
-    const response = await this.#apiService.movies;
-    this.#movies = normalizeArray(await ApiService.parseResponse(response), normalizeMovie);
+    try {
+      const response = await this.#apiService.movies;
+      this.#movies = normalizeArray(await ApiService.parseResponse(response), normalizeMovie);
+    } catch (err) {
+      this.#movies = [];
+    }
 
     this._notify(UpdateType.INIT);
   }
 
-  addComment = (movieId, commentId) => {
+  addComment = (movieId, comments) => {
     const currentMovie = this.#movies.find((movie) => movie.id === movieId);
 
     if (!currentMovie) {
       throw new Error('Movie doesn\'t exist.');
     }
 
-    currentMovie.comments.push(commentId);
+    currentMovie.comments = comments;
   }
 
   deleteComment = (commentId) => {
@@ -46,21 +50,26 @@ class MoviesModel extends AbstractObservable {
   }
 
   updateMovie = async (updateType, updatedMovie) => {
-    await this.#apiService.updateMovie(updatedMovie);
+    try {
+      await this.#apiService.updateMovie(updatedMovie);
 
-    const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
+      const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
 
-    if (index === -1) {
-      throw new Error('Can\'t update unexisting movie');
+      if (index === -1) {
+        throw new Error('Can\'t update unexisting movie');
+      }
+
+      this.#movies = [
+        ...this.#movies.slice(0, index),
+        updatedMovie,
+        ...this.#movies.slice(index + 1)
+      ];
+
+      this._notify(updateType, updatedMovie);
+
+    } catch (err) {
+      this._notify(UpdateType.ERROR, err);
     }
-
-    this.#movies = [
-      ...this.#movies.slice(0, index),
-      updatedMovie,
-      ...this.#movies.slice(index + 1)
-    ];
-
-    this._notify(updateType, updatedMovie);
   }
 }
 

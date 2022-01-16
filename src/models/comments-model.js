@@ -19,41 +19,52 @@ class CommentsModel extends AbstractObservable {
   }
 
   loadComments = async (movieId) => {
-    const response = await this.#apiService.getMoviesComments(movieId);
-    this.#comments = normalizeArray(await ApiService.parseResponse(response), normalizeComment);
+    try {
+      const response = await this.#apiService.getMoviesComments(movieId);
+      this.#comments = normalizeArray(await ApiService.parseResponse(response), normalizeComment);
+    } catch (err) {
+      this.#comments = [];
+    }
 
     this._notify(UpdateType.LOAD_COMMENTS);
   }
 
-  addComment = async (movieId, comment) => {
-    await this.#apiService.addComment(movieId, comment);
+  addComment = async (movieId, comment, callback) => {
+    try {
+      const response = await ApiService.parseResponse(await this.#apiService.addComment(movieId, comment));
+      this.#comments = normalizeArray(response.comments, normalizeComment);
 
-    this.#comments.push({
-      id: comment.id,
-      text: comment.text,
-      emotion: comment.emotion,
-      author: comment.author,
-      date: comment.date,
-    });
+      callback(movieId, response.movie.comments);
 
-    this._notify();
+      this._notify();
+
+    } catch (err) {
+      this._notify(UpdateType.ERROR, err);
+    }
   }
 
-  deleteComment = async (commentId) => {
-    await this.#apiService.deleteComment(commentId);
+  deleteComment = async (commentId, callback) => {
+    try {
+      await this.#apiService.deleteComment(commentId);
 
-    const index = this.#comments.findIndex((comment) => comment.id === commentId);
+      const index = this.#comments.findIndex((comment) => comment.id === commentId);
 
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting comment');
+      if (index === -1) {
+        throw new Error('Can\'t delete unexisting comment');
+      }
+
+      this.#comments = [
+        ...this.#comments.slice(0, index),
+        ...this.#comments.slice(index + 1)
+      ];
+
+      callback(commentId);
+
+      this._notify();
+
+    } catch (err) {
+      this._notify(UpdateType.ERROR, err);
     }
-
-    this.#comments = [
-      ...this.#comments.slice(0, index),
-      ...this.#comments.slice(index + 1)
-    ];
-
-    this._notify();
   }
 }
 

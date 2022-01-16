@@ -3,7 +3,6 @@ import MoviesList from '../view/movies-list-view';
 import MoviesContainer from '../view/movies-container-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
-import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
 import {
@@ -43,7 +42,6 @@ class MoviesPresenter {
   #favoriteMovies = [];
   #currentMoviesGap = MAX_FILMS_GAP;
 
-  #userRating = new Rating();
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
   #topMoviesList = new MoviesList('Top rated', true);
@@ -269,6 +267,7 @@ class MoviesPresenter {
       this.#statsView.removeElement();
     }
 
+    this.#currentUser.changeRating(this.#watchedMovies.length);
     this.#renderMainMenu();
 
     if (this.#filterModel.currentFilter === FilterType.STATS) {
@@ -314,7 +313,6 @@ class MoviesPresenter {
         if (this.#movieDetails !== null && this.#movieWrap.movie.id === data.id) {
           this.#movieWrap.movie = data;
         }
-        this.#userRating.rating = this.#watchedMovies.length;
         this.#moviesModel.updateMovie(updateType, data);
         break;
       case ActionType.CHANGE_FILTER:
@@ -323,13 +321,11 @@ class MoviesPresenter {
         this.#filterModel.updateFilter(updateType, data);
         break;
       case ActionType.DELETE_COMMENT:
-        this.#moviesModel.deleteComment(data);
-        this.#commentsModel.deleteComment(data);
+        this.#commentsModel.deleteComment(data, this.#moviesModel.deleteComment);
         break;
       case ActionType.ADD_COMMENT:
         this.#movieCommentsView.resetData();
-        this.#commentsModel.addComment(data.movieId, data);
-        this.#moviesModel.addComment(data.movieId, data.id);
+        this.#commentsModel.addComment(data.movieId, data, this.#moviesModel.addComment);
         break;
     }
   }
@@ -345,7 +341,6 @@ class MoviesPresenter {
     }
 
     this.#updateFilters();
-    this.#currentUser.changeRating(this.#watchedMovies.length);
     this.#updateMovies();
   }
 

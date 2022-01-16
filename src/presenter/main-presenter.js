@@ -26,6 +26,7 @@ class MainPresenter {
 
   #handleModelEvent = () => {
     this.#userRating.removeElement();
+
     this.#userRating.rating = this.#userRatingModel.rating;
 
     if (this.#userRating.rating) {

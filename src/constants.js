@@ -43,6 +43,7 @@ const SortType = {
 };
 const UpdateType = {
   INIT: 'INIT',
+  ERROR: 'ERROR',
   LOAD_COMMENTS: 'LOAD_COMMENTS',
   PATCH: 'PATCH',
   MINOR: 'MINOR',
