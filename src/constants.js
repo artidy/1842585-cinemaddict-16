@@ -4,7 +4,6 @@ const MIN_FILMS = 0;
 const BAR_HEIGHT = 50;
 const MINUTES_IN_HOUR = 60;
 const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
-const KEY = 'GlshdG!jd4283@Hw32';
 const USER_AVATAR = 'images/bitmap@2x.png';
 const UserRatings = {
   NONE: null,
@@ -95,7 +94,6 @@ export {
   MINUTES_IN_HOUR,
   BAR_HEIGHT,
   END_POINT,
-  KEY,
   USER_AVATAR,
   UserRatings,
   RatingValues,

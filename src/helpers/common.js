@@ -24,7 +24,7 @@ const getStatsInfo = (movies) => {
   return stats;
 };
 const getDuration = (movies) => movies.reduce(((prevValue, {runtime}) => prevValue + runtime), 0);
-const getAuthorization = () => `Basic ${KEY}`;
+const getAuthorization = () => 'Basic GlshdG!jd4283@Hw32';
 
 export {
   normalizeArray,

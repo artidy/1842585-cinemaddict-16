@@ -49,6 +49,7 @@ class ApiService {
       ApiService.checkStatus(response);
 
       return response;
+
     } catch (err) {
       ApiService.catchError(err);
     }
