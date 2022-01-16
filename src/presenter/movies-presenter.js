@@ -3,11 +3,17 @@ import MoviesList from '../view/movies-list-view';
 import MoviesContainer from '../view/movies-container-view';
 import MoviesEmpty from '../view/movies-empty';
 import {render, RenderPosition} from '../render';
-import Rating from '../view/rating-view';
 import MainMenu from '../view/menu-view';
 import Sorting from '../view/sort-view';
-import {ActionType, FilterType, MAX_FILMS_EXTRA, MAX_FILMS_GAP, MIN_FILMS, SortType} from '../constants';
-import Statistic from '../view/statistics-view';
+import {
+  ActionType,
+  FilterType,
+  MAX_FILMS_EXTRA,
+  MAX_FILMS_GAP,
+  MIN_FILMS,
+  SortType,
+  UpdateType,
+} from '../constants';
 import {onClickCloseBtn, onKeydownEsc} from '../helpers/events';
 import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
 import {sortMoviesByComments, sortMoviesByDate, sortMoviesByRating,} from '../helpers/sorting';
@@ -21,17 +27,16 @@ import ShowMoreBtnView from '../view/show-more-btn-view';
 import CloseDetailsBtnView from '../view/close-details-btn-view';
 import ControlsView from '../view/controls-view';
 import StatsView from '../view/stats-view';
+import LoadingView from '../view/loading-view';
 
 class MoviesPresenter {
-  #header = null;
   #main = null;
-  #footer = null;
   #moviesModel = null;
   #filterModel = null;
   #sortModel = null;
   #commentsModel = null;
   #currentUser = null;
-  #movieDetails = null;
+  #currentMovie = null;
   #watchMovies = [];
   #watchedMovies = [];
   #favoriteMovies = [];
@@ -44,6 +49,7 @@ class MoviesPresenter {
   #mainMoviesContainer = new MoviesContainer();
   #topMoviesContainer = new MoviesContainer();
   #recommendMoviesContainer = new MoviesContainer();
+  #movieDetails = null;
   #sortingMenu = null;
   #moreButton = new ShowMoreBtnView();
   #mainMenu = new MainMenu();
@@ -52,17 +58,18 @@ class MoviesPresenter {
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
   #movieForm = new MovieDetailsFormView();
+  #loadingView = new LoadingView();
   #statsView = null;
+  #loading = true;
 
-  constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel) {
-    this.#header = header;
+  constructor(main, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
     this.#main = main;
-    this.#footer = footer;
     this.#moviesModel = moviesModel;
     this.#filterModel = filterModel;
     this.#sortModel = sortModel;
     this.#commentsModel = commentsModel;
     this.#sortingMenu = new Sorting(this.#sortModel.currentSort);
+    this.#currentUser = currentUser;
 
     this.#moviesModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -103,29 +110,12 @@ class MoviesPresenter {
     return sortMoviesByComments(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
   }
 
-  load = (currentUser) => {
-    this.#currentUser = {...currentUser};
-
-    render(this.#header,  new Rating(this.#currentUser));
-    this.#renderMainMenu();
+  load = () => {
     render(this.#main, this.#mainContainer);
-    render(this.#mainContainer, this.#mainMoviesList);
-
-    if (this.movies.length === 0) {
-      render(this.#mainMoviesList, new MoviesEmpty());
-      return;
-    }
-
-    this.#renderSortMenu(this.#sortModel.currentSort);
-    this.#renderMainMovies();
-    this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
-    this.#updateExtraMovies();
-    this.#renderMoreButton();
-    render(this.#footer, new Statistic(this.#moviesModel.movies.length));
+    this.#updateMovies();
   }
 
   #renderMainMenu = () => {
-    this.#updateFilters();
     this.#mainMenu.watchListCount = this.#watchMovies.length;
     this.#mainMenu.historyCount = this.#watchedMovies.length;
     this.#mainMenu.favoriteCount = this.#favoriteMovies.length;
@@ -182,23 +172,19 @@ class MoviesPresenter {
     movieCardControls.restoreHandlers(this.#handleViewAction);
   }
 
-  #renderMovieDetails = (movie) => {
-    if (this.#movieDetails !== null) {
-      this.#movieWrap.removeElement();
-      this.#movieDetailsClose.removeElement();
-      this.#movieDetailsContainer.removeElement();
-      this.#movieDetails.removeElement();
-      this.#movieCommentsView.removeElement();
-      this.#movieForm.removeElement();
+  #renderMovieDetails = () => {
+    if (this.#movieDetails) {
+      this.#clearDetails();
+    } else {
+      this.#movieDetails = new MovieDetails();
+      render(this.#main, this.#movieDetails);
     }
 
-    const {comments: commentsIds} = movie;
+    this.#movieWrap.movie = this.#currentMovie;
+    const {id, comments: commentsIds} = this.#currentMovie;
     const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieDetails = new MovieDetails();
-    this.#movieWrap.movie = movie;
-    this.#movieCommentsView = new MovieDetailsCommentsView(movie.id, movieComments);
+    this.#movieCommentsView = new MovieDetailsCommentsView(id, movieComments);
 
-    render(this.#main, this.#movieDetails);
     render(this.#movieDetails, this.#movieForm);
     render(this.#movieForm, this.#movieDetailsContainer);
     render(this.#movieForm, this.#movieCommentsView);
@@ -206,12 +192,27 @@ class MoviesPresenter {
     this.#movieForm.restoreHandlers(this.#handleViewAction);
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
-    this.#addNewControl(this.#movieWrap, movie, true, RenderPosition.AFTEREND);
+    this.#addNewControl(this.#movieWrap, this.#currentMovie, true, RenderPosition.AFTEREND);
 
-    document.addEventListener('keydown', onKeydownEsc(this.#movieDetails));
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
+    document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
+    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
 
     document.body.classList.add('hide-overflow');
+  }
+
+  #clearDetails = () => {
+    this.#movieWrap.removeElement();
+    this.#movieDetailsClose.removeElement();
+    this.#movieCommentsView.removeElement();
+    this.#movieDetailsContainer.removeElement();
+    this.#movieForm.removeElement();
+  }
+
+  #onClickCloseDetails = () => {
+    this.#clearDetails();
+    this.#movieDetails.removeElement();
+    this.#currentMovie = null;
+    this.#movieDetails = null;
   }
 
   #renderSortMenu = () => {
@@ -229,9 +230,9 @@ class MoviesPresenter {
     }
 
     const id = movieCard.dataset.id;
-    const movie = this.movies.find((item) => item.id === id);
+    this.#currentMovie = this.movies.find((item) => item.id === id);
 
-    this.#renderMovieDetails(movie);
+    this.#commentsModel.loadComments(id);
   }
 
   #onShowMoreMovies = (evt) => {
@@ -250,12 +251,9 @@ class MoviesPresenter {
   }
 
   #updateMovies = () => {
-    this.#mainMenu.updateElement(
-      this.#handleViewAction,
-      this.#watchMovies.length,
-      this.#watchedMovies.length,
-      this.#favoriteMovies.length,
-    );
+    this.#mainContainer.replaceElement();
+    this.#loadingView.removeElement();
+    this.#mainMenu.removeElement();
     this.#mainMoviesList.removeElement();
     this.#topMoviesList.removeElement();
     this.#recommendMoviesList.removeElement();
@@ -269,10 +267,18 @@ class MoviesPresenter {
       this.#statsView.removeElement();
     }
 
+    this.#currentUser.changeRating(this.#watchedMovies.length);
+    this.#renderMainMenu();
+
     if (this.#filterModel.currentFilter === FilterType.STATS) {
-      this.#statsView = new StatsView(this.#watchedMovies);
+      this.#statsView = new StatsView(this.#watchedMovies, this.#currentUser.rating);
       render(this.#mainContainer, this.#statsView);
       this.#statsView.updateElement();
+      return;
+    }
+
+    if (this.#loading) {
+      render(this.#mainContainer, this.#loadingView);
       return;
     }
 
@@ -283,6 +289,10 @@ class MoviesPresenter {
       return;
     }
 
+    if (this.#currentMovie !== null) {
+      this.#renderMovieDetails();
+    }
+
     this.#sortingMenu.updateElement(this.#sortModel.currentSort);
     this.#renderSortMenu();
     this.#renderMainMovies();
@@ -290,27 +300,7 @@ class MoviesPresenter {
     this.#renderMovies(this.#mainMoviesContainer, this.movies.slice(MIN_FILMS, this.#currentMoviesGap));
     this.#updateExtraMovies();
 
-    if (this.#movieDetails !== null) {
-      this.#updateMovieDetails();
-    }
-
     this.#renderMoreButton();
-  }
-
-  #updateMovieDetails = () => {
-    if (this.#movieDetails === null) {
-      return;
-    }
-
-    const {comments: commentsIds} = this.#movieWrap.movie;
-    this.#movieCommentsView.comments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieCommentsView.updateElement(this.#handleViewAction);
-    this.#movieDetailsContainer.replaceElement();
-    this.#movieWrap.replaceElement();
-    render(this.#movieDetailsContainer, this.#movieDetailsClose);
-    render(this.#movieDetailsContainer, this.#movieWrap);
-    this.#addNewControl(this.#movieWrap, this.#movieWrap.movie, true, RenderPosition.AFTEREND);
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#movieDetails));
   }
 
   #handleViewAction = (actionType, updateType, data) => {
@@ -331,18 +321,25 @@ class MoviesPresenter {
         this.#filterModel.updateFilter(updateType, data);
         break;
       case ActionType.DELETE_COMMENT:
-        this.#moviesModel.deleteComment(data);
-        this.#commentsModel.deleteComment(data);
+        this.#commentsModel.deleteComment(data, this.#moviesModel.deleteComment);
         break;
       case ActionType.ADD_COMMENT:
         this.#movieCommentsView.resetData();
-        this.#moviesModel.addComment(data.movieId, data.id);
-        this.#commentsModel.addComment(data);
+        this.#commentsModel.addComment(data.movieId, data, this.#moviesModel.addComment);
         break;
     }
   }
 
-  #handleModelEvent = () => {
+  #handleModelEvent = (updateType) => {
+    if (updateType === UpdateType.LOAD_COMMENTS) {
+      this.#renderMovieDetails();
+      return;
+    }
+
+    if (updateType === UpdateType.INIT) {
+      this.#loading = false;
+    }
+
     this.#updateFilters();
     this.#updateMovies();
   }

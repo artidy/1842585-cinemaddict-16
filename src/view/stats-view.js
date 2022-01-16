@@ -1,18 +1,22 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js';
 import AbstractSmartView from './abstract-smart-view';
-import {BAR_HEIGHT, FilterStats} from '../constants';
+import {BAR_HEIGHT, FilterStats, USER_AVATAR, UserRatings} from '../constants';
 import {getDuration, getDurationHours, getDurationMinutes, getStatsInfo} from '../helpers/common';
 import {sortChartGenres, sortChartValues} from '../helpers/sorting';
 import {filterStats} from '../helpers/filters';
 
-const getStatisticsTemplate = (currentFilter, watched, duration, topGenre) =>
-  `<section class="statistic">
-    <p class="statistic__rank">
+const getRatingTemplate = (avatar, rating) => rating ?
+  `<p class="statistic__rank">
       Your rank
-      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Movie buff</span>
-    </p>
+      <img class="statistic__img" src="${avatar}" alt="Avatar" width="35" height="35">
+      <span class="statistic__rank-label">${rating}</span>
+    </p>` : '';
+
+const getStatisticsTemplate = (currentFilter, watched, duration, topGenre, avatar, rating) =>
+  `<section class="statistic">
+
+    ${getRatingTemplate(avatar, rating)}
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
@@ -61,14 +65,17 @@ class StatsView extends AbstractSmartView {
   #labels = [];
   #labelsValue = [];
   #currentFilter = FilterStats.All;
+  #avatar = USER_AVATAR;
+  #rating = UserRatings.NONE;
 
-  constructor(movies) {
+  constructor(movies, rating) {
     super();
     this.#movies = movies;
+    this.#rating = rating;
   }
 
   get template() {
-    return getStatisticsTemplate(this.#currentFilter, this.#watched, this.#duration, this.#topGenre);
+    return getStatisticsTemplate(this.#currentFilter, this.#watched, this.#duration, this.#topGenre, this.#avatar, this.#rating);
   }
 
   updateElement = () => {

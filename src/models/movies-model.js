@@ -1,24 +1,42 @@
 import AbstractObservable from './abstract-observable';
+import {normalizeArray} from '../helpers/common';
+import {normalizeMovie} from '../helpers/normalize';
+import {UpdateType} from '../constants';
+import ApiService from '../api-service';
 
 class MoviesModel extends AbstractObservable {
+  #apiService = null;
   #movies = [];
 
-  set movies(movies) {
-    this.#movies = [...movies];
+  constructor (apiService) {
+    super();
+
+    this.#apiService = apiService;
   }
 
   get movies() {
     return this.#movies;
   }
 
-  addComment = (movieId, commentId) => {
+  init = async () => {
+    try {
+      const response = await this.#apiService.movies;
+      this.#movies = normalizeArray(await ApiService.parseResponse(response), normalizeMovie);
+    } catch (err) {
+      this.#movies = [];
+    }
+
+    this._notify(UpdateType.INIT);
+  }
+
+  addComment = (movieId, comments) => {
     const currentMovie = this.#movies.find((movie) => movie.id === movieId);
 
     if (!currentMovie) {
       throw new Error('Movie doesn\'t exist.');
     }
 
-    currentMovie.comments.push(commentId);
+    currentMovie.comments = comments;
   }
 
   deleteComment = (commentId) => {
@@ -31,20 +49,27 @@ class MoviesModel extends AbstractObservable {
     ];
   }
 
-  updateMovie = (updateType, updatedMovie) => {
-    const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
+  updateMovie = async (updateType, updatedMovie) => {
+    try {
+      await this.#apiService.updateMovie(updatedMovie);
 
-    if (index === -1) {
-      throw new Error('Can\'t update unexisting movie');
+      const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
+
+      if (index === -1) {
+        throw new Error('Can\'t update unexisting movie');
+      }
+
+      this.#movies = [
+        ...this.#movies.slice(0, index),
+        updatedMovie,
+        ...this.#movies.slice(index + 1)
+      ];
+
+      this._notify(updateType, updatedMovie);
+
+    } catch (err) {
+      this._notify(UpdateType.ERROR, err);
     }
-
-    this.#movies = [
-      ...this.#movies.slice(0, index),
-      updatedMovie,
-      ...this.#movies.slice(index + 1)
-    ];
-
-    this._notify(updateType, updatedMovie);
   }
 }
 
