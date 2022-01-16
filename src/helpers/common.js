@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {KEY, MINUTES_IN_HOUR} from '../constants';
+import {MINUTES_IN_HOUR} from '../constants';
 
 const normalizeArray = (list, callback) => list.map(callback);
 const formatDate = (date, format) => dayjs(date).format(format);
