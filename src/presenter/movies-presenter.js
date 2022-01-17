@@ -41,6 +41,8 @@ class MoviesPresenter {
   #watchedMovies = [];
   #favoriteMovies = [];
   #currentMoviesGap = MAX_FILMS_GAP;
+  #errorComment = null;
+  #disableForm = false;
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
@@ -183,19 +185,21 @@ class MoviesPresenter {
     this.#movieWrap.movie = this.#currentMovie;
     const {id, comments: commentsIds} = this.#currentMovie;
     const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieCommentsView = new MovieDetailsCommentsView(id, movieComments);
+    this.#movieCommentsView = new MovieDetailsCommentsView(id, movieComments, this.#errorComment, this.#disableForm);
 
     render(this.#movieDetails, this.#movieForm);
     render(this.#movieForm, this.#movieDetailsContainer);
     render(this.#movieForm, this.#movieCommentsView);
-    this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
-    this.#movieForm.restoreHandlers(this.#handleViewAction);
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
     this.#addNewControl(this.#movieWrap, this.#currentMovie, true, RenderPosition.AFTEREND);
 
-    document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
+    if (!this.#disableForm) {
+      this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
+      this.#movieForm.restoreHandlers(this.#handleViewAction);
+      document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
+      this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
+    }
 
     document.body.classList.add('hide-overflow');
   }
@@ -304,6 +308,8 @@ class MoviesPresenter {
   }
 
   #handleViewAction = (actionType, updateType, data) => {
+    this.#errorComment = null;
+
     switch (actionType) {
       case ActionType.CHANGE_SORT:
         this.#currentMoviesGap = MAX_FILMS_GAP;
@@ -324,16 +330,29 @@ class MoviesPresenter {
         this.#commentsModel.deleteComment(data, this.#moviesModel.deleteComment);
         break;
       case ActionType.ADD_COMMENT:
+        this.#disableForm = true;
+        this.#movieForm.setError(false);
+        this.#renderMovieDetails();
         this.#movieCommentsView.resetData();
         this.#commentsModel.addComment(data.movieId, data, this.#moviesModel.addComment);
         break;
     }
   }
 
-  #handleModelEvent = (updateType) => {
+  #handleModelEvent = (updateType, data) => {
+    this.#disableForm = false;
+
     if (updateType === UpdateType.LOAD_COMMENTS) {
       this.#renderMovieDetails();
       return;
+    }
+
+    if (updateType === UpdateType.ERROR_DELETE_COMMENT) {
+      this.#errorComment = data;
+    }
+
+    if (updateType === UpdateType.ERROR_ADD_COMMENT) {
+      this.#movieForm.setError(true);
     }
 
     if (updateType === UpdateType.INIT) {

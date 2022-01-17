@@ -55,10 +55,6 @@ class MoviesModel extends AbstractObservable {
 
       const index = this.#movies.findIndex((movie) => movie.id === updatedMovie.id);
 
-      if (index === -1) {
-        throw new Error('Can\'t update unexisting movie');
-      }
-
       this.#movies = [
         ...this.#movies.slice(0, index),
         updatedMovie,
@@ -68,7 +64,7 @@ class MoviesModel extends AbstractObservable {
       this._notify(updateType, updatedMovie);
 
     } catch (err) {
-      this._notify(UpdateType.ERROR, err);
+      this._notify(UpdateType.ERROR_UPDATE_MOVIE, err);
     }
   }
 }

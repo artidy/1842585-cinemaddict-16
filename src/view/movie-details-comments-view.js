@@ -5,8 +5,8 @@ import he from 'he';
 
 const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${he.encode(emoji)}.png" width="55" height="55" alt="emoji">` : '';
 
-const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) =>
-  `<li class="film-details__comment">
+const getCommentsContent = (comments, deletingComment, disable, errorComment) => comments.map(({id, text, emotion, author, date}) =>
+  `<li class="film-details__comment ${errorComment === id ? 'shake' : ''}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${he.encode(emotion)}.png" width="55" height="55" alt="emoji-${he.encode(emotion)}">
     </span>
@@ -15,18 +15,21 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${he.encode(author)}</span>
         <span class="film-details__comment-day">${he.encode(formatDate(date, 'YYYY/MM/DD HH:mm'))}</span>
-        <button class="film-details__comment-delete" data-id="${id}">Delete</button>
+        <button
+            class="film-details__comment-delete"
+            data-id="${id}" ${disable ? 'disabled' : ''}
+        >${deletingComment === id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>`).join('');
 
-const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) =>
+const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText, deletingComment, disable, errorComment, disableForm) =>
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
       <ul class="film-details__comments-list">
-        ${getCommentsContent(comments)}
+        ${getCommentsContent(comments, deletingComment, disable, errorComment)}
       </ul>
 
       <div class="film-details__new-comment">
@@ -37,7 +40,7 @@ const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) 
             <textarea
                 class="film-details__comment-input"
                 placeholder="Select reaction below and write comment here"
-                name="comment" data-movie-id="${movieId}">${he.encode(currentText)}</textarea>
+                name="comment" data-movie-id="${movieId}" ${disableForm ? 'disabled' : ''}>${he.encode(currentText)}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
@@ -70,12 +73,18 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   #comments = null;
   #currentEmoji = null;
   #currentText = '';
+  #disable = false;
+  #disableForm = false;
+  #deletingComment = null;
+  #errorComment = null;
 
-  constructor(movieId, comments) {
+  constructor(movieId, comments, errorComment, disableForm) {
     super();
 
     this.#comments = comments;
     this.#movieId = movieId;
+    this.#errorComment = errorComment;
+    this.#disableForm = disableForm;
   }
 
   get comments() {
@@ -86,8 +95,21 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     this.#comments = comments;
   }
 
+  setDisable = (disable) => {
+    this.#disable = disable;
+  }
+
   get template() {
-    return getMovieCommentsTemplate(this.#movieId, this.#comments, this.#currentEmoji, this.#currentText);
+    return getMovieCommentsTemplate(
+      this.#movieId,
+      this.#comments,
+      this.#currentEmoji,
+      this.#currentText,
+      this.#deletingComment,
+      this.#disable,
+      this.#errorComment,
+      this.#disableForm,
+    );
   }
 
   resetData = () => {
@@ -141,7 +163,12 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     evt.preventDefault();
 
     if (evt.target.tagName === 'BUTTON') {
-      deleteComment(ActionType.DELETE_COMMENT, UpdateType.MINOR, evt.target.dataset.id);
+      this.#deletingComment = evt.target.dataset.id;
+      this.#disable = true;
+      this.#errorComment = null;
+
+      this.updateElement(deleteComment);
+      deleteComment(ActionType.DELETE_COMMENT, UpdateType.MINOR, this.#deletingComment);
     }
   }
 }

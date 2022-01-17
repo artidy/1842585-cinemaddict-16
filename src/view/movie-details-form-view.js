@@ -1,11 +1,17 @@
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
 
-const getFormTemplate = () => '<form class="film-details__inner" action="" method="get"></form>';
+const getFormTemplate = (isError) => `<form class="film-details__inner ${isError ? 'shake' : ''}" action="" method="get"></form>`;
 
 class MovieDetailsFormView extends AbstractSmartView {
+  #isError = false;
+
   get template() {
-    return getFormTemplate();
+    return getFormTemplate(this.#isError);
+  }
+
+  setError = (isError) => {
+    this.#isError = isError;
   }
 
   updateElement = (addComment) => {
