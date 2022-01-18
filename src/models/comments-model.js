@@ -39,7 +39,7 @@ class CommentsModel extends AbstractObservable {
       this._notify();
 
     } catch (err) {
-      this._notify(UpdateType.ERROR, err);
+      this._notify(UpdateType.ERROR_ADD_COMMENT, err);
     }
   }
 
@@ -48,10 +48,6 @@ class CommentsModel extends AbstractObservable {
       await this.#apiService.deleteComment(commentId);
 
       const index = this.#comments.findIndex((comment) => comment.id === commentId);
-
-      if (index === -1) {
-        throw new Error('Can\'t delete unexisting comment');
-      }
 
       this.#comments = [
         ...this.#comments.slice(0, index),
@@ -63,7 +59,7 @@ class CommentsModel extends AbstractObservable {
       this._notify();
 
     } catch (err) {
-      this._notify(UpdateType.ERROR, err);
+      this._notify(UpdateType.ERROR_DELETE_COMMENT, commentId);
     }
   }
 }

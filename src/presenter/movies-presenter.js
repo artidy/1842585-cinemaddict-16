@@ -54,13 +54,14 @@ class MoviesPresenter {
   #moreButton = new ShowMoreBtnView();
   #mainMenu = new MainMenu();
   #movieWrap = new MovieDetailsWrap();
-  #movieCommentsView = null;
+  #movieCommentsView = new MovieDetailsCommentsView();
   #movieDetailsContainer = new MovieDetailsContainerView();
   #movieDetailsClose = new CloseDetailsBtnView();
   #movieForm = new MovieDetailsFormView();
   #loadingView = new LoadingView();
   #statsView = null;
   #loading = true;
+  #loadingComments = true;
 
   constructor(main, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
     this.#main = main;
@@ -181,21 +182,29 @@ class MoviesPresenter {
     }
 
     this.#movieWrap.movie = this.#currentMovie;
-    const {id, comments: commentsIds} = this.#currentMovie;
-    const movieComments = this.#commentsModel.comments.filter((comment) => commentsIds.includes(comment.id));
-    this.#movieCommentsView = new MovieDetailsCommentsView(id, movieComments);
 
     render(this.#movieDetails, this.#movieForm);
     render(this.#movieForm, this.#movieDetailsContainer);
-    render(this.#movieForm, this.#movieCommentsView);
-    this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
-    this.#movieForm.restoreHandlers(this.#handleViewAction);
+
+    if (this.#loadingComments) {
+      render(this.#movieForm, new LoadingView());
+    } else {
+      this.#movieCommentsView.comments = this.#commentsModel.comments;
+      this.#movieCommentsView.movieId = this.#currentMovie.id;
+
+      render(this.#movieForm, this.#movieCommentsView);
+    }
+
     render(this.#movieDetailsContainer, this.#movieDetailsClose);
     render(this.#movieDetailsContainer, this.#movieWrap);
     this.#addNewControl(this.#movieWrap, this.#currentMovie, true, RenderPosition.AFTEREND);
 
-    document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
-    this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
+    if (!this.#movieCommentsView.disableForm) {
+      this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
+      this.#movieForm.restoreHandlers(this.#handleViewAction);
+      document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
+      this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
+    }
 
     document.body.classList.add('hide-overflow');
   }
@@ -231,6 +240,10 @@ class MoviesPresenter {
 
     const id = movieCard.dataset.id;
     this.#currentMovie = this.movies.find((item) => item.id === id);
+    this.#loadingComments = true;
+    this.#movieCommentsView.disableForm = true;
+
+    this.#renderMovieDetails();
 
     this.#commentsModel.loadComments(id);
   }
@@ -304,6 +317,8 @@ class MoviesPresenter {
   }
 
   #handleViewAction = (actionType, updateType, data) => {
+    this.#movieForm.isError = false;
+
     switch (actionType) {
       case ActionType.CHANGE_SORT:
         this.#currentMoviesGap = MAX_FILMS_GAP;
@@ -324,16 +339,32 @@ class MoviesPresenter {
         this.#commentsModel.deleteComment(data, this.#moviesModel.deleteComment);
         break;
       case ActionType.ADD_COMMENT:
-        this.#movieCommentsView.resetData();
+        this.#movieCommentsView.disableForm = true;
+        this.#renderMovieDetails();
         this.#commentsModel.addComment(data.movieId, data, this.#moviesModel.addComment);
         break;
     }
   }
 
-  #handleModelEvent = (updateType) => {
+  #handleModelEvent = (updateType, data) => {
+    this.#movieCommentsView.isError = false;
+
     if (updateType === UpdateType.LOAD_COMMENTS) {
+      this.#loadingComments = false;
+      this.#movieCommentsView.resetData();
       this.#renderMovieDetails();
       return;
+    }
+
+    if (updateType === UpdateType.ERROR_ADD_COMMENT) {
+      this.#movieForm.isError = true;
+      this.#movieCommentsView.isError = true;
+    }
+
+    this.#movieCommentsView.resetData();
+
+    if (updateType === UpdateType.ERROR_DELETE_COMMENT) {
+      this.#movieCommentsView.setErrorComment(data);
     }
 
     if (updateType === UpdateType.INIT) {

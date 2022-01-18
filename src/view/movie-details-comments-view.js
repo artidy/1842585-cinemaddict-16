@@ -2,11 +2,19 @@ import {formatDate} from '../helpers/common';
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
 import he from 'he';
+import {isArray} from 'lodash';
 
 const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${he.encode(emoji)}.png" width="55" height="55" alt="emoji">` : '';
+const getInputTemplate = (movieId, currentText, disableForm) => disableForm ? 'Adding comment...' :
+  `<textarea
+        class="film-details__comment-input"
+        placeholder="Select reaction below and write comment here"
+        name="comment"
+        data-movie-id="${movieId}"
+    >${he.encode(currentText)}</textarea>`;
 
-const getCommentsContent = (comments) => comments.map(({id, text, emotion, author, date}) =>
-  `<li class="film-details__comment">
+const getCommentsContent = (comments, deletingComment, disableDelete, errorComment) => comments.map(({id, text, emotion, author, date}) =>
+  `<li class="film-details__comment ${errorComment === id ? 'shake' : ''}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${he.encode(emotion)}.png" width="55" height="55" alt="emoji-${he.encode(emotion)}">
     </span>
@@ -15,18 +23,21 @@ const getCommentsContent = (comments) => comments.map(({id, text, emotion, autho
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${he.encode(author)}</span>
         <span class="film-details__comment-day">${he.encode(formatDate(date, 'YYYY/MM/DD HH:mm'))}</span>
-        <button class="film-details__comment-delete" data-id="${id}">Delete</button>
+        <button
+            class="film-details__comment-delete"
+            data-id="${id}" ${disableDelete ? 'disabled' : ''}
+        >${deletingComment === id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>`).join('');
 
-const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) =>
+const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText, deletingComment, disableDelete, errorComment, disableForm) =>
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
       <ul class="film-details__comments-list">
-        ${getCommentsContent(comments)}
+        ${getCommentsContent(comments, deletingComment, disableDelete, errorComment)}
       </ul>
 
       <div class="film-details__new-comment">
@@ -34,10 +45,7 @@ const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) 
 
 
         <label class="film-details__comment-label">
-            <textarea
-                class="film-details__comment-input"
-                placeholder="Select reaction below and write comment here"
-                name="comment" data-movie-id="${movieId}">${he.encode(currentText)}</textarea>
+            ${getInputTemplate(movieId, currentText, disableForm)}
         </label>
 
         <div class="film-details__emoji-list">
@@ -70,11 +78,33 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   #comments = null;
   #currentEmoji = null;
   #currentText = '';
+  #deletingComment = null;
+  #errorComment = null;
+  #disableDelete = false;
+  disableForm = false;
+  isError = false;
 
-  constructor(movieId, comments) {
-    super();
+  get template() {
+    return getMovieCommentsTemplate(
+      this.#movieId,
+      this.#comments,
+      this.#currentEmoji,
+      this.#currentText,
+      this.#deletingComment,
+      this.#disableDelete,
+      this.#errorComment,
+      this.disableForm,
+    );
+  }
 
-    this.#comments = comments;
+  get movieId() {
+    return this.#movieId;
+  }
+
+  set movieId(movieId) {
+    if (typeof movieId !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
     this.#movieId = movieId;
   }
 
@@ -83,16 +113,36 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   }
 
   set comments(comments) {
+    if (!isArray(comments)) {
+      throw new Error('Передаваемые данные должны быть массивом.');
+    }
     this.#comments = comments;
   }
 
-  get template() {
-    return getMovieCommentsTemplate(this.#movieId, this.#comments, this.#currentEmoji, this.#currentText);
+  setErrorComment = (errorComment) => {
+    if (typeof errorComment !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
+    this.#errorComment = errorComment;
+  }
+
+  setDeletingComment = (deletingComment) => {
+    if (typeof deletingComment !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
+    this.#deletingComment = deletingComment;
   }
 
   resetData = () => {
-    this.#currentEmoji = null;
-    this.#currentText = '';
+    this.#disableDelete = false;
+    this.disableForm = false;
+    this.#deletingComment = null;
+    this.#errorComment = null;
+
+    if (!this.isError) {
+      this.#currentEmoji = null;
+      this.#currentText = '';
+    }
   }
 
   updateElement = (deleteComment) => {
@@ -119,6 +169,7 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     const emojiLabel = evt.target.closest('.film-details__emoji-label');
 
     if (emojiLabel) {
+      this.#errorComment = null;
       this.#currentEmoji = this.element.querySelector(`#${emojiLabel.getAttribute('for')}`).value;
       this.updateData(this.#currentEmoji, true);
       this.updateElement(deleteComment);
@@ -131,6 +182,7 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     const currentInput = this.element.querySelector('.film-details__comment-input');
 
     if (currentInput) {
+      this.#errorComment = null;
       this.#currentText = currentInput.value;
       this.updateData(this.#currentText, true);
       this.updateElement(deleteComment);
@@ -141,7 +193,12 @@ class MovieDetailsCommentsView extends AbstractSmartView {
     evt.preventDefault();
 
     if (evt.target.tagName === 'BUTTON') {
-      deleteComment(ActionType.DELETE_COMMENT, UpdateType.MINOR, evt.target.dataset.id);
+      this.#deletingComment = evt.target.dataset.id;
+      this.#disableDelete = true;
+      this.#errorComment = null;
+
+      this.updateElement(deleteComment);
+      deleteComment(ActionType.DELETE_COMMENT, UpdateType.MINOR, this.#deletingComment);
     }
   }
 }

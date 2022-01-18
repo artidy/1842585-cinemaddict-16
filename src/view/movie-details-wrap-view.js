@@ -79,6 +79,9 @@ class MovieDetailsWrap extends AbstractView {
   }
 
   set movie(movie) {
+    if (typeof movie !== 'object') {
+      throw new Error('Данные должно быть объектом.');
+    }
     this.#movie = movie;
   }
 }

@@ -55,6 +55,11 @@ class ControlsView extends AbstractSmartView {
     this.#isDetails = isDetails;
   }
 
+  get template() {
+    return this.#isDetails ? getControlsDetailsTemplate(this.#movie)
+      : getControlsTemplate(this.#movie);
+  }
+
   #toggleWatchlist = () => {
     this.#movie.isInWatchlist = !this.#movie.isInWatchlist;
   }
@@ -66,11 +71,6 @@ class ControlsView extends AbstractSmartView {
 
   #toggleFavorite = () => {
     this.#movie.isFavorite = !this.#movie.isFavorite;
-  }
-
-  get template() {
-    return this.#isDetails ? getControlsDetailsTemplate(this.#movie)
-      : getControlsTemplate(this.#movie);
   }
 
   updateControl = () => {

@@ -70,6 +70,7 @@ class StatsView extends AbstractSmartView {
 
   constructor(movies, rating) {
     super();
+
     this.#movies = movies;
     this.#rating = rating;
   }

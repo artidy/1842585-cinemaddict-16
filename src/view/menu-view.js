@@ -35,14 +35,23 @@ class MainMenu extends AbstractSmartView {
   }
 
   set watchListCount(watchListCount) {
+    if (typeof watchListCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
     this.#watchListCount = watchListCount;
   }
 
   set historyCount(historyCount) {
+    if (typeof historyCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
     this.#historyCount = historyCount;
   }
 
   set favoriteCount(favoriteCount) {
+    if (typeof favoriteCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
     this.#favoriteCount = favoriteCount;
   }
 
