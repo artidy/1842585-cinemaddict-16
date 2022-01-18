@@ -87,13 +87,13 @@ class ApiService {
         headers = new Headers()
       }) => {
         headers.append('Authorization', _classPrivateFieldGet(this, _authorization));
-        const response = await fetch(`${_classPrivateFieldGet(this, _endPoint)}/${url}`, {
-          method,
-          body,
-          headers
-        });
 
         try {
+          const response = await fetch(`${_classPrivateFieldGet(this, _endPoint)}/${url}`, {
+            method,
+            body,
+            headers
+          });
           ApiService.checkStatus(response);
           return response;
         } catch (err) {
@@ -147,7 +147,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "MINUTES_IN_HOUR": () => (/* binding */ MINUTES_IN_HOUR),
 /* harmony export */   "BAR_HEIGHT": () => (/* binding */ BAR_HEIGHT),
 /* harmony export */   "END_POINT": () => (/* binding */ END_POINT),
-/* harmony export */   "KEY": () => (/* binding */ KEY),
 /* harmony export */   "USER_AVATAR": () => (/* binding */ USER_AVATAR),
 /* harmony export */   "UserRatings": () => (/* binding */ UserRatings),
 /* harmony export */   "RatingValues": () => (/* binding */ RatingValues),
@@ -166,7 +165,6 @@ const MIN_FILMS = 0;
 const BAR_HEIGHT = 50;
 const MINUTES_IN_HOUR = 60;
 const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
-const KEY = 'GlshdG!jd4283@Hw32';
 const USER_AVATAR = 'images/bitmap@2x.png';
 const UserRatings = {
   NONE: null,
@@ -206,6 +204,9 @@ const SortType = {
 };
 const UpdateType = {
   INIT: 'INIT',
+  ERROR_DELETE_COMMENT: 'ERROR_DELETE_COMMENT',
+  ERROR_ADD_COMMENT: 'ERROR_ADD_COMMENT',
+  ERROR_UPDATE_MOVIE: 'ERROR_UPDATE_MOVIE',
   LOAD_COMMENTS: 'LOAD_COMMENTS',
   PATCH: 'PATCH',
   MINOR: 'MINOR',
@@ -310,7 +311,7 @@ const getDuration = movies => movies.reduce((prevValue, {
   runtime
 }) => prevValue + runtime, 0);
 
-const getAuthorization = () => `Basic ${_constants__WEBPACK_IMPORTED_MODULE_1__.KEY}`;
+const getAuthorization = () => 'Basic GlshdG!jd4283@Hw32';
 
 
 
@@ -597,146 +598,6 @@ const sortChartValues = chartData => {
 
 /***/ }),
 
-/***/ "./src/mock/constants.js":
-/*!*******************************!*\
-  !*** ./src/mock/constants.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FILMS_TITLES": () => (/* binding */ FILMS_TITLES),
-/* harmony export */   "FILMS_POSTERS": () => (/* binding */ FILMS_POSTERS),
-/* harmony export */   "FILMS_DESCRIPTIONS": () => (/* binding */ FILMS_DESCRIPTIONS),
-/* harmony export */   "FILMS_GENRES": () => (/* binding */ FILMS_GENRES),
-/* harmony export */   "FILMS_DIRECTORS": () => (/* binding */ FILMS_DIRECTORS),
-/* harmony export */   "FILMS_SCREEN_WRITERS": () => (/* binding */ FILMS_SCREEN_WRITERS),
-/* harmony export */   "FILMS_ACTORS": () => (/* binding */ FILMS_ACTORS),
-/* harmony export */   "FILMS_COUNTRIES": () => (/* binding */ FILMS_COUNTRIES),
-/* harmony export */   "COMMENTS_EMOTION": () => (/* binding */ COMMENTS_EMOTION),
-/* harmony export */   "COMMENTS_AUTHORS": () => (/* binding */ COMMENTS_AUTHORS),
-/* harmony export */   "DEFAULT_MIN_NUMBER": () => (/* binding */ DEFAULT_MIN_NUMBER),
-/* harmony export */   "DEFAULT_MAX_NUMBER": () => (/* binding */ DEFAULT_MAX_NUMBER),
-/* harmony export */   "MAX_GAP_YEAR": () => (/* binding */ MAX_GAP_YEAR),
-/* harmony export */   "MIN_GAP_MINUTES": () => (/* binding */ MIN_GAP_MINUTES),
-/* harmony export */   "MAX_GAP_MINUTES": () => (/* binding */ MAX_GAP_MINUTES),
-/* harmony export */   "MIN_RATING_NUMBER": () => (/* binding */ MIN_RATING_NUMBER),
-/* harmony export */   "MAX_RATING_NUMBER": () => (/* binding */ MAX_RATING_NUMBER),
-/* harmony export */   "MAX_MATURITY_RATING_NUMBER": () => (/* binding */ MAX_MATURITY_RATING_NUMBER),
-/* harmony export */   "RATING_DECIMAL": () => (/* binding */ RATING_DECIMAL),
-/* harmony export */   "DEFAULT_FILMS_COUNT": () => (/* binding */ DEFAULT_FILMS_COUNT)
-/* harmony export */ });
-const FILMS_TITLES = ['Pirates of the Caribbean: On Stranger Tides', 'Avengers: Age of Ultron', 'The Hobbit: The Desolation of Smaug', 'John Carter', 'Avatar', 'The Lone Ranger', 'Men in Black 3'];
-const FILMS_POSTERS = ['images/posters/made-for-each-other.png', 'images/posters/popeye-meets-sinbad.png', 'images/posters/sagebrush-trail.jpg', 'images/posters/santa-claus-conquers-the-martians.jpg', 'images/posters/the-dance-of-life.jpg', 'images/posters/the-great-flamarion.jpg', 'images/posters/the-man-with-the-golden-arm.jpg'];
-const FILMS_DESCRIPTIONS = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Cras aliquet varius magna, non porta ligula feugiat eget.', 'Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.', 'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.', 'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.', 'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.', 'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'];
-const FILMS_GENRES = ['action', 'adventure', 'comedy', 'drama', 'fantasy', 'horror', 'thriller'];
-const FILMS_DIRECTORS = ['Ida Lupino', 'Bong Joon Ho', 'Guillermo del Toro', 'David Cronenberg', 'Sidney Lumet', 'Woody Allen', 'Kathryn Bigelow'];
-const FILMS_SCREEN_WRITERS = ['Ola Balogun', 'Biyi Bandele', 'Nicole Asinugo', 'Jude Idada', 'Kehinde Olorunyomi', 'Tade Ogidan', 'Chika Anadu', 'Jeffrey Musa', 'Kemi Adesoye', 'Chet Anekwe'];
-const FILMS_ACTORS = ['Casey Affleck', 'Adam Driver', 'Michael Keaton', 'Rami Malek', 'Gary Oldman', 'Chiwetel Ejiofor', 'Kerry Armstrong', 'Wendy Hughes', 'Angourie Rice', 'Sacha Horler', 'Noni Hazlehurst', 'Rose Byrne', 'Sheila Florance'];
-const FILMS_COUNTRIES = ['United States', 'Brazil', 'Russia', 'China', 'Australia', 'Kazakhstan', 'France'];
-const COMMENTS_EMOTION = ['angry', 'puke', 'sleeping', 'smile'];
-const COMMENTS_AUTHORS = ['Tim Macoveev', 'John Doe', 'Sargon of Akkad', 'Qin Shi Huang ', 'Shimon bar Kokhba', 'Leif Erikson', 'Lazar of Serbia'];
-const DEFAULT_MIN_NUMBER = 0;
-const DEFAULT_MAX_NUMBER = 1;
-const MAX_GAP_YEAR = 36;
-const MIN_GAP_MINUTES = 80;
-const MAX_GAP_MINUTES = 180;
-const MIN_RATING_NUMBER = 0.0;
-const MAX_RATING_NUMBER = 10.0;
-const MAX_MATURITY_RATING_NUMBER = 18;
-const RATING_DECIMAL = 1;
-const DEFAULT_FILMS_COUNT = 20;
-
-
-/***/ }),
-
-/***/ "./src/mock/helpers.js":
-/*!*****************************!*\
-  !*** ./src/mock/helpers.js ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getRandomTitle": () => (/* binding */ getRandomTitle),
-/* harmony export */   "getRandomPoster": () => (/* binding */ getRandomPoster),
-/* harmony export */   "getRandomDescription": () => (/* binding */ getRandomDescription),
-/* harmony export */   "getRandomRating": () => (/* binding */ getRandomRating),
-/* harmony export */   "getRandomDirectors": () => (/* binding */ getRandomDirectors),
-/* harmony export */   "getRandomScreenWriters": () => (/* binding */ getRandomScreenWriters),
-/* harmony export */   "getRandomActors": () => (/* binding */ getRandomActors),
-/* harmony export */   "getRandomCountry": () => (/* binding */ getRandomCountry),
-/* harmony export */   "getRandomGenres": () => (/* binding */ getRandomGenres),
-/* harmony export */   "getRandomDate": () => (/* binding */ getRandomDate),
-/* harmony export */   "getRandomDuration": () => (/* binding */ getRandomDuration),
-/* harmony export */   "getRandomMaturityRating": () => (/* binding */ getRandomMaturityRating),
-/* harmony export */   "getRandomComments": () => (/* binding */ getRandomComments),
-/* harmony export */   "getRandomEmotion": () => (/* binding */ getRandomEmotion),
-/* harmony export */   "getRandomAuthor": () => (/* binding */ getRandomAuthor),
-/* harmony export */   "getRandomBoolean": () => (/* binding */ getRandomBoolean),
-/* harmony export */   "getWatchingDate": () => (/* binding */ getWatchingDate)
-/* harmony export */ });
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var dayjs_random__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs-random */ "./node_modules/dayjs-random/index.min.js");
-/* harmony import */ var dayjs_random__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs_random__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./src/mock/constants.js");
-
-
-
-dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend((dayjs_random__WEBPACK_IMPORTED_MODULE_1___default()));
-
-
-const getRandomValueFromArray = list => list[lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, list.length - _constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MAX_NUMBER)];
-
-const getRandomValuesFromArray = list => [...new Set(Array.from({
-  length: lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MAX_NUMBER, list.length)
-}, () => getRandomValueFromArray(list)))];
-
-const getRandomTitle = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_TITLES);
-
-const getRandomPoster = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_POSTERS);
-
-const getRandomDescription = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_DESCRIPTIONS);
-
-const getRandomRating = () => lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.MIN_RATING_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.MAX_RATING_NUMBER, true).toFixed(_constants__WEBPACK_IMPORTED_MODULE_3__.RATING_DECIMAL);
-
-const getRandomDirectors = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_DIRECTORS);
-
-const getRandomScreenWriters = () => getRandomValuesFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_SCREEN_WRITERS);
-
-const getRandomActors = () => getRandomValuesFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_ACTORS);
-
-const getRandomCountry = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_COUNTRIES);
-
-const getRandomGenres = () => getRandomValuesFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.FILMS_GENRES);
-
-const getRandomDate = () => dayjs__WEBPACK_IMPORTED_MODULE_0___default().between(dayjs__WEBPACK_IMPORTED_MODULE_0___default()().add(-lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.MAX_GAP_YEAR), 'year'), dayjs__WEBPACK_IMPORTED_MODULE_0___default()().add(-lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.MAX_GAP_YEAR), 'year')).toDate();
-
-const getRandomDuration = () => lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.MIN_GAP_MINUTES, _constants__WEBPACK_IMPORTED_MODULE_3__.MAX_GAP_MINUTES);
-
-const getRandomMaturityRating = () => `${lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.MAX_MATURITY_RATING_NUMBER)}+`;
-
-const getRandomComments = () => Array.from({
-  length: lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_FILMS_COUNT)
-}, (lodash__WEBPACK_IMPORTED_MODULE_2___default().uniqueId));
-
-const getRandomEmotion = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.COMMENTS_EMOTION);
-
-const getRandomAuthor = () => getRandomValueFromArray(_constants__WEBPACK_IMPORTED_MODULE_3__.COMMENTS_AUTHORS);
-
-const getRandomBoolean = () => Boolean(lodash__WEBPACK_IMPORTED_MODULE_2___default().random(_constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MIN_NUMBER, _constants__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_MAX_NUMBER));
-
-const getWatchingDate = () => dayjs__WEBPACK_IMPORTED_MODULE_0___default().between(dayjs__WEBPACK_IMPORTED_MODULE_0___default()().subtract(3, 'month'), dayjs__WEBPACK_IMPORTED_MODULE_0___default()()).toDate();
-
-
-
-/***/ }),
-
 /***/ "./src/models/abstract-observable.js":
 /*!*******************************************!*\
   !*** ./src/models/abstract-observable.js ***!
@@ -845,39 +706,45 @@ class CommentsModel extends _abstract_observable__WEBPACK_IMPORTED_MODULE_0__["d
     });
 
     _defineProperty(this, "loadComments", async movieId => {
-      const response = await _classPrivateFieldGet(this, _apiService).getMoviesComments(movieId);
+      try {
+        const response = await _classPrivateFieldGet(this, _apiService).getMoviesComments(movieId);
 
-      _classPrivateFieldSet(this, _comments, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_1__.normalizeArray)(await _api_service__WEBPACK_IMPORTED_MODULE_4__["default"].parseResponse(response), _helpers_normalize__WEBPACK_IMPORTED_MODULE_2__.normalizeComment));
+        _classPrivateFieldSet(this, _comments, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_1__.normalizeArray)(await _api_service__WEBPACK_IMPORTED_MODULE_4__["default"].parseResponse(response), _helpers_normalize__WEBPACK_IMPORTED_MODULE_2__.normalizeComment));
+      } catch (err) {
+        _classPrivateFieldSet(this, _comments, []);
+      }
 
       this._notify(_constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.LOAD_COMMENTS);
     });
 
-    _defineProperty(this, "addComment", async (movieId, comment) => {
-      await _classPrivateFieldGet(this, _apiService).addComment(movieId, comment);
+    _defineProperty(this, "addComment", async (movieId, comment, callback) => {
+      try {
+        const response = await _api_service__WEBPACK_IMPORTED_MODULE_4__["default"].parseResponse(await _classPrivateFieldGet(this, _apiService).addComment(movieId, comment));
 
-      _classPrivateFieldGet(this, _comments).push({
-        id: comment.id,
-        text: comment.text,
-        emotion: comment.emotion,
-        author: comment.author,
-        date: comment.date
-      });
+        _classPrivateFieldSet(this, _comments, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_1__.normalizeArray)(response.comments, _helpers_normalize__WEBPACK_IMPORTED_MODULE_2__.normalizeComment));
 
-      this._notify();
+        callback(movieId, response.movie.comments);
+
+        this._notify();
+      } catch (err) {
+        this._notify(_constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.ERROR_ADD_COMMENT, err);
+      }
     });
 
-    _defineProperty(this, "deleteComment", async commentId => {
-      await _classPrivateFieldGet(this, _apiService).deleteComment(commentId);
+    _defineProperty(this, "deleteComment", async (commentId, callback) => {
+      try {
+        await _classPrivateFieldGet(this, _apiService).deleteComment(commentId);
 
-      const index = _classPrivateFieldGet(this, _comments).findIndex(comment => comment.id === commentId);
+        const index = _classPrivateFieldGet(this, _comments).findIndex(comment => comment.id === commentId);
 
-      if (index === -1) {
-        throw new Error('Can\'t delete unexisting comment');
+        _classPrivateFieldSet(this, _comments, [..._classPrivateFieldGet(this, _comments).slice(0, index), ..._classPrivateFieldGet(this, _comments).slice(index + 1)]);
+
+        callback(commentId);
+
+        this._notify();
+      } catch (err) {
+        this._notify(_constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.ERROR_DELETE_COMMENT, commentId);
       }
-
-      _classPrivateFieldSet(this, _comments, [..._classPrivateFieldGet(this, _comments).slice(0, index), ..._classPrivateFieldGet(this, _comments).slice(index + 1)]);
-
-      this._notify();
     });
 
     _classPrivateFieldSet(this, _apiService, apiService);
@@ -1018,21 +885,25 @@ class MoviesModel extends _abstract_observable__WEBPACK_IMPORTED_MODULE_0__["def
     });
 
     _defineProperty(this, "init", async () => {
-      const response = await _classPrivateFieldGet(this, _apiService).movies;
+      try {
+        const response = await _classPrivateFieldGet(this, _apiService).movies;
 
-      _classPrivateFieldSet(this, _movies, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_1__.normalizeArray)(await _api_service__WEBPACK_IMPORTED_MODULE_4__["default"].parseResponse(response), _helpers_normalize__WEBPACK_IMPORTED_MODULE_2__.normalizeMovie));
+        _classPrivateFieldSet(this, _movies, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_1__.normalizeArray)(await _api_service__WEBPACK_IMPORTED_MODULE_4__["default"].parseResponse(response), _helpers_normalize__WEBPACK_IMPORTED_MODULE_2__.normalizeMovie));
+      } catch (err) {
+        _classPrivateFieldSet(this, _movies, []);
+      }
 
       this._notify(_constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.INIT);
     });
 
-    _defineProperty(this, "addComment", (movieId, commentId) => {
+    _defineProperty(this, "addComment", (movieId, comments) => {
       const currentMovie = _classPrivateFieldGet(this, _movies).find(movie => movie.id === movieId);
 
       if (!currentMovie) {
         throw new Error('Movie doesn\'t exist.');
       }
 
-      currentMovie.comments.push(commentId);
+      currentMovie.comments = comments;
     });
 
     _defineProperty(this, "deleteComment", commentId => {
@@ -1043,17 +914,17 @@ class MoviesModel extends _abstract_observable__WEBPACK_IMPORTED_MODULE_0__["def
     });
 
     _defineProperty(this, "updateMovie", async (updateType, updatedMovie) => {
-      await _classPrivateFieldGet(this, _apiService).updateMovie(updatedMovie);
+      try {
+        await _classPrivateFieldGet(this, _apiService).updateMovie(updatedMovie);
 
-      const index = _classPrivateFieldGet(this, _movies).findIndex(movie => movie.id === updatedMovie.id);
+        const index = _classPrivateFieldGet(this, _movies).findIndex(movie => movie.id === updatedMovie.id);
 
-      if (index === -1) {
-        throw new Error('Can\'t update unexisting movie');
+        _classPrivateFieldSet(this, _movies, [..._classPrivateFieldGet(this, _movies).slice(0, index), updatedMovie, ..._classPrivateFieldGet(this, _movies).slice(index + 1)]);
+
+        this._notify(updateType, updatedMovie);
+      } catch (err) {
+        this._notify(_constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.ERROR_UPDATE_MOVIE, err);
       }
-
-      _classPrivateFieldSet(this, _movies, [..._classPrivateFieldGet(this, _movies).slice(0, index), updatedMovie, ..._classPrivateFieldGet(this, _movies).slice(index + 1)]);
-
-      this._notify(updateType, updatedMovie);
     });
 
     _classPrivateFieldSet(this, _apiService, apiService);
@@ -1199,6 +1070,122 @@ class UserRating {
 
 /***/ }),
 
+/***/ "./src/presenter/main-presenter.js":
+/*!*****************************************!*\
+  !*** ./src/presenter/main-presenter.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../render */ "./src/render.js");
+/* harmony import */ var _view_rating_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../view/rating-view */ "./src/view/rating-view.js");
+/* harmony import */ var _view_statistics_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/statistics-view */ "./src/view/statistics-view.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
+
+
+
+
+var _header = /*#__PURE__*/new WeakMap();
+
+var _footer = /*#__PURE__*/new WeakMap();
+
+var _moviesModel = /*#__PURE__*/new WeakMap();
+
+var _userRatingModel = /*#__PURE__*/new WeakMap();
+
+var _userRating = /*#__PURE__*/new WeakMap();
+
+var _statistic = /*#__PURE__*/new WeakMap();
+
+var _handleModelEvent = /*#__PURE__*/new WeakMap();
+
+class MainPresenter {
+  constructor(header, footer, moviesModel, userRatingModel) {
+    _classPrivateFieldInitSpec(this, _header, {
+      writable: true,
+      value: null
+    });
+
+    _classPrivateFieldInitSpec(this, _footer, {
+      writable: true,
+      value: null
+    });
+
+    _classPrivateFieldInitSpec(this, _moviesModel, {
+      writable: true,
+      value: null
+    });
+
+    _classPrivateFieldInitSpec(this, _userRatingModel, {
+      writable: true,
+      value: null
+    });
+
+    _classPrivateFieldInitSpec(this, _userRating, {
+      writable: true,
+      value: new _view_rating_view__WEBPACK_IMPORTED_MODULE_1__["default"]()
+    });
+
+    _classPrivateFieldInitSpec(this, _statistic, {
+      writable: true,
+      value: new _view_statistics_view__WEBPACK_IMPORTED_MODULE_2__["default"]()
+    });
+
+    _defineProperty(this, "load", () => {
+      (0,_render__WEBPACK_IMPORTED_MODULE_0__.render)(_classPrivateFieldGet(this, _footer), _classPrivateFieldGet(this, _statistic));
+    });
+
+    _classPrivateFieldInitSpec(this, _handleModelEvent, {
+      writable: true,
+      value: () => {
+        _classPrivateFieldGet(this, _userRating).removeElement();
+
+        _classPrivateFieldGet(this, _userRating).rating = _classPrivateFieldGet(this, _userRatingModel).rating;
+
+        if (_classPrivateFieldGet(this, _userRating).rating) {
+          (0,_render__WEBPACK_IMPORTED_MODULE_0__.render)(_classPrivateFieldGet(this, _header), _classPrivateFieldGet(this, _userRating));
+        }
+
+        _classPrivateFieldGet(this, _statistic).updateElement(_classPrivateFieldGet(this, _moviesModel).movies.length);
+      }
+    });
+
+    _classPrivateFieldSet(this, _header, header);
+
+    _classPrivateFieldSet(this, _footer, footer);
+
+    _classPrivateFieldSet(this, _moviesModel, moviesModel);
+
+    _classPrivateFieldSet(this, _userRatingModel, userRatingModel);
+
+    _classPrivateFieldGet(this, _moviesModel).addObserver(_classPrivateFieldGet(this, _handleModelEvent));
+  }
+
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MainPresenter);
+
+/***/ }),
+
 /***/ "./src/presenter/movies-presenter.js":
 /*!*******************************************!*\
   !*** ./src/presenter/movies-presenter.js ***!
@@ -1215,25 +1202,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_movies_container_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/movies-container-view */ "./src/view/movies-container-view.js");
 /* harmony import */ var _view_movies_empty__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../view/movies-empty */ "./src/view/movies-empty.js");
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../render */ "./src/render.js");
-/* harmony import */ var _view_rating_view__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/rating-view */ "./src/view/rating-view.js");
-/* harmony import */ var _view_menu_view__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../view/menu-view */ "./src/view/menu-view.js");
-/* harmony import */ var _view_sort_view__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../view/sort-view */ "./src/view/sort-view.js");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
-/* harmony import */ var _view_statistics_view__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../view/statistics-view */ "./src/view/statistics-view.js");
-/* harmony import */ var _helpers_events__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../helpers/events */ "./src/helpers/events.js");
-/* harmony import */ var _helpers_filters__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../helpers/filters */ "./src/helpers/filters.js");
-/* harmony import */ var _helpers_sorting__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../helpers/sorting */ "./src/helpers/sorting.js");
-/* harmony import */ var _view_details_view__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../view/details-view */ "./src/view/details-view.js");
-/* harmony import */ var _view_movie_view__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../view/movie-view */ "./src/view/movie-view.js");
-/* harmony import */ var _view_movie_details_form_view__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../view/movie-details-form-view */ "./src/view/movie-details-form-view.js");
-/* harmony import */ var _view_movie_details_container_view__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../view/movie-details-container-view */ "./src/view/movie-details-container-view.js");
-/* harmony import */ var _view_movie_details_wrap_view__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../view/movie-details-wrap-view */ "./src/view/movie-details-wrap-view.js");
-/* harmony import */ var _view_movie_details_comments_view__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../view/movie-details-comments-view */ "./src/view/movie-details-comments-view.js");
-/* harmony import */ var _view_show_more_btn_view__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../view/show-more-btn-view */ "./src/view/show-more-btn-view.js");
-/* harmony import */ var _view_close_details_btn_view__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../view/close-details-btn-view */ "./src/view/close-details-btn-view.js");
-/* harmony import */ var _view_controls_view__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../view/controls-view */ "./src/view/controls-view.js");
-/* harmony import */ var _view_stats_view__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../view/stats-view */ "./src/view/stats-view.js");
-/* harmony import */ var _view_loading_view__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../view/loading-view */ "./src/view/loading-view.js");
+/* harmony import */ var _view_menu_view__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/menu-view */ "./src/view/menu-view.js");
+/* harmony import */ var _view_sort_view__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../view/sort-view */ "./src/view/sort-view.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
+/* harmony import */ var _helpers_events__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../helpers/events */ "./src/helpers/events.js");
+/* harmony import */ var _helpers_filters__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers/filters */ "./src/helpers/filters.js");
+/* harmony import */ var _helpers_sorting__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../helpers/sorting */ "./src/helpers/sorting.js");
+/* harmony import */ var _view_details_view__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../view/details-view */ "./src/view/details-view.js");
+/* harmony import */ var _view_movie_view__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../view/movie-view */ "./src/view/movie-view.js");
+/* harmony import */ var _view_movie_details_form_view__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../view/movie-details-form-view */ "./src/view/movie-details-form-view.js");
+/* harmony import */ var _view_movie_details_container_view__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../view/movie-details-container-view */ "./src/view/movie-details-container-view.js");
+/* harmony import */ var _view_movie_details_wrap_view__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../view/movie-details-wrap-view */ "./src/view/movie-details-wrap-view.js");
+/* harmony import */ var _view_movie_details_comments_view__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../view/movie-details-comments-view */ "./src/view/movie-details-comments-view.js");
+/* harmony import */ var _view_show_more_btn_view__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../view/show-more-btn-view */ "./src/view/show-more-btn-view.js");
+/* harmony import */ var _view_close_details_btn_view__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../view/close-details-btn-view */ "./src/view/close-details-btn-view.js");
+/* harmony import */ var _view_controls_view__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../view/controls-view */ "./src/view/controls-view.js");
+/* harmony import */ var _view_stats_view__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../view/stats-view */ "./src/view/stats-view.js");
+/* harmony import */ var _view_loading_view__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../view/loading-view */ "./src/view/loading-view.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
@@ -1273,13 +1258,7 @@ function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.
 
 
 
-
-
-var _header = /*#__PURE__*/new WeakMap();
-
 var _main = /*#__PURE__*/new WeakMap();
-
-var _footer = /*#__PURE__*/new WeakMap();
 
 var _moviesModel = /*#__PURE__*/new WeakMap();
 
@@ -1300,8 +1279,6 @@ var _watchedMovies = /*#__PURE__*/new WeakMap();
 var _favoriteMovies = /*#__PURE__*/new WeakMap();
 
 var _currentMoviesGap = /*#__PURE__*/new WeakMap();
-
-var _userRating = /*#__PURE__*/new WeakMap();
 
 var _mainContainer = /*#__PURE__*/new WeakMap();
 
@@ -1340,6 +1317,8 @@ var _loadingView = /*#__PURE__*/new WeakMap();
 var _statsView = /*#__PURE__*/new WeakMap();
 
 var _loading = /*#__PURE__*/new WeakMap();
+
+var _loadingComments = /*#__PURE__*/new WeakMap();
 
 var _renderMainMenu = /*#__PURE__*/new WeakMap();
 
@@ -1380,18 +1359,8 @@ var _handleModelEvent = /*#__PURE__*/new WeakMap();
 var _updateExtraMovies = /*#__PURE__*/new WeakMap();
 
 class MoviesPresenter {
-  constructor(header, main, footer, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
-    _classPrivateFieldInitSpec(this, _header, {
-      writable: true,
-      value: null
-    });
-
+  constructor(main, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
     _classPrivateFieldInitSpec(this, _main, {
-      writable: true,
-      value: null
-    });
-
-    _classPrivateFieldInitSpec(this, _footer, {
       writable: true,
       value: null
     });
@@ -1443,12 +1412,7 @@ class MoviesPresenter {
 
     _classPrivateFieldInitSpec(this, _currentMoviesGap, {
       writable: true,
-      value: _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_GAP
-    });
-
-    _classPrivateFieldInitSpec(this, _userRating, {
-      writable: true,
-      value: new _view_rating_view__WEBPACK_IMPORTED_MODULE_5__["default"]()
+      value: _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_GAP
     });
 
     _classPrivateFieldInitSpec(this, _mainContainer, {
@@ -1498,42 +1462,42 @@ class MoviesPresenter {
 
     _classPrivateFieldInitSpec(this, _moreButton, {
       writable: true,
-      value: new _view_show_more_btn_view__WEBPACK_IMPORTED_MODULE_19__["default"]()
+      value: new _view_show_more_btn_view__WEBPACK_IMPORTED_MODULE_17__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _mainMenu, {
       writable: true,
-      value: new _view_menu_view__WEBPACK_IMPORTED_MODULE_6__["default"]()
+      value: new _view_menu_view__WEBPACK_IMPORTED_MODULE_5__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _movieWrap, {
       writable: true,
-      value: new _view_movie_details_wrap_view__WEBPACK_IMPORTED_MODULE_17__["default"]()
+      value: new _view_movie_details_wrap_view__WEBPACK_IMPORTED_MODULE_15__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _movieCommentsView, {
       writable: true,
-      value: null
+      value: new _view_movie_details_comments_view__WEBPACK_IMPORTED_MODULE_16__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _movieDetailsContainer, {
       writable: true,
-      value: new _view_movie_details_container_view__WEBPACK_IMPORTED_MODULE_16__["default"]()
+      value: new _view_movie_details_container_view__WEBPACK_IMPORTED_MODULE_14__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _movieDetailsClose, {
       writable: true,
-      value: new _view_close_details_btn_view__WEBPACK_IMPORTED_MODULE_20__["default"]()
+      value: new _view_close_details_btn_view__WEBPACK_IMPORTED_MODULE_18__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _movieForm, {
       writable: true,
-      value: new _view_movie_details_form_view__WEBPACK_IMPORTED_MODULE_15__["default"]()
+      value: new _view_movie_details_form_view__WEBPACK_IMPORTED_MODULE_13__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _loadingView, {
       writable: true,
-      value: new _view_loading_view__WEBPACK_IMPORTED_MODULE_23__["default"]()
+      value: new _view_loading_view__WEBPACK_IMPORTED_MODULE_21__["default"]()
     });
 
     _classPrivateFieldInitSpec(this, _statsView, {
@@ -1546,14 +1510,15 @@ class MoviesPresenter {
       value: true
     });
 
+    _classPrivateFieldInitSpec(this, _loadingComments, {
+      writable: true,
+      value: true
+    });
+
     _defineProperty(this, "load", () => {
       (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _main), _classPrivateFieldGet(this, _mainContainer));
 
       _classPrivateFieldGet(this, _updateMovies).call(this);
-
-      if (!_classPrivateFieldGet(this, _loading)) {
-        (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _footer), new _view_statistics_view__WEBPACK_IMPORTED_MODULE_9__["default"](_classPrivateFieldGet(this, _moviesModel).movies.length));
-      }
     });
 
     _classPrivateFieldInitSpec(this, _renderMainMenu, {
@@ -1571,11 +1536,11 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _updateFilters, {
       writable: true,
       value: () => {
-        _classPrivateFieldSet(this, _watchMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_11__.filterWatchingMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
+        _classPrivateFieldSet(this, _watchMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_9__.filterWatchingMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
 
-        _classPrivateFieldSet(this, _watchedMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_11__.filterWatchedMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
+        _classPrivateFieldSet(this, _watchedMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_9__.filterWatchedMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
 
-        _classPrivateFieldSet(this, _favoriteMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_11__.filterFavoriteMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
+        _classPrivateFieldSet(this, _favoriteMovies, (0,_helpers_filters__WEBPACK_IMPORTED_MODULE_9__.filterFavoriteMovies)(_classPrivateFieldGet(this, _moviesModel).movies));
       }
     });
 
@@ -1621,7 +1586,7 @@ class MoviesPresenter {
       writable: true,
       value: (container, movies) => {
         movies.forEach(movie => {
-          const movieCard = new _view_movie_view__WEBPACK_IMPORTED_MODULE_14__["default"](movie);
+          const movieCard = new _view_movie_view__WEBPACK_IMPORTED_MODULE_12__["default"](movie);
           (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(container, movieCard);
 
           _classPrivateFieldGet(this, _addNewControl).call(this, movieCard, movie);
@@ -1632,8 +1597,8 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _addNewControl, {
       writable: true,
       value: (parent, movie, isDetails = false, renderPosition = _render__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.BEFOREEND) => {
-        const movieCardControls = new _view_controls_view__WEBPACK_IMPORTED_MODULE_21__["default"](movie, isDetails);
-        _view_controls_view__WEBPACK_IMPORTED_MODULE_21__["default"].addControl(movie, movieCardControls);
+        const movieCardControls = new _view_controls_view__WEBPACK_IMPORTED_MODULE_19__["default"](movie, isDetails);
+        _view_controls_view__WEBPACK_IMPORTED_MODULE_19__["default"].addControl(movie, movieCardControls);
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(parent, movieCardControls, renderPosition);
         movieCardControls.restoreHandlers(_classPrivateFieldGet(this, _handleViewAction));
       }
@@ -1645,38 +1610,37 @@ class MoviesPresenter {
         if (_classPrivateFieldGet(this, _movieDetails)) {
           _classPrivateFieldGet(this, _clearDetails).call(this);
         } else {
-          _classPrivateFieldSet(this, _movieDetails, new _view_details_view__WEBPACK_IMPORTED_MODULE_13__["default"]());
+          _classPrivateFieldSet(this, _movieDetails, new _view_details_view__WEBPACK_IMPORTED_MODULE_11__["default"]());
 
           (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _main), _classPrivateFieldGet(this, _movieDetails));
         }
 
         _classPrivateFieldGet(this, _movieWrap).movie = _classPrivateFieldGet(this, _currentMovie);
-
-        const {
-          id,
-          comments: commentsIds
-        } = _classPrivateFieldGet(this, _currentMovie);
-
-        const movieComments = _classPrivateFieldGet(this, _commentsModel).comments.filter(comment => commentsIds.includes(comment.id));
-
-        _classPrivateFieldSet(this, _movieCommentsView, new _view_movie_details_comments_view__WEBPACK_IMPORTED_MODULE_18__["default"](id, movieComments));
-
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieDetails), _classPrivateFieldGet(this, _movieForm));
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieForm), _classPrivateFieldGet(this, _movieDetailsContainer));
-        (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieForm), _classPrivateFieldGet(this, _movieCommentsView));
 
-        _classPrivateFieldGet(this, _movieCommentsView).restoreHandlers(_classPrivateFieldGet(this, _handleViewAction));
-
-        _classPrivateFieldGet(this, _movieForm).restoreHandlers(_classPrivateFieldGet(this, _handleViewAction));
+        if (_classPrivateFieldGet(this, _loadingComments)) {
+          (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieForm), new _view_loading_view__WEBPACK_IMPORTED_MODULE_21__["default"]());
+        } else {
+          _classPrivateFieldGet(this, _movieCommentsView).comments = _classPrivateFieldGet(this, _commentsModel).comments;
+          _classPrivateFieldGet(this, _movieCommentsView).movieId = _classPrivateFieldGet(this, _currentMovie).id;
+          (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieForm), _classPrivateFieldGet(this, _movieCommentsView));
+        }
 
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieDetailsContainer), _classPrivateFieldGet(this, _movieDetailsClose));
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _movieDetailsContainer), _classPrivateFieldGet(this, _movieWrap));
 
         _classPrivateFieldGet(this, _addNewControl).call(this, _classPrivateFieldGet(this, _movieWrap), _classPrivateFieldGet(this, _currentMovie), true, _render__WEBPACK_IMPORTED_MODULE_4__.RenderPosition.AFTEREND);
 
-        document.addEventListener('keydown', (0,_helpers_events__WEBPACK_IMPORTED_MODULE_10__.onKeydownEsc)(_classPrivateFieldGet(this, _onClickCloseDetails)));
+        if (!_classPrivateFieldGet(this, _movieCommentsView).disableForm) {
+          _classPrivateFieldGet(this, _movieCommentsView).restoreHandlers(_classPrivateFieldGet(this, _handleViewAction));
 
-        _classPrivateFieldGet(this, _movieDetailsClose).addEvent('onClickCloseBtn', 'click', (0,_helpers_events__WEBPACK_IMPORTED_MODULE_10__.onClickCloseBtn)(_classPrivateFieldGet(this, _onClickCloseDetails)));
+          _classPrivateFieldGet(this, _movieForm).restoreHandlers(_classPrivateFieldGet(this, _handleViewAction));
+
+          document.addEventListener('keydown', (0,_helpers_events__WEBPACK_IMPORTED_MODULE_8__.onKeydownEsc)(_classPrivateFieldGet(this, _onClickCloseDetails)));
+
+          _classPrivateFieldGet(this, _movieDetailsClose).addEvent('onClickCloseBtn', 'click', (0,_helpers_events__WEBPACK_IMPORTED_MODULE_8__.onClickCloseBtn)(_classPrivateFieldGet(this, _onClickCloseDetails)));
+        }
 
         document.body.classList.add('hide-overflow');
       }
@@ -1733,6 +1697,12 @@ class MoviesPresenter {
 
         _classPrivateFieldSet(this, _currentMovie, this.movies.find(item => item.id === id));
 
+        _classPrivateFieldSet(this, _loadingComments, true);
+
+        _classPrivateFieldGet(this, _movieCommentsView).disableForm = true;
+
+        _classPrivateFieldGet(this, _renderMovieDetails).call(this);
+
         _classPrivateFieldGet(this, _commentsModel).loadComments(id);
       }
     });
@@ -1742,9 +1712,9 @@ class MoviesPresenter {
       value: evt => {
         evt.preventDefault();
 
-        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _mainMoviesContainer), this.movies.slice(_classPrivateFieldGet(this, _currentMoviesGap), _classPrivateFieldGet(this, _currentMoviesGap) + _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_GAP));
+        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _mainMoviesContainer), this.movies.slice(_classPrivateFieldGet(this, _currentMoviesGap), _classPrivateFieldGet(this, _currentMoviesGap) + _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_GAP));
 
-        _classPrivateFieldSet(this, _currentMoviesGap, _classPrivateFieldGet(this, _currentMoviesGap) + _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_GAP);
+        _classPrivateFieldSet(this, _currentMoviesGap, _classPrivateFieldGet(this, _currentMoviesGap) + _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_GAP);
 
         if (_classPrivateFieldGet(this, _currentMoviesGap) >= this.movies.length) {
           _classPrivateFieldGet(this, _moreButton).removeElement();
@@ -1784,20 +1754,16 @@ class MoviesPresenter {
 
         _classPrivateFieldGet(this, _moreButton).removeElement();
 
-        _classPrivateFieldGet(this, _userRating).removeElement();
-
         if (_classPrivateFieldGet(this, _statsView)) {
           _classPrivateFieldGet(this, _statsView).removeElement();
         }
 
-        if (_classPrivateFieldGet(this, _userRating).rating !== _constants__WEBPACK_IMPORTED_MODULE_8__.UserRatings.NONE) {
-          (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _header), _classPrivateFieldGet(this, _userRating));
-        }
+        _classPrivateFieldGet(this, _currentUser).changeRating(_classPrivateFieldGet(this, _watchedMovies).length);
 
         _classPrivateFieldGet(this, _renderMainMenu).call(this);
 
-        if (_classPrivateFieldGet(this, _filterModel).currentFilter === _constants__WEBPACK_IMPORTED_MODULE_8__.FilterType.STATS) {
-          _classPrivateFieldSet(this, _statsView, new _view_stats_view__WEBPACK_IMPORTED_MODULE_22__["default"](_classPrivateFieldGet(this, _watchedMovies), _classPrivateFieldGet(this, _userRating).rating));
+        if (_classPrivateFieldGet(this, _filterModel).currentFilter === _constants__WEBPACK_IMPORTED_MODULE_7__.FilterType.STATS) {
+          _classPrivateFieldSet(this, _statsView, new _view_stats_view__WEBPACK_IMPORTED_MODULE_20__["default"](_classPrivateFieldGet(this, _watchedMovies), _classPrivateFieldGet(this, _currentUser).rating));
 
           (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainContainer), _classPrivateFieldGet(this, _statsView));
 
@@ -1830,7 +1796,7 @@ class MoviesPresenter {
 
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainMoviesList), _classPrivateFieldGet(this, _mainMoviesContainer));
 
-        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _mainMoviesContainer), this.movies.slice(_constants__WEBPACK_IMPORTED_MODULE_8__.MIN_FILMS, _classPrivateFieldGet(this, _currentMoviesGap)));
+        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _mainMoviesContainer), this.movies.slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _classPrivateFieldGet(this, _currentMoviesGap)));
 
         _classPrivateFieldGet(this, _updateExtraMovies).call(this);
 
@@ -1841,47 +1807,45 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _handleViewAction, {
       writable: true,
       value: (actionType, updateType, data) => {
+        _classPrivateFieldGet(this, _movieForm).isError = false;
+
         switch (actionType) {
-          case _constants__WEBPACK_IMPORTED_MODULE_8__.ActionType.CHANGE_SORT:
-            _classPrivateFieldSet(this, _currentMoviesGap, _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_GAP);
+          case _constants__WEBPACK_IMPORTED_MODULE_7__.ActionType.CHANGE_SORT:
+            _classPrivateFieldSet(this, _currentMoviesGap, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_GAP);
 
             _classPrivateFieldGet(this, _sortModel).updateSort(updateType, data);
 
             break;
 
-          case _constants__WEBPACK_IMPORTED_MODULE_8__.ActionType.UPDATE_MOVIE:
+          case _constants__WEBPACK_IMPORTED_MODULE_7__.ActionType.UPDATE_MOVIE:
             if (_classPrivateFieldGet(this, _movieDetails) !== null && _classPrivateFieldGet(this, _movieWrap).movie.id === data.id) {
               _classPrivateFieldGet(this, _movieWrap).movie = data;
             }
-
-            _classPrivateFieldGet(this, _userRating).rating = _classPrivateFieldGet(this, _watchedMovies).length;
 
             _classPrivateFieldGet(this, _moviesModel).updateMovie(updateType, data);
 
             break;
 
-          case _constants__WEBPACK_IMPORTED_MODULE_8__.ActionType.CHANGE_FILTER:
-            _classPrivateFieldSet(this, _currentMoviesGap, _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_GAP);
+          case _constants__WEBPACK_IMPORTED_MODULE_7__.ActionType.CHANGE_FILTER:
+            _classPrivateFieldSet(this, _currentMoviesGap, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_GAP);
 
-            _classPrivateFieldGet(this, _sortModel).currentSort = _constants__WEBPACK_IMPORTED_MODULE_8__.SortType.DEFAULT;
+            _classPrivateFieldGet(this, _sortModel).currentSort = _constants__WEBPACK_IMPORTED_MODULE_7__.SortType.DEFAULT;
 
             _classPrivateFieldGet(this, _filterModel).updateFilter(updateType, data);
 
             break;
 
-          case _constants__WEBPACK_IMPORTED_MODULE_8__.ActionType.DELETE_COMMENT:
-            _classPrivateFieldGet(this, _moviesModel).deleteComment(data);
-
-            _classPrivateFieldGet(this, _commentsModel).deleteComment(data);
+          case _constants__WEBPACK_IMPORTED_MODULE_7__.ActionType.DELETE_COMMENT:
+            _classPrivateFieldGet(this, _commentsModel).deleteComment(data, _classPrivateFieldGet(this, _moviesModel).deleteComment);
 
             break;
 
-          case _constants__WEBPACK_IMPORTED_MODULE_8__.ActionType.ADD_COMMENT:
-            _classPrivateFieldGet(this, _movieCommentsView).resetData();
+          case _constants__WEBPACK_IMPORTED_MODULE_7__.ActionType.ADD_COMMENT:
+            _classPrivateFieldGet(this, _movieCommentsView).disableForm = true;
 
-            _classPrivateFieldGet(this, _commentsModel).addComment(data.movieId, data);
+            _classPrivateFieldGet(this, _renderMovieDetails).call(this);
 
-            _classPrivateFieldGet(this, _moviesModel).addComment(data.movieId, data.id);
+            _classPrivateFieldGet(this, _commentsModel).addComment(data.movieId, data, _classPrivateFieldGet(this, _moviesModel).addComment);
 
             break;
         }
@@ -1890,26 +1854,37 @@ class MoviesPresenter {
 
     _classPrivateFieldInitSpec(this, _handleModelEvent, {
       writable: true,
-      value: updateType => {
-        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_8__.UpdateType.LOAD_COMMENTS) {
+      value: (updateType, data) => {
+        _classPrivateFieldGet(this, _movieCommentsView).isError = false;
+
+        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_7__.UpdateType.LOAD_COMMENTS) {
+          _classPrivateFieldSet(this, _loadingComments, false);
+
+          _classPrivateFieldGet(this, _movieCommentsView).resetData();
+
           _classPrivateFieldGet(this, _renderMovieDetails).call(this);
 
           return;
         }
 
+        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_7__.UpdateType.ERROR_ADD_COMMENT) {
+          _classPrivateFieldGet(this, _movieForm).isError = true;
+          _classPrivateFieldGet(this, _movieCommentsView).isError = true;
+        }
+
+        _classPrivateFieldGet(this, _movieCommentsView).resetData();
+
+        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_7__.UpdateType.ERROR_DELETE_COMMENT) {
+          _classPrivateFieldGet(this, _movieCommentsView).setErrorComment(data);
+        }
+
+        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_7__.UpdateType.INIT) {
+          _classPrivateFieldSet(this, _loading, false);
+        }
+
         _classPrivateFieldGet(this, _updateFilters).call(this);
 
-        _classPrivateFieldGet(this, _currentUser).changeRating(_classPrivateFieldGet(this, _watchedMovies).length);
-
-        _classPrivateFieldGet(this, _userRating).rating = _classPrivateFieldGet(this, _currentUser).rating;
-
-        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_8__.UpdateType.INIT) {
-          _classPrivateFieldSet(this, _loading, false);
-
-          this.load();
-        } else {
-          _classPrivateFieldGet(this, _updateMovies).call(this);
-        }
+        _classPrivateFieldGet(this, _updateMovies).call(this);
       }
     });
 
@@ -1926,11 +1901,7 @@ class MoviesPresenter {
       }
     });
 
-    _classPrivateFieldSet(this, _header, header);
-
     _classPrivateFieldSet(this, _main, main);
-
-    _classPrivateFieldSet(this, _footer, footer);
 
     _classPrivateFieldSet(this, _moviesModel, moviesModel);
 
@@ -1940,7 +1911,7 @@ class MoviesPresenter {
 
     _classPrivateFieldSet(this, _commentsModel, commentsModel);
 
-    _classPrivateFieldSet(this, _sortingMenu, new _view_sort_view__WEBPACK_IMPORTED_MODULE_7__["default"](_classPrivateFieldGet(this, _sortModel).currentSort));
+    _classPrivateFieldSet(this, _sortingMenu, new _view_sort_view__WEBPACK_IMPORTED_MODULE_6__["default"](_classPrivateFieldGet(this, _sortModel).currentSort));
 
     _classPrivateFieldSet(this, _currentUser, currentUser);
 
@@ -1957,25 +1928,25 @@ class MoviesPresenter {
     let movies = [..._classPrivateFieldGet(this, _moviesModel).movies];
 
     switch (_classPrivateFieldGet(this, _filterModel).currentFilter) {
-      case _constants__WEBPACK_IMPORTED_MODULE_8__.FilterType.WATCHLIST:
+      case _constants__WEBPACK_IMPORTED_MODULE_7__.FilterType.WATCHLIST:
         movies = _classPrivateFieldGet(this, _watchMovies);
         break;
 
-      case _constants__WEBPACK_IMPORTED_MODULE_8__.FilterType.HISTORY:
+      case _constants__WEBPACK_IMPORTED_MODULE_7__.FilterType.HISTORY:
         movies = _classPrivateFieldGet(this, _watchedMovies);
         break;
 
-      case _constants__WEBPACK_IMPORTED_MODULE_8__.FilterType.FAVORITES:
+      case _constants__WEBPACK_IMPORTED_MODULE_7__.FilterType.FAVORITES:
         movies = _classPrivateFieldGet(this, _favoriteMovies);
         break;
     }
 
     switch (_classPrivateFieldGet(this, _sortModel).currentSort) {
-      case _constants__WEBPACK_IMPORTED_MODULE_8__.SortType.DATE:
-        return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_12__.sortMoviesByDate)(movies);
+      case _constants__WEBPACK_IMPORTED_MODULE_7__.SortType.DATE:
+        return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByDate)(movies);
 
-      case _constants__WEBPACK_IMPORTED_MODULE_8__.SortType.RATING:
-        return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_12__.sortMoviesByRating)(movies);
+      case _constants__WEBPACK_IMPORTED_MODULE_7__.SortType.RATING:
+        return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByRating)(movies);
 
       default:
         return movies;
@@ -1983,11 +1954,11 @@ class MoviesPresenter {
   }
 
   get topRatedMovies() {
-    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_12__.sortMoviesByRating)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_8__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_EXTRA);
+    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByRating)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
   }
 
   get mostCommentedMovies() {
-    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_12__.sortMoviesByComments)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_8__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_8__.MAX_FILMS_EXTRA);
+    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByComments)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
   }
 
 }
@@ -2700,14 +2671,26 @@ class MainMenu extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["defaul
   }
 
   set watchListCount(watchListCount) {
+    if (typeof watchListCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
+
     _classPrivateFieldSet(this, _watchListCount, watchListCount);
   }
 
   set historyCount(historyCount) {
+    if (typeof historyCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
+
     _classPrivateFieldSet(this, _historyCount, historyCount);
   }
 
   set favoriteCount(favoriteCount) {
+    if (typeof favoriteCount !== 'number') {
+      throw new Error('Данные должны быть числом.');
+    }
+
     _classPrivateFieldSet(this, _favoriteCount, favoriteCount);
   }
 
@@ -2733,21 +2716,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
-
-function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
-
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
 
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 
-function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
 
 
 
@@ -2756,13 +2742,20 @@ function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.
 
 const getEmojiTemplate = emoji => emoji ? `<img src="./images/emoji/${he__WEBPACK_IMPORTED_MODULE_3___default().encode(emoji)}.png" width="55" height="55" alt="emoji">` : '';
 
-const getCommentsContent = comments => comments.map(({
+const getInputTemplate = (movieId, currentText, disableForm) => disableForm ? 'Adding comment...' : `<textarea
+        class="film-details__comment-input"
+        placeholder="Select reaction below and write comment here"
+        name="comment"
+        data-movie-id="${movieId}"
+    >${he__WEBPACK_IMPORTED_MODULE_3___default().encode(currentText)}</textarea>`;
+
+const getCommentsContent = (comments, deletingComment, disableDelete, errorComment) => comments.map(({
   id,
   text,
   emotion,
   author,
   date
-}) => `<li class="film-details__comment">
+}) => `<li class="film-details__comment ${errorComment === id ? 'shake' : ''}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${he__WEBPACK_IMPORTED_MODULE_3___default().encode(emotion)}.png" width="55" height="55" alt="emoji-${he__WEBPACK_IMPORTED_MODULE_3___default().encode(emotion)}">
     </span>
@@ -2771,17 +2764,20 @@ const getCommentsContent = comments => comments.map(({
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${he__WEBPACK_IMPORTED_MODULE_3___default().encode(author)}</span>
         <span class="film-details__comment-day">${he__WEBPACK_IMPORTED_MODULE_3___default().encode((0,_helpers_common__WEBPACK_IMPORTED_MODULE_0__.formatDate)(date, 'YYYY/MM/DD HH:mm'))}</span>
-        <button class="film-details__comment-delete" data-id="${id}">Delete</button>
+        <button
+            class="film-details__comment-delete"
+            data-id="${id}" ${disableDelete ? 'disabled' : ''}
+        >${deletingComment === id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>`).join('');
 
-const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) => `<div class="film-details__bottom-container">
+const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText, deletingComment, disableDelete, errorComment, disableForm) => `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
       <ul class="film-details__comments-list">
-        ${getCommentsContent(comments)}
+        ${getCommentsContent(comments, deletingComment, disableDelete, errorComment)}
       </ul>
 
       <div class="film-details__new-comment">
@@ -2789,10 +2785,7 @@ const getMovieCommentsTemplate = (movieId, comments, currentEmoji, currentText) 
 
 
         <label class="film-details__comment-label">
-            <textarea
-                class="film-details__comment-input"
-                placeholder="Select reaction below and write comment here"
-                name="comment" data-movie-id="${movieId}">${he__WEBPACK_IMPORTED_MODULE_3___default().encode(currentText)}</textarea>
+            ${getInputTemplate(movieId, currentText, disableForm)}
         </label>
 
         <div class="film-details__emoji-list">
@@ -2828,6 +2821,12 @@ var _currentEmoji = /*#__PURE__*/new WeakMap();
 
 var _currentText = /*#__PURE__*/new WeakMap();
 
+var _deletingComment = /*#__PURE__*/new WeakMap();
+
+var _errorComment = /*#__PURE__*/new WeakMap();
+
+var _disableDelete = /*#__PURE__*/new WeakMap();
+
 var _onClickEmoji = /*#__PURE__*/new WeakMap();
 
 var _onInputText = /*#__PURE__*/new WeakMap();
@@ -2835,8 +2834,8 @@ var _onInputText = /*#__PURE__*/new WeakMap();
 var _onDeleteComment = /*#__PURE__*/new WeakMap();
 
 class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor(movieId, comments) {
-    super();
+  constructor(...args) {
+    super(...args);
 
     _classPrivateFieldInitSpec(this, _movieId, {
       writable: true,
@@ -2858,10 +2857,55 @@ class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MO
       value: ''
     });
 
-    _defineProperty(this, "resetData", () => {
-      _classPrivateFieldSet(this, _currentEmoji, null);
+    _classPrivateFieldInitSpec(this, _deletingComment, {
+      writable: true,
+      value: null
+    });
 
-      _classPrivateFieldSet(this, _currentText, '');
+    _classPrivateFieldInitSpec(this, _errorComment, {
+      writable: true,
+      value: null
+    });
+
+    _classPrivateFieldInitSpec(this, _disableDelete, {
+      writable: true,
+      value: false
+    });
+
+    _defineProperty(this, "disableForm", false);
+
+    _defineProperty(this, "isError", false);
+
+    _defineProperty(this, "setErrorComment", errorComment => {
+      if (typeof errorComment !== 'string') {
+        throw new Error('Передаваемые данные должны быть строкой.');
+      }
+
+      _classPrivateFieldSet(this, _errorComment, errorComment);
+    });
+
+    _defineProperty(this, "setDeletingComment", deletingComment => {
+      if (typeof deletingComment !== 'string') {
+        throw new Error('Передаваемые данные должны быть строкой.');
+      }
+
+      _classPrivateFieldSet(this, _deletingComment, deletingComment);
+    });
+
+    _defineProperty(this, "resetData", () => {
+      _classPrivateFieldSet(this, _disableDelete, false);
+
+      this.disableForm = false;
+
+      _classPrivateFieldSet(this, _deletingComment, null);
+
+      _classPrivateFieldSet(this, _errorComment, null);
+
+      if (!this.isError) {
+        _classPrivateFieldSet(this, _currentEmoji, null);
+
+        _classPrivateFieldSet(this, _currentText, '');
+      }
     });
 
     _defineProperty(this, "updateElement", deleteComment => {
@@ -2889,6 +2933,8 @@ class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MO
         const emojiLabel = evt.target.closest('.film-details__emoji-label');
 
         if (emojiLabel) {
+          _classPrivateFieldSet(this, _errorComment, null);
+
           _classPrivateFieldSet(this, _currentEmoji, this.element.querySelector(`#${emojiLabel.getAttribute('for')}`).value);
 
           this.updateData(_classPrivateFieldGet(this, _currentEmoji), true);
@@ -2904,6 +2950,8 @@ class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MO
         const currentInput = this.element.querySelector('.film-details__comment-input');
 
         if (currentInput) {
+          _classPrivateFieldSet(this, _errorComment, null);
+
           _classPrivateFieldSet(this, _currentText, currentInput.value);
 
           this.updateData(_classPrivateFieldGet(this, _currentText), true);
@@ -2918,12 +2966,31 @@ class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MO
         evt.preventDefault();
 
         if (evt.target.tagName === 'BUTTON') {
-          deleteComment(_constants__WEBPACK_IMPORTED_MODULE_2__.ActionType.DELETE_COMMENT, _constants__WEBPACK_IMPORTED_MODULE_2__.UpdateType.MINOR, evt.target.dataset.id);
+          _classPrivateFieldSet(this, _deletingComment, evt.target.dataset.id);
+
+          _classPrivateFieldSet(this, _disableDelete, true);
+
+          _classPrivateFieldSet(this, _errorComment, null);
+
+          this.updateElement(deleteComment);
+          deleteComment(_constants__WEBPACK_IMPORTED_MODULE_2__.ActionType.DELETE_COMMENT, _constants__WEBPACK_IMPORTED_MODULE_2__.UpdateType.MINOR, _classPrivateFieldGet(this, _deletingComment));
         }
       }
     });
+  }
 
-    _classPrivateFieldSet(this, _comments, comments);
+  get template() {
+    return getMovieCommentsTemplate(_classPrivateFieldGet(this, _movieId), _classPrivateFieldGet(this, _comments), _classPrivateFieldGet(this, _currentEmoji), _classPrivateFieldGet(this, _currentText), _classPrivateFieldGet(this, _deletingComment), _classPrivateFieldGet(this, _disableDelete), _classPrivateFieldGet(this, _errorComment), this.disableForm);
+  }
+
+  get movieId() {
+    return _classPrivateFieldGet(this, _movieId);
+  }
+
+  set movieId(movieId) {
+    if (typeof movieId !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
 
     _classPrivateFieldSet(this, _movieId, movieId);
   }
@@ -2933,11 +3000,11 @@ class MovieDetailsCommentsView extends _abstract_smart_view__WEBPACK_IMPORTED_MO
   }
 
   set comments(comments) {
-    _classPrivateFieldSet(this, _comments, comments);
-  }
+    if (!(0,lodash__WEBPACK_IMPORTED_MODULE_4__.isArray)(comments)) {
+      throw new Error('Передаваемые данные должны быть массивом.');
+    }
 
-  get template() {
-    return getMovieCommentsTemplate(_classPrivateFieldGet(this, _movieId), _classPrivateFieldGet(this, _comments), _classPrivateFieldGet(this, _currentEmoji), _classPrivateFieldGet(this, _currentText));
+    _classPrivateFieldSet(this, _comments, comments);
   }
 
 }
@@ -2986,11 +3053,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./abstract-smart-view */ "./src/view/abstract-smart-view.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mock_helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mock/helpers */ "./src/mock/helpers.js");
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
@@ -3006,16 +3068,15 @@ function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { 
 
 
 
-
-
-
-const getFormTemplate = () => '<form class="film-details__inner" action="" method="get"></form>';
+const getFormTemplate = isError => `<form class="film-details__inner ${isError ? 'shake' : ''}" action="" method="get"></form>`;
 
 var _onKeyDownEnter = /*#__PURE__*/new WeakMap();
 
 class MovieDetailsFormView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor(...args) {
     super(...args);
+
+    _defineProperty(this, "isError", false);
 
     _defineProperty(this, "updateElement", addComment => {
       this.replaceElement();
@@ -3044,11 +3105,8 @@ class MovieDetailsFormView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE
 
           addComment(_constants__WEBPACK_IMPORTED_MODULE_1__.ActionType.ADD_COMMENT, _constants__WEBPACK_IMPORTED_MODULE_1__.UpdateType.MINOR, {
             movieId: commentInput.dataset.movieId,
-            id: lodash__WEBPACK_IMPORTED_MODULE_2___default().uniqueId(),
             text,
-            emotion,
-            author: (0,_mock_helpers__WEBPACK_IMPORTED_MODULE_4__.getRandomAuthor)(),
-            date: dayjs__WEBPACK_IMPORTED_MODULE_3___default()().toDate()
+            emotion
           });
         }
       }
@@ -3056,7 +3114,7 @@ class MovieDetailsFormView extends _abstract_smart_view__WEBPACK_IMPORTED_MODULE
   }
 
   get template() {
-    return getFormTemplate();
+    return getFormTemplate(this.isError);
   }
 
 }
@@ -3191,6 +3249,10 @@ class MovieDetailsWrap extends _abstract_view__WEBPACK_IMPORTED_MODULE_0__["defa
   }
 
   set movie(movie) {
+    if (typeof movie !== 'object') {
+      throw new Error('Данные должно быть объектом.');
+    }
+
     _classPrivateFieldSet(this, _movie, movie);
   }
 
@@ -3500,6 +3562,10 @@ class Rating extends _abstract_view__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
   set rating(rating) {
+    if (!Object.values(_constants__WEBPACK_IMPORTED_MODULE_1__.UserRatings).includes(rating)) {
+      throw new Error('Данные должны быть свойством рейтинга пользователей');
+    }
+
     _classPrivateFieldSet(this, _rating, rating);
   }
 
@@ -3636,6 +3702,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _helpers_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/common */ "./src/helpers/common.js");
 /* harmony import */ var _abstract_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstract-view */ "./src/view/abstract-view.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
@@ -3660,15 +3728,19 @@ const getStatisticsTemplate = count => `<section class="footer__statistics">
 var _count = /*#__PURE__*/new WeakMap();
 
 class Statistic extends _abstract_view__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor(count) {
-    super();
+  constructor(...args) {
+    super(...args);
 
     _classPrivateFieldInitSpec(this, _count, {
       writable: true,
       value: 0
     });
 
-    _classPrivateFieldSet(this, _count, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_0__.formatNumber)(count));
+    _defineProperty(this, "updateElement", count => {
+      _classPrivateFieldSet(this, _count, (0,_helpers_common__WEBPACK_IMPORTED_MODULE_0__.formatNumber)(count));
+
+      this.replaceElement();
+    });
   }
 
   get template() {
@@ -21537,16 +21609,6 @@ return plugin;
 
 }));
 
-
-/***/ }),
-
-/***/ "./node_modules/dayjs-random/index.min.js":
-/*!************************************************!*\
-  !*** ./node_modules/dayjs-random/index.min.js ***!
-  \************************************************/
-/***/ (function(module) {
-
-!function(e,t){ true?module.exports=t():0}(this,(function(){"use strict";return(e,t,n)=>{n.between=(e,t)=>{const r=n(e).valueOf(),o=n(t).valueOf()-r,u=Math.floor(Math.random()*o+1),a=n(r+u);return n(a)},n.soon=(e=1,t=n())=>{const r=n(t),o=r.add(e,"day");return n.between(r,o)},n.recent=(e=1,t=n())=>{const r=n(t),o=r.subtract(e,"day");return n.between(o,r)},n.future=(e=1,t=n())=>{const r=n(t),o=r.add(e,"year");return n.between(r,o)},n.past=(e=1,t=n())=>{const r=n(t),o=r.subtract(e,"year");return n.between(o,r)}}}));
 
 /***/ }),
 
@@ -60670,6 +60732,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_comments_model__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./models/comments-model */ "./src/models/comments-model.js");
 /* harmony import */ var _api_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./api-service */ "./src/api-service.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./constants */ "./src/constants.js");
+/* harmony import */ var _presenter_main_presenter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./presenter/main-presenter */ "./src/presenter/main-presenter.js");
+
 
 
 
@@ -60689,7 +60753,9 @@ moviesModel.init();
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const footer = document.querySelector('.footer');
-const moviesPresenter = new _presenter_movies_presenter__WEBPACK_IMPORTED_MODULE_2__["default"](header, main, footer, moviesModel, filterModel, sortModel, commentsModel, userModel);
+const moviesPresenter = new _presenter_movies_presenter__WEBPACK_IMPORTED_MODULE_2__["default"](main, moviesModel, filterModel, sortModel, commentsModel, userModel);
+const mainPresenter = new _presenter_main_presenter__WEBPACK_IMPORTED_MODULE_9__["default"](header, footer, moviesModel, userModel);
+mainPresenter.load();
 moviesPresenter.load();
 })();
 
