@@ -2,6 +2,7 @@ import {formatDate} from '../helpers/common';
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
 import he from 'he';
+import {isArray} from 'lodash';
 
 const getEmojiTemplate = (emoji) => emoji ? `<img src="./images/emoji/${he.encode(emoji)}.png" width="55" height="55" alt="emoji">` : '';
 const getInputTemplate = (movieId, currentText, disableForm) => disableForm ? 'Adding comment...' :
@@ -77,55 +78,11 @@ class MovieDetailsCommentsView extends AbstractSmartView {
   #comments = null;
   #currentEmoji = null;
   #currentText = '';
-  #disableDelete = false;
-  #disableForm = false;
   #deletingComment = null;
   #errorComment = null;
-  #isError = false;
-
-  get movieId() {
-    return this.#movieId;
-  }
-
-  set movieId(movieId) {
-    this.#movieId = movieId;
-  }
-
-  get comments() {
-    return this.#comments;
-  }
-
-  set comments(comments) {
-    this.#comments = comments;
-  }
-
-  get isError() {
-    return this.#isError;
-  }
-
-  set isError(isError) {
-    this.#isError = isError;
-  }
-
-  setDisableDelete = (disableDelete) => {
-    this.#disableDelete = disableDelete;
-  }
-
-  setErrorComment = (errorComment) => {
-    this.#errorComment = errorComment;
-  }
-
-  setDeletingComment = (deletingComment) => {
-    this.#deletingComment = deletingComment;
-  }
-
-  get disableForm() {
-    return this.#disableForm;
-  }
-
-  set disableForm(disableForm) {
-    this.#disableForm = disableForm;
-  }
+  #disableDelete = false;
+  disableForm = false;
+  isError = false;
 
   get template() {
     return getMovieCommentsTemplate(
@@ -136,17 +93,53 @@ class MovieDetailsCommentsView extends AbstractSmartView {
       this.#deletingComment,
       this.#disableDelete,
       this.#errorComment,
-      this.#disableForm,
+      this.disableForm,
     );
+  }
+
+  get movieId() {
+    return this.#movieId;
+  }
+
+  set movieId(movieId) {
+    if (typeof movieId !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
+    this.#movieId = movieId;
+  }
+
+  get comments() {
+    return this.#comments;
+  }
+
+  set comments(comments) {
+    if (!isArray(comments)) {
+      throw new Error('Передаваемые данные должны быть массивом.');
+    }
+    this.#comments = comments;
+  }
+
+  setErrorComment = (errorComment) => {
+    if (typeof errorComment !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
+    this.#errorComment = errorComment;
+  }
+
+  setDeletingComment = (deletingComment) => {
+    if (typeof deletingComment !== 'string') {
+      throw new Error('Передаваемые данные должны быть строкой.');
+    }
+    this.#deletingComment = deletingComment;
   }
 
   resetData = () => {
     this.#disableDelete = false;
-    this.#disableForm = false;
+    this.disableForm = false;
     this.#deletingComment = null;
     this.#errorComment = null;
 
-    if (!this.#isError) {
+    if (!this.isError) {
       this.#currentEmoji = null;
       this.#currentText = '';
     }

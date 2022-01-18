@@ -10,6 +10,7 @@ class MoviesList extends AbstractView {
 
   constructor(header, isExtra) {
     super();
+
     this.#header = header;
     this.#isExtra = isExtra;
   }

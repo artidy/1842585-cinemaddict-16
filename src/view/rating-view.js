@@ -20,6 +20,9 @@ class Rating extends AbstractView {
   }
 
   set rating(rating) {
+    if (!Object.values(UserRatings).includes(rating)) {
+      throw new Error('Данные должны быть свойством рейтинга пользователей');
+    }
     this.#rating = rating;
   }
 }

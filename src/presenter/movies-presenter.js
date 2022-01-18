@@ -317,7 +317,7 @@ class MoviesPresenter {
   }
 
   #handleViewAction = (actionType, updateType, data) => {
-    this.#movieForm.setError(false);
+    this.#movieForm.isError = false;
 
     switch (actionType) {
       case ActionType.CHANGE_SORT:
@@ -357,7 +357,7 @@ class MoviesPresenter {
     }
 
     if (updateType === UpdateType.ERROR_ADD_COMMENT) {
-      this.#movieForm.setError(true);
+      this.#movieForm.isError = true;
       this.#movieCommentsView.isError = true;
     }
 
