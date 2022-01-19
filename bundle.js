@@ -270,23 +270,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getDuration": () => (/* binding */ getDuration),
 /* harmony export */   "getDurationHours": () => (/* binding */ getDurationHours),
 /* harmony export */   "getDurationMinutes": () => (/* binding */ getDurationMinutes),
-/* harmony export */   "getAuthorization": () => (/* binding */ getAuthorization)
+/* harmony export */   "getAuthorization": () => (/* binding */ getAuthorization),
+/* harmony export */   "getDateAgo": () => (/* binding */ getDateAgo)
 /* harmony export */ });
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
+/* harmony import */ var dayjs_plugin_relativeTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs/plugin/relativeTime */ "./node_modules/dayjs/plugin/relativeTime.js");
+/* harmony import */ var dayjs_plugin_relativeTime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs_plugin_relativeTime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
+
+dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend((dayjs_plugin_relativeTime__WEBPACK_IMPORTED_MODULE_1___default()));
 
 
 const normalizeArray = (list, callback) => list.map(callback);
 
 const formatDate = (date, format) => dayjs__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
 
+const getDateAgo = date => dayjs__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
+
 const formatNumber = number => new Intl.NumberFormat('ru-RU').format(number);
 
-const getDurationHours = duration => Math.floor(duration / _constants__WEBPACK_IMPORTED_MODULE_1__.MINUTES_IN_HOUR);
+const getDurationHours = duration => Math.floor(duration / _constants__WEBPACK_IMPORTED_MODULE_2__.MINUTES_IN_HOUR);
 
-const getDurationMinutes = duration => duration % _constants__WEBPACK_IMPORTED_MODULE_1__.MINUTES_IN_HOUR;
+const getDurationMinutes = duration => duration % _constants__WEBPACK_IMPORTED_MODULE_2__.MINUTES_IN_HOUR;
 
 const formatRuntime = runtime => `${getDurationHours(runtime)}h ${getDurationMinutes(runtime)}m`;
 
@@ -361,6 +368,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "filterWatchingMovies": () => (/* binding */ filterWatchingMovies),
 /* harmony export */   "filterWatchedMovies": () => (/* binding */ filterWatchedMovies),
 /* harmony export */   "filterFavoriteMovies": () => (/* binding */ filterFavoriteMovies),
+/* harmony export */   "filterRatingMovies": () => (/* binding */ filterRatingMovies),
+/* harmony export */   "filterCommentedMovies": () => (/* binding */ filterCommentedMovies),
 /* harmony export */   "filterStats": () => (/* binding */ filterStats)
 /* harmony export */ });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
@@ -378,6 +387,10 @@ const filterWatchingMovies = movies => movies.filter(movie => movie.isInWatchlis
 const filterWatchedMovies = movies => movies.filter(movie => movie.isWatched);
 
 const filterFavoriteMovies = movies => movies.filter(movie => movie.isFavorite);
+
+const filterRatingMovies = movies => movies.filter(movie => movie.rating > 0);
+
+const filterCommentedMovies = movies => movies.filter(movie => movie.comments.length > 0);
 
 const filterMoviesByDate = (movies, timeUnit) => movies.filter(({
   watchingDate
@@ -1084,6 +1097,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _render__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../render */ "./src/render.js");
 /* harmony import */ var _view_rating_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../view/rating-view */ "./src/view/rating-view.js");
 /* harmony import */ var _view_statistics_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/statistics-view */ "./src/view/statistics-view.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
@@ -1099,6 +1113,7 @@ function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 
 function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
 
 
 
@@ -1156,7 +1171,7 @@ class MainPresenter {
 
     _classPrivateFieldInitSpec(this, _handleModelEvent, {
       writable: true,
-      value: () => {
+      value: updateType => {
         _classPrivateFieldGet(this, _userRating).removeElement();
 
         _classPrivateFieldGet(this, _userRating).rating = _classPrivateFieldGet(this, _userRatingModel).rating;
@@ -1165,7 +1180,9 @@ class MainPresenter {
           (0,_render__WEBPACK_IMPORTED_MODULE_0__.render)(_classPrivateFieldGet(this, _header), _classPrivateFieldGet(this, _userRating));
         }
 
-        _classPrivateFieldGet(this, _statistic).updateElement(_classPrivateFieldGet(this, _moviesModel).movies.length);
+        if (updateType === _constants__WEBPACK_IMPORTED_MODULE_3__.UpdateType.INIT) {
+          _classPrivateFieldGet(this, _statistic).updateElement(_classPrivateFieldGet(this, _moviesModel).movies.length);
+        }
       }
     });
 
@@ -1320,6 +1337,8 @@ var _loading = /*#__PURE__*/new WeakMap();
 
 var _loadingComments = /*#__PURE__*/new WeakMap();
 
+var _renderBothExtra = /*#__PURE__*/new WeakMap();
+
 var _renderMainMenu = /*#__PURE__*/new WeakMap();
 
 var _updateFilters = /*#__PURE__*/new WeakMap();
@@ -1427,12 +1446,12 @@ class MoviesPresenter {
 
     _classPrivateFieldInitSpec(this, _topMoviesList, {
       writable: true,
-      value: new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Top rated', true)
+      value: new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Top rated', true, true)
     });
 
     _classPrivateFieldInitSpec(this, _recommendMoviesList, {
       writable: true,
-      value: new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Most commented', true)
+      value: new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Most commented', true, true)
     });
 
     _classPrivateFieldInitSpec(this, _mainMoviesContainer, {
@@ -1515,6 +1534,11 @@ class MoviesPresenter {
       value: true
     });
 
+    _classPrivateFieldInitSpec(this, _renderBothExtra, {
+      writable: true,
+      value: true
+    });
+
     _defineProperty(this, "load", () => {
       (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _main), _classPrivateFieldGet(this, _mainContainer));
 
@@ -1556,6 +1580,8 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _renderTopMovies, {
       writable: true,
       value: () => {
+        _classPrivateFieldSet(this, _topMoviesList, new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Top rated', _classPrivateFieldGet(this, _renderBothExtra), true));
+
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainContainer), _classPrivateFieldGet(this, _topMoviesList));
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _topMoviesList), _classPrivateFieldGet(this, _topMoviesContainer));
       }
@@ -1564,6 +1590,8 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _renderRecommendedMovies, {
       writable: true,
       value: () => {
+        _classPrivateFieldSet(this, _recommendMoviesList, new _view_movies_list_view__WEBPACK_IMPORTED_MODULE_1__["default"]('Most commented', _classPrivateFieldGet(this, _renderBothExtra), true));
+
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _mainContainer), _classPrivateFieldGet(this, _recommendMoviesList));
         (0,_render__WEBPACK_IMPORTED_MODULE_4__.render)(_classPrivateFieldGet(this, _recommendMoviesList), _classPrivateFieldGet(this, _recommendMoviesContainer));
       }
@@ -1891,13 +1919,22 @@ class MoviesPresenter {
     _classPrivateFieldInitSpec(this, _updateExtraMovies, {
       writable: true,
       value: () => {
-        _classPrivateFieldGet(this, _renderTopMovies).call(this);
+        const renderTopExtra = this.topRatedMovies.length > 0;
+        const renderCommentedExtra = this.mostCommentedMovies.length > 0;
 
-        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _topMoviesContainer), this.topRatedMovies);
+        _classPrivateFieldSet(this, _renderBothExtra, renderTopExtra && renderCommentedExtra);
 
-        _classPrivateFieldGet(this, _renderRecommendedMovies).call(this);
+        if (renderTopExtra) {
+          _classPrivateFieldGet(this, _renderTopMovies).call(this);
 
-        _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _recommendMoviesContainer), this.mostCommentedMovies);
+          _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _topMoviesContainer), this.topRatedMovies);
+        }
+
+        if (renderCommentedExtra) {
+          _classPrivateFieldGet(this, _renderRecommendedMovies).call(this);
+
+          _classPrivateFieldGet(this, _renderMovies).call(this, _classPrivateFieldGet(this, _recommendMoviesContainer), this.mostCommentedMovies);
+        }
       }
     });
 
@@ -1954,11 +1991,11 @@ class MoviesPresenter {
   }
 
   get topRatedMovies() {
-    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByRating)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
+    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByRating)((0,_helpers_filters__WEBPACK_IMPORTED_MODULE_9__.filterRatingMovies)(this.movies)).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
   }
 
   get mostCommentedMovies() {
-    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByComments)(this.movies).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
+    return (0,_helpers_sorting__WEBPACK_IMPORTED_MODULE_10__.sortMoviesByComments)((0,_helpers_filters__WEBPACK_IMPORTED_MODULE_9__.filterCommentedMovies)(this.movies)).slice(_constants__WEBPACK_IMPORTED_MODULE_7__.MIN_FILMS, _constants__WEBPACK_IMPORTED_MODULE_7__.MAX_FILMS_EXTRA);
   }
 
 }
@@ -2763,7 +2800,7 @@ const getCommentsContent = (comments, deletingComment, disableDelete, errorComme
       <p class="film-details__comment-text">${he__WEBPACK_IMPORTED_MODULE_3___default().encode(text)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${he__WEBPACK_IMPORTED_MODULE_3___default().encode(author)}</span>
-        <span class="film-details__comment-day">${he__WEBPACK_IMPORTED_MODULE_3___default().encode((0,_helpers_common__WEBPACK_IMPORTED_MODULE_0__.formatDate)(date, 'YYYY/MM/DD HH:mm'))}</span>
+        <span class="film-details__comment-day">${he__WEBPACK_IMPORTED_MODULE_3___default().encode((0,_helpers_common__WEBPACK_IMPORTED_MODULE_0__.getDateAgo)(date))}</span>
         <button
             class="film-details__comment-delete"
             data-id="${id}" ${disableDelete ? 'disabled' : ''}
@@ -3435,16 +3472,18 @@ function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.
 
 
 
-const getMoviesListTemplate = header => `<section class="films-list"><h2 class="films-list__title visually-hidden">${header}</h2></section>`;
-
-const getMoviesListExtraTemplate = header => `<section class="films-list films-list--extra"><h2 class="films-list__title">${header}</h2></section>`;
+const getMoviesListTemplate = (header, isExtra, showHeader) => `<section class="films-list ${isExtra ? 'films-list--extra' : ''}">
+    <h2 class="films-list__title ${showHeader ? '' : 'visually-hidden'}">${header}</h2>
+  </section>`;
 
 var _header = /*#__PURE__*/new WeakMap();
 
 var _isExtra = /*#__PURE__*/new WeakMap();
 
+var _showHeader = /*#__PURE__*/new WeakMap();
+
 class MoviesList extends _abstract_view__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  constructor(header, isExtra) {
+  constructor(header, isExtra, showHeader = false) {
     super();
 
     _classPrivateFieldInitSpec(this, _header, {
@@ -3457,13 +3496,20 @@ class MoviesList extends _abstract_view__WEBPACK_IMPORTED_MODULE_0__["default"] 
       value: null
     });
 
+    _classPrivateFieldInitSpec(this, _showHeader, {
+      writable: true,
+      value: false
+    });
+
     _classPrivateFieldSet(this, _header, header);
 
     _classPrivateFieldSet(this, _isExtra, isExtra);
+
+    _classPrivateFieldSet(this, _showHeader, showHeader);
   }
 
   get template() {
-    return _classPrivateFieldGet(this, _isExtra) ? getMoviesListExtraTemplate(_classPrivateFieldGet(this, _header)) : getMoviesListTemplate(_classPrivateFieldGet(this, _header));
+    return getMoviesListTemplate(_classPrivateFieldGet(this, _header), _classPrivateFieldGet(this, _isExtra), _classPrivateFieldGet(this, _showHeader));
   }
 
 }
@@ -21629,6 +21675,16 @@ return plugin;
 /***/ (function(module) {
 
 !function(e,i){ true?module.exports=i():0}(this,(function(){"use strict";return function(e,i,t){i.prototype.isBetween=function(e,i,s,f){var n=t(e),o=t(i),r="("===(f=f||"()")[0],u=")"===f[1];return(r?this.isAfter(n,s):!this.isBefore(n,s))&&(u?this.isBefore(o,s):!this.isAfter(o,s))||(r?this.isBefore(n,s):!this.isAfter(n,s))&&(u?this.isAfter(o,s):!this.isBefore(o,s))}}}));
+
+/***/ }),
+
+/***/ "./node_modules/dayjs/plugin/relativeTime.js":
+/*!***************************************************!*\
+  !*** ./node_modules/dayjs/plugin/relativeTime.js ***!
+  \***************************************************/
+/***/ (function(module) {
+
+!function(r,e){ true?module.exports=e():0}(this,(function(){"use strict";return function(r,e,t){r=r||{};var n=e.prototype,o={future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"};function i(r,e,t,o){return n.fromToBase(r,e,t,o)}t.en.relativeTime=o,n.fromToBase=function(e,n,i,d,u){for(var f,a,s,l=i.$locale().relativeTime||o,h=r.thresholds||[{l:"s",r:44,d:"second"},{l:"m",r:89},{l:"mm",r:44,d:"minute"},{l:"h",r:89},{l:"hh",r:21,d:"hour"},{l:"d",r:35},{l:"dd",r:25,d:"day"},{l:"M",r:45},{l:"MM",r:10,d:"month"},{l:"y",r:17},{l:"yy",d:"year"}],m=h.length,c=0;c<m;c+=1){var y=h[c];y.d&&(f=d?t(e).diff(i,y.d,!0):i.diff(e,y.d,!0));var p=(r.rounding||Math.round)(Math.abs(f));if(s=f>0,p<=y.r||!y.r){p<=1&&c>0&&(y=h[c-1]);var v=l[y.l];u&&(p=u(""+p)),a="string"==typeof v?v.replace("%d",p):v(p,n,y.l,s);break}}if(n)return a;var M=s?l.future:l.past;return"function"==typeof M?M(a):M.replace("%s",a)},n.to=function(r,e){return i(r,e,this,!0)},n.from=function(r,e){return i(r,e,this)};var d=function(r){return r.$u?t.utc():t()};n.toNow=function(r){return this.to(d(this),r)},n.fromNow=function(r){return this.from(d(this),r)}}}));
 
 /***/ }),
 
