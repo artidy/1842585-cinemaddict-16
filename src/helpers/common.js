@@ -1,8 +1,11 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 import {MINUTES_IN_HOUR} from '../constants';
 
 const normalizeArray = (list, callback) => list.map(callback);
 const formatDate = (date, format) => dayjs(date).format(format);
+const getDateAgo = (date) => dayjs(date).fromNow();
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);
 const getDurationHours = (duration) => Math.floor(duration / MINUTES_IN_HOUR);
 const getDurationMinutes = (duration) => duration % MINUTES_IN_HOUR;
@@ -36,4 +39,5 @@ export {
   getDurationHours,
   getDurationMinutes,
   getAuthorization,
+  getDateAgo,
 };

@@ -1,4 +1,4 @@
-import {formatDate} from '../helpers/common';
+import {getDateAgo} from '../helpers/common';
 import AbstractSmartView from './abstract-smart-view';
 import {ActionType, UpdateType} from '../constants';
 import he from 'he';
@@ -22,7 +22,7 @@ const getCommentsContent = (comments, deletingComment, disableDelete, errorComme
       <p class="film-details__comment-text">${he.encode(text)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${he.encode(author)}</span>
-        <span class="film-details__comment-day">${he.encode(formatDate(date, 'YYYY/MM/DD HH:mm'))}</span>
+        <span class="film-details__comment-day">${he.encode(getDateAgo(date))}</span>
         <button
             class="film-details__comment-delete"
             data-id="${id}" ${disableDelete ? 'disabled' : ''}

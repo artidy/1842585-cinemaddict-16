@@ -15,7 +15,13 @@ import {
   UpdateType,
 } from '../constants';
 import {onClickCloseBtn, onKeydownEsc} from '../helpers/events';
-import {filterFavoriteMovies, filterWatchedMovies, filterWatchingMovies} from '../helpers/filters';
+import {
+  filterCommentedMovies,
+  filterFavoriteMovies,
+  filterRatingMovies,
+  filterWatchedMovies,
+  filterWatchingMovies
+} from '../helpers/filters';
 import {sortMoviesByComments, sortMoviesByDate, sortMoviesByRating,} from '../helpers/sorting';
 import MovieDetails from '../view/details-view';
 import Movie from '../view/movie-view';
@@ -44,8 +50,8 @@ class MoviesPresenter {
 
   #mainContainer = new MainContainer();
   #mainMoviesList = new MoviesList('All movies. Upcoming', false);
-  #topMoviesList = new MoviesList('Top rated', true);
-  #recommendMoviesList = new MoviesList('Most commented', true);
+  #topMoviesList = new MoviesList('Top rated', true, true);
+  #recommendMoviesList = new MoviesList('Most commented', true, true);
   #mainMoviesContainer = new MoviesContainer();
   #topMoviesContainer = new MoviesContainer();
   #recommendMoviesContainer = new MoviesContainer();
@@ -62,6 +68,7 @@ class MoviesPresenter {
   #statsView = null;
   #loading = true;
   #loadingComments = true;
+  #renderBothExtra = true;
 
   constructor(main, moviesModel, filterModel, sortModel, commentsModel, currentUser) {
     this.#main = main;
@@ -104,11 +111,11 @@ class MoviesPresenter {
   }
 
   get topRatedMovies() {
-    return sortMoviesByRating(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
+    return sortMoviesByRating(filterRatingMovies(this.movies)).slice(MIN_FILMS, MAX_FILMS_EXTRA);
   }
 
   get mostCommentedMovies() {
-    return sortMoviesByComments(this.movies).slice(MIN_FILMS, MAX_FILMS_EXTRA);
+    return sortMoviesByComments(filterCommentedMovies(this.movies)).slice(MIN_FILMS, MAX_FILMS_EXTRA);
   }
 
   load = () => {
@@ -137,11 +144,15 @@ class MoviesPresenter {
   }
 
   #renderTopMovies = () => {
+    this.#topMoviesList = new MoviesList('Top rated', this.#renderBothExtra, true);
+
     render(this.#mainContainer, this.#topMoviesList);
     render(this.#topMoviesList, this.#topMoviesContainer);
   }
 
   #renderRecommendedMovies = () => {
+    this.#recommendMoviesList = new MoviesList('Most commented', this.#renderBothExtra, true);
+
     render(this.#mainContainer, this.#recommendMoviesList);
     render(this.#recommendMoviesList, this.#recommendMoviesContainer);
   }
@@ -376,10 +387,19 @@ class MoviesPresenter {
   }
 
   #updateExtraMovies = () => {
-    this.#renderTopMovies();
-    this.#renderMovies(this.#topMoviesContainer, this.topRatedMovies);
-    this.#renderRecommendedMovies();
-    this.#renderMovies(this.#recommendMoviesContainer, this.mostCommentedMovies);
+    const renderTopExtra = this.topRatedMovies.length > 0;
+    const renderCommentedExtra = this.mostCommentedMovies.length > 0;
+    this.#renderBothExtra = renderTopExtra && renderCommentedExtra;
+
+    if (renderTopExtra) {
+      this.#renderTopMovies();
+      this.#renderMovies(this.#topMoviesContainer, this.topRatedMovies);
+    }
+
+    if (renderCommentedExtra) {
+      this.#renderRecommendedMovies();
+      this.#renderMovies(this.#recommendMoviesContainer, this.mostCommentedMovies);
+    }
   }
 }
 

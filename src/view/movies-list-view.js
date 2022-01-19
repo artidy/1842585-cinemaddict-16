@@ -1,22 +1,25 @@
 import AbstractView from './abstract-view';
 
-const getMoviesListTemplate = (header) => `<section class="films-list"><h2 class="films-list__title visually-hidden">${header}</h2></section>`;
-
-const getMoviesListExtraTemplate = (header) => `<section class="films-list films-list--extra"><h2 class="films-list__title">${header}</h2></section>`;
+const getMoviesListTemplate = (header, isExtra, showHeader) =>
+  `<section class="films-list ${isExtra ? 'films-list--extra' : ''}">
+    <h2 class="films-list__title ${showHeader ? '' : 'visually-hidden'}">${header}</h2>
+  </section>`;
 
 class MoviesList extends AbstractView {
   #header = null;
   #isExtra = null;
+  #showHeader = false;
 
-  constructor(header, isExtra) {
+  constructor(header, isExtra, showHeader = false) {
     super();
 
     this.#header = header;
     this.#isExtra = isExtra;
+    this.#showHeader = showHeader;
   }
 
   get template() {
-    return this.#isExtra ? getMoviesListExtraTemplate(this.#header) : getMoviesListTemplate(this.#header);
+    return getMoviesListTemplate(this.#header, this.#isExtra, this.#showHeader);
   }
 }
 
