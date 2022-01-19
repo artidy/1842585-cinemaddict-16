@@ -1,6 +1,7 @@
 import {render} from '../render';
 import Rating from '../view/rating-view';
 import Statistic from '../view/statistics-view';
+import {UpdateType} from '../constants';
 
 class MainPresenter {
   #header = null;
@@ -24,7 +25,7 @@ class MainPresenter {
     render(this.#footer, this.#statistic);
   }
 
-  #handleModelEvent = () => {
+  #handleModelEvent = (updateType) => {
     this.#userRating.removeElement();
 
     this.#userRating.rating = this.#userRatingModel.rating;
@@ -32,7 +33,10 @@ class MainPresenter {
     if (this.#userRating.rating) {
       render(this.#header, this.#userRating);
     }
-    this.#statistic.updateElement(this.#moviesModel.movies.length);
+
+    if (updateType === UpdateType.INIT) {
+      this.#statistic.updateElement(this.#moviesModel.movies.length);
+    }
   }
 }
 
