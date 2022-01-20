@@ -114,5 +114,5 @@ export {
   normalizeMovieServer,
   normalizeComment,
   normalizeCommentServer,
-  normalizeUser,
+  normalizeUser
 };

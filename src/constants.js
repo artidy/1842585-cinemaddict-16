@@ -107,5 +107,5 @@ export {
   ActionType,
   TimeUnits,
   Methods,
-  Urls,
+  Urls
 };

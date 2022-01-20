@@ -17,5 +17,5 @@ export {
   sortMoviesByComments,
   sortMoviesByDate,
   sortChartGenres,
-  sortChartValues,
+  sortChartValues
 };

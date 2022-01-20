@@ -30,5 +30,5 @@ export {
   filterFavoriteMovies,
   filterRatingMovies,
   filterCommentedMovies,
-  filterStats,
+  filterStats
 };

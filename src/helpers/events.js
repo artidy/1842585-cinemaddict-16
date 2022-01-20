@@ -18,5 +18,5 @@ const onClickCloseBtn = (callback) => (evt) => {
 
 export {
   onKeydownEsc,
-  onClickCloseBtn,
+  onClickCloseBtn
 };

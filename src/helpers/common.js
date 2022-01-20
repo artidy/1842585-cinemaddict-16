@@ -39,5 +39,5 @@ export {
   getDurationHours,
   getDurationMinutes,
   getAuthorization,
-  getDateAgo,
+  getDateAgo
 };
