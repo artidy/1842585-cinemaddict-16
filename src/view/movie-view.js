@@ -19,7 +19,7 @@ const getMovieTemplate = ({id, title, rating, releaseDate, duration, genres, pos
     </a>
   </article>`;
 
-class Movie extends AbstractView {
+class MovieView extends AbstractView {
   #movie = {
     id: '',
     title: '',
@@ -43,4 +43,4 @@ class Movie extends AbstractView {
   }
 }
 
-export default Movie;
+export default MovieView;

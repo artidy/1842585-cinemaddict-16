@@ -1,41 +1,41 @@
 import {render} from '../render';
-import Rating from '../view/rating-view';
-import Statistic from '../view/statistics-view';
+import RatingView from '../view/rating-view';
+import StatisticsView from '../view/statistics-view';
 import {UpdateType} from '../constants';
 
 class MainPresenter {
   #header = null;
   #footer = null;
   #moviesModel = null;
-  #userRatingModel = null;
+  #ratingModel = null;
 
-  #userRating = new Rating();
-  #statistic = new Statistic();
+  #ratingView = new RatingView();
+  #statisticsView = new StatisticsView();
 
-  constructor(header, footer, moviesModel, userRatingModel) {
+  constructor(header, footer, moviesModel, ratingModel) {
     this.#header = header;
     this.#footer = footer;
     this.#moviesModel = moviesModel;
-    this.#userRatingModel = userRatingModel;
+    this.#ratingModel = ratingModel;
 
     this.#moviesModel.addObserver(this.#handleModelEvent);
   }
 
   load = () => {
-    render(this.#footer, this.#statistic);
+    render(this.#footer, this.#statisticsView);
   }
 
   #handleModelEvent = (updateType) => {
-    this.#userRating.removeElement();
+    this.#ratingView.removeElement();
 
-    this.#userRating.rating = this.#userRatingModel.rating;
+    this.#ratingView.rating = this.#ratingModel.rating;
 
-    if (this.#userRating.rating) {
-      render(this.#header, this.#userRating);
+    if (this.#ratingView.rating) {
+      render(this.#header, this.#ratingView);
     }
 
     if (updateType === UpdateType.INIT) {
-      this.#statistic.updateElement(this.#moviesModel.movies.length);
+      this.#statisticsView.updateElement(this.#moviesModel.movies.length);
     }
   }
 }

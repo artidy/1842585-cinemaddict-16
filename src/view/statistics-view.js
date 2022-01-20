@@ -6,7 +6,7 @@ const getStatisticsTemplate = (count) =>
     <p>${count} movies inside</p>
   </section>`;
 
-class Statistic extends AbstractView {
+class StatisticsView extends AbstractView {
   #count = 0;
 
   updateElement = (count) => {
@@ -20,4 +20,4 @@ class Statistic extends AbstractView {
   }
 }
 
-export default Statistic;
+export default StatisticsView;

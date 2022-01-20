@@ -5,7 +5,7 @@ const getMoviesListTemplate = (header, isExtra, showHeader) =>
     <h2 class="films-list__title ${showHeader ? '' : 'visually-hidden'}">${header}</h2>
   </section>`;
 
-class MoviesList extends AbstractView {
+class MoviesListView extends AbstractView {
   #header = null;
   #isExtra = null;
   #showHeader = false;
@@ -23,4 +23,4 @@ class MoviesList extends AbstractView {
   }
 }
 
-export default MoviesList;
+export default MoviesListView;

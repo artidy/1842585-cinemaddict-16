@@ -2,10 +2,10 @@ import AbstractView from './abstract-view';
 
 const getMoviesContainerTemplate = () => '<div class="films-list__container"></div>';
 
-class MoviesContainer extends AbstractView {
+class MoviesContainerView extends AbstractView {
   get template() {
     return getMoviesContainerTemplate();
   }
 }
 
-export default MoviesContainer;
+export default MoviesContainerView;

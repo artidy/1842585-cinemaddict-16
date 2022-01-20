@@ -7,7 +7,7 @@ const getRatingTemplate = (avatar, rating) =>
     <img class="profile__avatar" src="${avatar}" alt="Avatar" width="35" height="35">
   </section>`;
 
-class Rating extends AbstractView {
+class RatingView extends AbstractView {
   #avatar = USER_AVATAR;
   #rating = UserRatings.NONE;
 
@@ -27,4 +27,4 @@ class Rating extends AbstractView {
   }
 }
 
-export default Rating;
+export default RatingView;

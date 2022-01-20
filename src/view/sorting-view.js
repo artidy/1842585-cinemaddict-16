@@ -1,14 +1,14 @@
 import {ActionType, SortType, UpdateType} from '../constants';
 import AbstractSmartView from './abstract-smart-view';
 
-const getSortTemplate = (currentSort) =>
+const getSortingTemplate = (currentSort) =>
   `<ul class="sort">
     <li><a class="sort__button ${currentSort === SortType.DEFAULT ? 'sort__button--active' : ''}" data-sort="${SortType.DEFAULT}">Sort by default</a></li>
     <li><a class="sort__button ${currentSort === SortType.DATE ? 'sort__button--active' : ''}" data-sort="${SortType.DATE}">Sort by date</a></li>
     <li><a class="sort__button ${currentSort === SortType.RATING ? 'sort__button--active' : ''}" data-sort="${SortType.RATING}">Sort by rating</a></li>
   </ul>`;
 
-class Sorting extends AbstractSmartView {
+class SortingView extends AbstractSmartView {
   #currentSort = null;
 
   constructor(currentSort) {
@@ -17,7 +17,7 @@ class Sorting extends AbstractSmartView {
   }
 
   get template() {
-    return getSortTemplate(this.#currentSort);
+    return getSortingTemplate(this.#currentSort);
   }
 
   updateElement = (currentSort) => {
@@ -41,4 +41,4 @@ class Sorting extends AbstractSmartView {
   }
 }
 
-export default Sorting;
+export default SortingView;

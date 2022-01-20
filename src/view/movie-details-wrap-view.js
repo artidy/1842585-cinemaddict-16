@@ -63,7 +63,7 @@ const getMoviesWrapTemplate = ({poster, title, maturityRating, originalTitle, ra
     </div>
   </div>`;
 
-class MovieDetailsWrap extends AbstractView {
+class MovieDetailsWrapView extends AbstractView {
   #movie = EMPTY_MOVIE;
 
   constructor() {
@@ -86,4 +86,4 @@ class MovieDetailsWrap extends AbstractView {
   }
 }
 
-export default MovieDetailsWrap;
+export default MovieDetailsWrapView;
