@@ -13,14 +13,14 @@ const formatRuntime = (runtime) => `${getDurationHours(runtime)}h ${getDurationM
 const getStatsInfo = (movies) => {
   const stats = {};
 
-  for (let i = 0; i < movies.length; i++) {
-    for (let j = 0; j < movies[i].genres.length; j++) {
-      if (stats[movies[i].genres[j]]) {
-        stats[movies[i].genres[j]] += 1;
+  for (const movie of movies) {
+    for (const genre of movie.genres) {
+      if (stats[genre]) {
+        stats[genre] += 1;
         continue;
       }
 
-      stats[movies[i].genres[j]] = 1;
+      stats[genre] = 1;
     }
   }
 
