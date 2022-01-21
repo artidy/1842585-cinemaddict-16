@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view';
-import {USER_AVATAR, UserRatings} from '../constants';
+import {USER_AVATAR, Rating} from '../constants';
 
 const getRatingTemplate = (avatar, rating) =>
   `<section class="header__profile profile">
@@ -9,7 +9,7 @@ const getRatingTemplate = (avatar, rating) =>
 
 class RatingView extends AbstractView {
   #avatar = USER_AVATAR;
-  #rating = UserRatings.NONE;
+  #rating = Rating.NONE;
 
   get template() {
     return getRatingTemplate(this.#avatar, this.#rating);
@@ -20,7 +20,7 @@ class RatingView extends AbstractView {
   }
 
   set rating(rating) {
-    if (!Object.values(UserRatings).includes(rating)) {
+    if (!Object.values(Rating).includes(rating)) {
       throw new Error('Данные должны быть свойством рейтинга пользователей');
     }
     this.#rating = rating;

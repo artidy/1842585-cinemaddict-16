@@ -2,16 +2,15 @@ const MAX_FILMS_GAP = 5;
 const MAX_FILMS_EXTRA = 2;
 const MIN_FILMS = 0;
 const BAR_HEIGHT = 50;
-const MINUTES_IN_HOUR = 60;
 const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
 const USER_AVATAR = 'images/bitmap@2x.png';
-const UserRatings = {
+const Rating = {
   NONE: null,
   NOVICE: 'Novice',
   FAN: 'Fan',
   MOVIE_BUFF: 'Movie Buff',
 };
-const RatingValues = {
+const RatingValue = {
   NONE: 0,
   NOVICE: 1,
   FAN: 11,
@@ -65,26 +64,26 @@ const FilterType = {
   FAVORITES: 'favorites',
   STATS: 'stats',
 };
-const FilterStats = {
+const FilterStat = {
   All: 'all',
   TODAY: 'today',
   WEEK: 'week',
   MONTH: 'month',
   YEAR: 'year',
 };
-const TimeUnits = {
+const TimeUnit = {
   DAY: 'day',
   WEEK: 'week',
   MONTH: 'month',
   YEAR: 'year',
 };
-const Methods = {
+const Method = {
   GET: 'GET',
   PUT: 'PUT',
   POST: 'POST',
   DELETE: 'DELETE',
 };
-const Urls = {
+const Url = {
   MOVIES: 'movies',
   COMMENTS: 'comments',
 };
@@ -94,18 +93,17 @@ export {
   MAX_FILMS_EXTRA,
   MIN_FILMS,
   EMPTY_MOVIE,
-  MINUTES_IN_HOUR,
   BAR_HEIGHT,
   END_POINT,
   USER_AVATAR,
-  UserRatings,
-  RatingValues,
+  Rating,
+  RatingValue,
   SortType,
   UpdateType,
   FilterType,
-  FilterStats,
+  FilterStat,
   ActionType,
-  TimeUnits,
-  Methods,
-  Urls
+  TimeUnit,
+  Method,
+  Url
 };

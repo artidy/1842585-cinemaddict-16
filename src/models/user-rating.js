@@ -1,21 +1,21 @@
-import {RatingValues, UserRatings} from '../constants';
+import {RatingValue, Rating} from '../constants';
 
 class UserRating {
-  #rating =  UserRatings.NONE;
+  #rating =  Rating.NONE;
 
   get rating() {
     return this.#rating;
   }
 
   changeRating = (watchingCount) => {
-    if (watchingCount >= RatingValues.MOVIE_BUFF) {
-      this.#rating = UserRatings.MOVIE_BUFF;
-    } else if (watchingCount >= RatingValues.FAN) {
-      this.#rating = UserRatings.FAN;
-    } else if (watchingCount >= RatingValues.NOVICE) {
-      this.#rating = UserRatings.NOVICE;
+    if (watchingCount >= RatingValue.MOVIE_BUFF) {
+      this.#rating = Rating.MOVIE_BUFF;
+    } else if (watchingCount >= RatingValue.FAN) {
+      this.#rating = Rating.FAN;
+    } else if (watchingCount >= RatingValue.NOVICE) {
+      this.#rating = Rating.NOVICE;
     } else {
-      this.#rating = UserRatings.NONE;
+      this.#rating = Rating.NONE;
     }
   }
 }

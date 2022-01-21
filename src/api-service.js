@@ -1,4 +1,4 @@
-import {Methods, Urls} from './constants';
+import {Method, Url} from './constants';
 import {normalizeCommentServer, normalizeMovieServer} from './helpers/normalize';
 
 class ApiService {
@@ -11,33 +11,33 @@ class ApiService {
   }
 
   get movies() {
-    return this.#load({url: Urls.MOVIES});
+    return this.#load({url: Url.MOVIES});
   }
 
-  getMoviesComments = (movieId) => this.#load({url: `${Urls.COMMENTS}/${movieId}`})
+  getMoviesComments = (movieId) => this.#load({url: `${Url.COMMENTS}/${movieId}`})
 
   updateMovie = (movie) => this.#load({
-    url: `${Urls.MOVIES}/${movie.id}`,
-    method: Methods.PUT,
+    url: `${Url.MOVIES}/${movie.id}`,
+    method: Method.PUT,
     body: JSON.stringify(normalizeMovieServer(movie)),
     headers: new Headers({'Content-Type': 'application/json'}),
   });
 
   addComment = (movieId, comment) => this.#load({
-    url: `${Urls.COMMENTS}/${movieId}`,
-    method: Methods.POST,
+    url: `${Url.COMMENTS}/${movieId}`,
+    method: Method.POST,
     body: JSON.stringify(normalizeCommentServer(comment)),
     headers: new Headers({'Content-Type': 'application/json'}),
   });
 
   deleteComment = (commentId) => this.#load({
-    url: `${Urls.COMMENTS}/${commentId}`,
-    method: Methods.DELETE,
+    url: `${Url.COMMENTS}/${commentId}`,
+    method: Method.DELETE,
   });
 
   #load = async ({
     url,
-    method = Methods.GET,
+    method = Method.GET,
     body = null,
     headers = new Headers(),
   }) => {

@@ -4,7 +4,7 @@ import duration from 'dayjs/plugin/duration';
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
-const normalizeArray = (list, callback) => list.map(callback);
+const normalizeArray = (values, callback) => values.map(callback);
 const formatDate = (date, format) => dayjs(date).format(format);
 const getDateAgo = (date) => dayjs(date).fromNow();
 const formatNumber = (number) => new Intl.NumberFormat('ru-RU').format(number);

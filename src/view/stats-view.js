@@ -1,7 +1,7 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js';
 import AbstractSmartView from './abstract-smart-view';
-import {BAR_HEIGHT, FilterStats, USER_AVATAR, UserRatings} from '../constants';
+import {BAR_HEIGHT, FilterStat, USER_AVATAR, Rating} from '../constants';
 import {getDuration, getDurationHours, getDurationMinutes, getStatsInfo} from '../helpers/common';
 import {sortChartGenres, sortChartValues} from '../helpers/sorting';
 import {filterStats} from '../helpers/filters';
@@ -64,9 +64,9 @@ class StatsView extends AbstractSmartView {
   #topGenre = '';
   #labels = [];
   #labelsValue = [];
-  #currentFilter = FilterStats.All;
+  #currentFilter = FilterStat.All;
   #avatar = USER_AVATAR;
-  #rating = UserRatings.NONE;
+  #rating = Rating.NONE;
 
   constructor(movies, rating) {
     super();
