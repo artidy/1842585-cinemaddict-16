@@ -190,6 +190,7 @@ class MoviesPresenter {
     } else {
       this.#movieDetailsView = new MovieDetailsView();
       render(this.#main, this.#movieDetailsView);
+      this.#movieDetailsView.addEvent('onEscClickBtn', 'keydown', onKeydownEsc(this.#onClickCloseDetails), document);
     }
 
     this.#movieDetailsWrapView.movie = this.#currentMovie;
@@ -213,7 +214,6 @@ class MoviesPresenter {
     if (!this.#movieCommentsView.disableForm) {
       this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
       this.#movieForm.restoreHandlers(this.#handleViewAction);
-      this.#movieDetailsView.addEvent('onEscClickBtn', 'keydown', onKeydownEsc(this.#onClickCloseDetails), document);
       this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
     }
 

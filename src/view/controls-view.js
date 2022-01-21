@@ -73,40 +73,6 @@ class ControlsView extends AbstractSmartView {
     this.#movie.isFavorite = !this.#movie.isFavorite;
   }
 
-  updateControl = () => {
-    const currentMovieControls = ControlsView.#controls.get(this.#movie.id);
-
-    if (currentMovieControls) {
-      currentMovieControls.forEach((control) => {
-        control.updateData(this.#movie, false);
-      });
-    }
-  }
-
-  static addControl = (movie, control) => {
-    const mainControls  = ControlsView.#controls.get(movie.id);
-
-    if (mainControls) {
-      mainControls.push(control);
-    } else {
-      ControlsView.#controls.set(movie.id, [control]);
-    }
-  }
-
-  static clearControl = () => {
-    ControlsView.#controls = new Map();
-  }
-
-  updateElement = (updateElement) => {
-    this.replaceElement();
-    this.clearEvents();
-    this.restoreHandlers(updateElement);
-  }
-
-  restoreHandlers = (updateElement) => {
-    this.addEvent('onClickControls', 'click', this.#onClickControls(updateElement));
-  }
-
   #onClickControls = (updateElement) => (evt) => {
     evt.preventDefault();
 
@@ -125,6 +91,40 @@ class ControlsView extends AbstractSmartView {
 
       updateElement(ActionType.UPDATE_MOVIE, UpdateType.MINOR, this.#movie);
     }
+  }
+
+  updateControl = () => {
+    const currentMovieControls = ControlsView.#controls.get(this.#movie.id);
+
+    if (currentMovieControls) {
+      currentMovieControls.forEach((control) => {
+        control.updateData(this.#movie, false);
+      });
+    }
+  }
+
+  updateElement = (updateElement) => {
+    this.replaceElement();
+    this.clearEvents();
+    this.restoreHandlers(updateElement);
+  }
+
+  restoreHandlers = (updateElement) => {
+    this.addEvent('onClickControls', 'click', this.#onClickControls(updateElement));
+  }
+
+  static addControl = (movie, control) => {
+    const mainControls  = ControlsView.#controls.get(movie.id);
+
+    if (mainControls) {
+      mainControls.push(control);
+    } else {
+      ControlsView.#controls.set(movie.id, [control]);
+    }
+  }
+
+  static clearControl = () => {
+    ControlsView.#controls = new Map();
   }
 }
 
