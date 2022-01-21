@@ -213,7 +213,7 @@ class MoviesPresenter {
     if (!this.#movieCommentsView.disableForm) {
       this.#movieCommentsView.restoreHandlers(this.#handleViewAction);
       this.#movieForm.restoreHandlers(this.#handleViewAction);
-      document.addEventListener('keydown', onKeydownEsc(this.#onClickCloseDetails));
+      this.#movieDetailsView.addEvent('onEscClickBtn', 'keydown', onKeydownEsc(this.#onClickCloseDetails), document);
       this.#movieDetailsClose.addEvent('onClickCloseBtn', 'click', onClickCloseBtn(this.#onClickCloseDetails));
     }
 
@@ -230,6 +230,7 @@ class MoviesPresenter {
 
   #onClickCloseDetails = () => {
     this.#clearDetails();
+    this.#movieDetailsView.removeEvent('onEscClickBtn', 'keydown', document);
     this.#movieDetailsView.removeElement();
     this.#currentMovie = null;
     this.#movieDetailsView = null;
