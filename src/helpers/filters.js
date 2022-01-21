@@ -1,4 +1,4 @@
-import {FilterStat, TimeUnit} from '../constants';
+import {FilterState, TimeUnit} from '../constants';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
@@ -11,13 +11,13 @@ const filterCommentedMovies = (movies) => movies.filter((movie) => movie.comment
 const filterMoviesByDate = (movies, timeUnit) => movies.filter(({watchingDate}) => dayjs(watchingDate).isBetween(dayjs().subtract(1, timeUnit), dayjs()));
 const filterStats = (movies, filter) => {
   switch (filter) {
-    case FilterStat.TODAY:
+    case FilterState.TODAY:
       return filterMoviesByDate(movies, TimeUnit.DAY);
-    case FilterStat.WEEK:
+    case FilterState.WEEK:
       return filterMoviesByDate(movies, TimeUnit.WEEK);
-    case FilterStat.MONTH:
+    case FilterState.MONTH:
       return filterMoviesByDate(movies, TimeUnit.MONTH);
-    case FilterStat.YEAR:
+    case FilterState.YEAR:
       return filterMoviesByDate(movies, TimeUnit.YEAR);
     default:
       return movies;

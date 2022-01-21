@@ -64,7 +64,7 @@ const FilterType = {
   FAVORITES: 'favorites',
   STATS: 'stats',
 };
-const FilterStat = {
+const FilterState = {
   All: 'all',
   TODAY: 'today',
   WEEK: 'week',
@@ -101,7 +101,7 @@ export {
   SortType,
   UpdateType,
   FilterType,
-  FilterStat,
+  FilterState,
   ActionType,
   TimeUnit,
   Method,
