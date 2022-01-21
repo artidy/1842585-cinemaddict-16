@@ -2,7 +2,7 @@ import MainContainerView from '../view/main-container-view';
 import MoviesListView from '../view/movies-list-view';
 import MoviesContainerView from '../view/movies-container-view';
 import MoviesEmptyView from '../view/movies-empty-view';
-import MainMenu from '../view/menu-view';
+import MenuView from '../view/menu-view';
 import SortingView from '../view/sorting-view';
 import MovieDetailsView from '../view/movie-details-view';
 import MovieView from '../view/movie-view';
@@ -58,7 +58,7 @@ class MoviesPresenter {
   #movieDetailsView = null;
   #sortingView = null;
   #moreButton = new ShowMoreBtnView();
-  #mainMenu = new MainMenu();
+  #menuView = new MenuView();
   #movieDetailsWrapView = new MovieDetailsWrapView();
   #movieCommentsView = new MovieDetailsCommentsView();
   #movieDetailsContainer = new MovieDetailsContainerView();
@@ -124,12 +124,12 @@ class MoviesPresenter {
   }
 
   #renderMainMenu = () => {
-    this.#mainMenu.watchListCount = this.#watchMovies.length;
-    this.#mainMenu.historyCount = this.#watchedMovies.length;
-    this.#mainMenu.favoriteCount = this.#favoriteMovies.length;
+    this.#menuView.watchListCount = this.#watchMovies.length;
+    this.#menuView.historyCount = this.#watchedMovies.length;
+    this.#menuView.favoriteCount = this.#favoriteMovies.length;
 
-    render(this.#main, this.#mainMenu, RenderPosition.AFTERBEGIN);
-    this.#mainMenu.restoreHandlers(this.#handleViewAction);
+    render(this.#main, this.#menuView, RenderPosition.AFTERBEGIN);
+    this.#menuView.restoreHandlers(this.#handleViewAction);
   }
 
   #updateFilters = () => {
@@ -278,7 +278,7 @@ class MoviesPresenter {
   #updateMovies = () => {
     this.#mainContainerView.replaceElement();
     this.#loadingView.removeElement();
-    this.#mainMenu.removeElement();
+    this.#menuView.removeElement();
     this.#mainMoviesListView.removeElement();
     this.#topMoviesListView.removeElement();
     this.#recommendMoviesListView.removeElement();

@@ -12,7 +12,7 @@ const getMenuTemplate = (watchListCount, historyCount, favoriteCount, activeButt
     <a href="#${FilterType.STATS}" class="main-navigation__additional ${FilterType.STATS === activeButton ? 'main-navigation__additional--active' : ''}">Stats</a>
   </nav>`;
 
-class MainMenu extends AbstractSmartView {
+class MenuView extends AbstractSmartView {
   #watchListCount = 0;
   #historyCount = 0;
   #favoriteCount = 0;
@@ -86,4 +86,4 @@ class MainMenu extends AbstractSmartView {
   }
 }
 
-export default MainMenu;
+export default MenuView;
